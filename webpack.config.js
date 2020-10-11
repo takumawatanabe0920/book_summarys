@@ -22,9 +22,29 @@ module.exports = {
         test: /\.(js|ts|tsx)?$/,
         use: "ts-loader",
         exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: "css-loader"
+      },
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        test: /\.(eot|ttf|woff|woff2)$/,
+        use: {
+          loader: "file-loader",
+          options: {
+            name: "[name].[ext]",
+            publicPath: "fonts",
+            outputPath: "fonts"
+          }
+        }
       }
     ]
   },
+
   // モジュール解決
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"]
