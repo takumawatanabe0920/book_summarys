@@ -5,7 +5,7 @@ module.exports = {
   // モードを開発モードにする
   mode: "development",
   // 入力ファイル設定
-  entry: [path.resolve(__dirname, "./src/index.tsx")],
+  entry: [path.resolve(__dirname, "./src/pages/index.tsx")],
   // 出力ファイル設定
   output: {
     // 出力されるファイル名

@@ -27,6 +27,8 @@
     font-size: 13px;
     line-height: 19px;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
     @include pc() {
       margin: 40px 0 20px;
     }

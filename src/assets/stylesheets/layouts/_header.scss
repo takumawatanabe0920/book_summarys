@@ -2,10 +2,12 @@
   &__top {
     background: linear-gradient(90deg, #2f66cc 0%, #3d8ccc 100%);
     color: #fff;
-    text-align: center;
-    padding: 10px 0;
+    padding: 10px 20px;
     font-weight: bold;
     letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     @include fz_md();
     @include sp() {
       @include fz_sm();
@@ -15,52 +17,23 @@
     &.m-center {
       @include sp() {
         font-size: 0.8rem;
-        text-align: center;
         padding: 5px 0;
       }
     }
   }
 
-  &__bottom {
-    position: relative;
-    display: block;
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: 25px 0;
-    @include sp() {
-      padding: 10px 16px;
-    }
-
-    &.center {
-      @include pc() {
-        text-align: center;
-      }
-    }
-
-    &.m-center {
-      text-align: center;
-      padding: 14px 0 14px;
-    }
-  }
-
   &__logo {
-    display: inline-block;
-    margin: 0 auto 9px;
-    padding: 0 0 0 0;
     font-size: 24px;
     font-weight: bold;
-    @include pc() {
-      // width: 320px;
-    }
-    @include sp() {
-    }
-    img {
-      width: 10rem;
-      display: block;
-      // height: 16.5px;
-    }
-    &.mall {
-      margin: 0 auto 0;
+    border-bottom: 2px solid;
+  }
+
+  &__right-box {
+    display: flex;
+    a {
+      font-size: 1.15rem;
+      margin-left: 1rem;
+      font-weight: 400;
     }
   }
 
