@@ -1,25 +1,19 @@
-.l-main {
+.wrapper {
   padding-top: 40px;
-  &.top {
-    @include pc() {
-      padding-top: 15px;
-    }
-    @include sp() {
-      padding-top: 0;
-    }
-  }
-  @include pc() {
-    width: 680px;
-    &__ad_delivery {
-      margin: 0 auto;
-    }
-  }
-  @include sp() {
-  }
 }
 
 a {
   &:hover {
     opacity: 0.6;
   }
+}
+
+.l-main {
+  display: flex;
+  width: 100%;
+}
+
+.main-block {
+  width: 70%;
+  padding: 0 1rem;
 }
