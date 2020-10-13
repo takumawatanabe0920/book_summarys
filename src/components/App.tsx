@@ -1,13 +1,21 @@
-import React, { Component } from "react"
+import React from "react"
 
-class App extends Component {
-  render() {
-    return (
-      <>
-        <h1>Hello TS-React!</h1>
-      </>
-    )
-  }
+// components
+import Header from "./layouts/Header"
+import Footer from "./layouts/Footer"
+
+// sections
+
+function IndexPage() {
+  return (
+    <div>
+      <Header />
+      <div className="sections">contents</div>
+      <div className="extendedFooter">
+        <Footer />
+      </div>
+    </div>
+  )
 }
 
-export default App
+export default IndexPage
