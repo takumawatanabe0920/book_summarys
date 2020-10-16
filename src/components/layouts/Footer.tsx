@@ -1,6 +1,6 @@
 import React from "react"
 
-function Footer() {
+const Footer = () => {
   return (
     <footer className="l-footer">
       <div className="l-footer__logo">BOOKSUMMARY</div>

@@ -4,7 +4,7 @@ import Sidebar from "./layouts/Sidebar"
 
 // sections
 
-function IndexPage() {
+const IndexPage = () => {
   return (
     <>
       <div className="l-main">
