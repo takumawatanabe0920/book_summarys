@@ -53,6 +53,7 @@ module.exports = {
   // 開発モード設定
   devtool: "source-map",
   devServer: {
+    historyApiFallback: true,
     contentBase: "./dist",
     host: "0.0.0.0",
     port: 3016
