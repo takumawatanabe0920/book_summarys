@@ -9,6 +9,7 @@ function Header() {
           BOOK SUMMARY
         </Link>
         <div className="l-header__right-box">
+          <Link to="/summary/create">CREATE SUMMARY</Link>
           <Link to="/signup">SIGN UP</Link>
           <Link to="/signin">SIGN IN</Link>
           <Link to="/mypage">MYPAGE</Link>
