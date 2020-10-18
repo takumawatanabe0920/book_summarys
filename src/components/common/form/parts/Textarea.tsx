@@ -6,10 +6,11 @@ type Props = {
   placeholder?: string
   required?: boolean
   name: string
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
 }
 
 const Textarea: FC<Props> = props => {
-  const { title, required, value, placeholder, name } = props
+  const { title, required, value, placeholder, name, onChange } = props
   return (
     <>
       <dl className="form-group">
@@ -25,6 +26,7 @@ const Textarea: FC<Props> = props => {
             name={name}
             className="form-control"
             placeholder={placeholder}
+            onChange={onChange}
           />
         </dd>
       </dl>

@@ -5,10 +5,16 @@ type Props = {
   value?: string
   required?: boolean
   name: string
+  dataList: { name?: string; slug?: string }[]
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 const Select: FC<Props> = props => {
-  const { title, required, value, name } = props
+  const { title, required, value, name, onChange, dataList } = props
+  // dataList &&
+  //   dataList.forEach(data => {
+  //     console.log(data)
+  //   })
   return (
     <>
       <dl className="form-group">
@@ -19,10 +25,15 @@ const Select: FC<Props> = props => {
           </label>
         </dt>
         <dd>
-          <select value={value} name={name}>
-            <option value="grapefruit">Grapefruit</option>
-            <option value="lime">Lime</option>
-            <option value="mango">Mango</option>
+          <select value={value} name={name} onChange={onChange}>
+            {dataList &&
+              dataList.map(data => {
+                return (
+                  <option value={data.slug} key={data.slug}>
+                    {data.name}
+                  </option>
+                )
+              })}
           </select>
         </dd>
       </dl>

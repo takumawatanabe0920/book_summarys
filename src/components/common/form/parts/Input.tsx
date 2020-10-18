@@ -7,10 +7,11 @@ type Props = {
   placeholder?: string
   required?: boolean
   name: string
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Input: FC<Props> = props => {
-  const { title, required, type, value, placeholder, name } = props
+  const { title, required, type, value, placeholder, name, onChange } = props
   return (
     <>
       <dl className="form-group">
@@ -27,6 +28,7 @@ const Input: FC<Props> = props => {
             type={type}
             className="form-control"
             placeholder={placeholder}
+            onChange={onChange}
           />
         </dd>
       </dl>
