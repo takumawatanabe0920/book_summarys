@@ -1,0 +1,15 @@
+.lg-container {
+  @include pc() {
+    display: flex;
+    max-width: 1240px;
+    margin: auto;
+  }
+}
+
+.l-container {
+  @include pc() {
+    display: flex;
+    max-width: 1080px;
+    margin: auto;
+  }
+}

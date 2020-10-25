@@ -4,9 +4,10 @@ import "../assets/stylesheets/main.scss"
 import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom"
 // コンポーネント読み込み
 import IndexPage from "../components/App"
-import CreatePage from "../components/summary/Create"
 import Header from "../components/layouts/Header"
 import Footer from "../components/layouts/Footer"
+import CreatePage from "../components/summary/Create"
+import ShowPage from "../components/summary/Show"
 
 ReactDOM.render(
   <div>
@@ -18,6 +19,7 @@ ReactDOM.render(
             <Switch>
               <Route exact path="/" component={IndexPage} />
               <Route exact path="/summary/create" component={CreatePage} />
+              <Route exact path="/summary/:id" component={ShowPage} />
             </Switch>
           </div>
         </div>

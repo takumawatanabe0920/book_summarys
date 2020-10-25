@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 
-function Header() {
+const Header = () => {
   return (
     <header className="l-header__container">
       <div className="l-header__top">

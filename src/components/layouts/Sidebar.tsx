@@ -1,7 +1,7 @@
 import React from "react"
 //import { Link } from "react-router-dom"
 
-function Sidebar() {
+const Sidebar = () => {
   return (
     <div className="side-bar">
       <h3>総合ランキング</h3>
