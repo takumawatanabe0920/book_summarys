@@ -1,27 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react"
-import firebase from "../firebase/config.jsx"
-const db = firebase.firestore()
 // components
 import Sidebar from "./layouts/Sidebar"
 import SummaryList from "./summary/SummaryList"
+import { getSummaries } from "../utils/functions"
 
 // sections
 
 const IndexPage = () => {
   const [summaries, setSummaries] = useState([])
 
-  const getSummaries = () => {
-    const snapShot = db
-      .collection("summary")
-      .get()
-      .then(res =>
-        res.docs.map(doc => {
-          return { id: doc.id, ...doc.data() }
-        })
-      )
-
-    return snapShot
-  }
   useEffect(() => {
     let unmounted = false
     ;(async () => {

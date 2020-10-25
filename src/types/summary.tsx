@@ -13,14 +13,12 @@ export type SummaryBook = Partial<{
   product_links: string
 }>
 
-export type Categories = Partial<{
-  id: string
+export type Category = Partial<{
   name: string
   slug: string
 }>
 
-export type SubCategories = Partial<{
-  id: string
+export type SubCategory = Partial<{
   category_id: string
   name: string
   slug: string
@@ -30,3 +28,16 @@ export type ResSummaryData = {
   id: string
   values: SummaryBook
 }
+
+export type ResCategory = Partial<{
+  id: string
+  name: string
+  slug: string
+}>
+
+export type ResSubCategory = Partial<{
+  id: string
+  category_id: string
+  name: string
+  slug: string
+}>

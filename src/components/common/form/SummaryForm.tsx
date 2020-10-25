@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
+import { useForm } from "react-hook-form"
+import firebase from "../../../firebase/config.jsx"
+const db = firebase.firestore()
 import Input from "./parts/Input"
 import Textarea from "./parts/Textarea"
 import Select from "./parts/Select"
-import firebase from "../../../firebase/config.jsx"
-import { useForm } from "react-hook-form"
-const db = firebase.firestore()
-import { SummaryBook, Categories, SubCategories } from "../../../types/summary"
+import {
+  SummaryBook,
+  ResCategory,
+  ResSubCategory
+} from "../../../types/summary"
+import { getCategories } from "../../../utils/functions"
 
 const SummaryForm = () => {
   const [values, setValues] = useState<SummaryBook>({})
-  const [categories, setCategories] = useState<Categories[]>([])
-  const [subCategories, setSubCategories] = useState<SubCategories[]>([])
+  const [categories, setCategories] = useState<ResCategory[]>([])
+  const [subCategories, setSubCategories] = useState<ResSubCategory[]>([])
   const [isSelectCategory, setIsSelectCategory] = useState<boolean>(false)
 
   const { register, handleSubmit, errors, formState } = useForm<SummaryBook>({
@@ -56,19 +61,6 @@ const SummaryForm = () => {
         .then(res => {})
         .catch(error => {})
     }
-  }
-
-  const getCategories = () => {
-    const snapShot = db
-      .collection("category")
-      .get()
-      .then(res =>
-        res.docs.map(doc => {
-          return { id: doc.id, ...doc.data() }
-        })
-      )
-
-    return snapShot
   }
 
   const subCategorySelect = async (categoryId?: string) => {
