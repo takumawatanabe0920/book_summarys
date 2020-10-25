@@ -1,11 +1,12 @@
 import React, { FC } from "react"
+import { number } from "prop-types"
 
 type Props = {
   title: string
   value?: string
   required?: boolean
   name: string
-  dataList: { name?: string; slug?: string }[]
+  dataList: { id?: string; name?: string; slug?: string }[]
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
@@ -29,7 +30,7 @@ const Select: FC<Props> = props => {
             {dataList &&
               dataList.map(data => {
                 return (
-                  <option value={data.slug} key={data.slug}>
+                  <option value={data.id} key={data.id}>
                     {data.name}
                   </option>
                 )

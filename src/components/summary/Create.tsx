@@ -8,8 +8,8 @@ const CreatePage = () => {
     <>
       <div className="summary_main">
         <div className="main-block">
-          <Link to="/">一覧へ戻る</Link>
           <SummaryForm />
+          <Link to="/">一覧へ戻る</Link>
         </div>
         <Sidebar />
       </div>

@@ -1,0 +1,9 @@
+.main-title {
+  padding: 0.2rem 1rem;
+  font-size: $fz_md;
+  margin-bottom: 1.5rem;
+
+  &.blue-main-title {
+    border-left: 4px solid #2f66cc;
+  }
+}

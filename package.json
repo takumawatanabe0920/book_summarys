@@ -17,6 +17,7 @@
     "firebase": "^7.24.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+    "react-hook-form": "^6.9.5",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"
   },

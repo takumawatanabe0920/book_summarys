@@ -1,0 +1,18 @@
+.side-bar {
+  width: 30%;
+  padding: 0 2rem;
+
+  h3 {
+    border-bottom: 2px solid;
+    font-size: 1.25rem;
+  }
+
+  .article-box {
+    margin-bottom: 3rem;
+    padding-left: 1rem;
+
+    .article-item {
+      padding-bottom: 0.25rem;
+    }
+  }
+}

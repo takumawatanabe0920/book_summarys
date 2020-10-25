@@ -3,35 +3,19 @@ import Input from "./parts/Input"
 import Textarea from "./parts/Textarea"
 import Select from "./parts/Select"
 import firebase from "../../../firebase/config.jsx"
+import { useForm } from "react-hook-form"
 const db = firebase.firestore()
-//firebase.auth().signInWithEmailAndPassword("takuma.w@tential.jp", "Takuma0920")
-
-type SummaryBook = {
-  title: number
-  content: string
-  category: string
-  sub_category: string
-  author: string
-  price: string
-  review: string
-  product_links: string
-}
-
-type Categories = {
-  name?: string
-  slug?: string
-}
-
-type SubCategories = {
-  category_id?: string
-  name?: string
-  slug?: string
-}
+import { SummaryBook, Categories, SubCategories } from "../../../types/summary"
 
 const SummaryForm = () => {
-  const [values, setValues] = useState<SummaryBook[]>([])
+  const [values, setValues] = useState<SummaryBook>({})
   const [categories, setCategories] = useState<Categories[]>([])
   const [subCategories, setSubCategories] = useState<SubCategories[]>([])
+  const [isSelectCategory, setIsSelectCategory] = useState<boolean>(false)
+
+  const { register, handleSubmit, errors, formState } = useForm<SummaryBook>({
+    mode: "onChange"
+  })
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist()
@@ -57,26 +41,20 @@ const SummaryForm = () => {
     const value = target.value
     const name = target.name
     setValues({ ...values, [name]: value })
+    setIsSelectCategory(true)
+    subCategorySelect(value)
   }
 
   const onSubmit = (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
-    const error = values.length === 0
-    // if (error) {
-    //   return alert("未入力項目があります")
-    // }
     if (window.confirm("記事を作成しますか？")) {
       db.collection("summary")
         .add({
           values
         })
-        .then(res => {
-          console.log("Document written with ID: ", res)
-        })
-        .catch(error => {
-          console.error("Error adding document: ", error)
-        })
+        .then(res => {})
+        .catch(error => {})
     }
   }
 
@@ -84,40 +62,39 @@ const SummaryForm = () => {
     const snapShot = db
       .collection("category")
       .get()
-      .then(res => res.docs.map(doc => doc.data()))
+      .then(res =>
+        res.docs.map(doc => {
+          return { id: doc.id, ...doc.data() }
+        })
+      )
 
     return snapShot
   }
 
-  const getSubCategories = () => {
-    const snapShot = db
+  const subCategorySelect = async (categoryId?: string) => {
+    const snapShot = await db
       .collection("sub_category")
+      .where("category_id", "==", categoryId)
       .get()
-      .then(res => res.docs.map(doc => doc.data()))
-
-    return snapShot
+      .then(res =>
+        res.docs.map(doc => {
+          return { id: doc.id, ...doc.data() }
+        })
+      )
+    setSubCategories(snapShot)
   }
-
-  //setSubCategories
-  //let subCategories = useMemo(getSubCategories, [])
 
   useEffect(() => {
     let unmounted = false
     ;(async () => {
       let cate_result = await getCategories()
-      let sub_cate_result = await getSubCategories()
       if (!unmounted) {
         setCategories(cate_result)
-        setSubCategories(sub_cate_result)
       }
     })()
     return () => {
       unmounted = true
     }
-  }, [])
-
-  useEffect(() => {
-    console.log(values)
   }, [])
 
   return (
@@ -130,6 +107,7 @@ const SummaryForm = () => {
           required={true}
           onChange={handleInputChange}
         />
+        {errors.title && "作者名は1文字以上、20文字以下でなければなりません。"}
         <Textarea
           title="本の内容"
           name="content"
@@ -143,12 +121,14 @@ const SummaryForm = () => {
           dataList={categories}
           onChange={handleSelectChange}
         />
-        <Select
-          title="本のサブカテゴリー"
-          name="sub_category"
-          onChange={handleSelectChange}
-          dataList={subCategories}
-        />
+        {isSelectCategory && (
+          <Select
+            title="本のサブカテゴリー"
+            name="sub_category"
+            onChange={handleSelectChange}
+            dataList={subCategories}
+          />
+        )}
         <Input
           title="筆者"
           name="author"
@@ -176,11 +156,11 @@ const SummaryForm = () => {
 
         <div className="btn-area mgt-2 inline">
           <button className="_btn submit" type="submit" onClick={onSubmit}>
-            送信
+            作成する
           </button>
-          <button className="_btn submit" type="submit">
+          {/* <button className="_btn submit" type="submit">
             編集する
-          </button>
+          </button> */}
           <button className="_btn remove" type="button">
             削除する
           </button>
