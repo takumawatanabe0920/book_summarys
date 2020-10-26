@@ -1,0 +1,23 @@
+.summary-show {
+  ._header {
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 2rem;
+  }
+
+  ._body {
+    border-bottom: 1px solid $border-color;
+    padding: 1.5rem 0;
+  }
+
+  ._footer {
+    padding: 1.5rem 0;
+    dl {
+      display: flex;
+      font-weight: 400;
+      margin: 0.5rem 0rem;
+      dd {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+}

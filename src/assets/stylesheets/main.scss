@@ -5,6 +5,7 @@
 @import "./foundation/variables";
 @import "./foundation/mixin";
 @import "./foundation/initialize";
+@import "./foundation/reset";
 
 // ==========================================================================
 //  Layout
@@ -34,7 +35,7 @@
 // Project
 // -----------------------------------------------------------------
 
-// @import "./objects/project/article_list";
+@import "./object/project/summary";
 // @import "./objects/project/recommend";
 // @import "./objects/project/top";
 // @import "./objects/project/article";

@@ -1,6 +1,7 @@
 .wrapper {
   padding-top: 40px;
   height: 100vh;
+  background-color: $bg-gray-color;
 }
 
 a {
@@ -12,12 +13,14 @@ a {
 .l-main,
 .summary_main {
   display: flex;
+  justify-content: space-between;
   width: 100%;
 }
 
 .main-block {
-  width: 70%;
-  padding: 0 1rem;
+  width: 68%;
+  padding: 2rem;
+  background-color: #fff;
 
   .data-list {
     display: flex;
@@ -31,4 +34,18 @@ a {
   }
 }
 
-.summary_main {}
+.prof-area {
+}
+
+.tags {
+  display: flex;
+  .tag {
+    margin-right: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    line-height: 1;
+    border-radius: 0.25rem;
+    color: #666;
+    font-weight: 500;
+    background-color: $tag-bg-color;
+  }
+}
