@@ -1,6 +1,7 @@
 .wrapper {
   padding-top: 40px;
   height: 100vh;
+  background-color: $bg-gray-color;
 }
 
 a {
@@ -12,23 +13,49 @@ a {
 .l-main,
 .summary_main {
   display: flex;
+  justify-content: space-between;
   width: 100%;
+  ._summary-ttl {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  ._summary-txt {
+    font-size: 0.7rem;
+  }
 }
 
 .main-block {
-  width: 70%;
-  padding: 0 1rem;
+  width: 68%;
+  padding: 2rem;
+  background-color: #fff;
 
   .data-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     margin-bottom: 5rem;
 
     .data-item {
       width: 30%;
+      margin: 0 5% 2rem 0;
+      &:nth-of-type(3n) {
+        margin-right: 0;
+      }
     }
   }
 }
 
-.summary_main {}
+.prof-area {
+}
+
+.tags {
+  display: flex;
+  .tag {
+    margin-right: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    line-height: 1;
+    border-radius: 0.25rem;
+    color: #666;
+    font-weight: 500;
+    background-color: $tag-bg-color;
+  }
+}

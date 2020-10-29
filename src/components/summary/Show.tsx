@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react"
-import { Link, useParams } from "react-router-dom"
-import firebase from "./../../firebase/config.jsx"
-const db = firebase.firestore()
+import { useParams } from "react-router-dom"
 import Sidebar from "../layouts/Sidebar"
-import { SummaryBook, Category, SubCategory } from "./../../types/summary"
-import {
-  getCategory,
-  getSubCategory,
-  getSummaryBook
-} from "../../utils/functions"
+import { SummaryBook, Category, SubCategory } from "../../types/summary"
+import functions from "../../utils/functions"
+const { getSummaryBook, getCategory, getSubCategory } = functions
 
 const ShowPage = () => {
   const [summarybook, setSummaryBook] = useState<SummaryBook>({})
-  //const [category, setCategory] = useState<Category>({})
-  //const [subCategory, setSubCategory] = useState<SubCategory>({})
+  const [category, setCategory] = useState<Category>({})
+  const [subCategory, setSubCategory] = useState<SubCategory>({})
 
   const url: { id: string } = useParams()
 
@@ -21,12 +16,14 @@ const ShowPage = () => {
     let unmounted = false
     ;(async () => {
       const resSummaryBook = await getSummaryBook(url.id)
-      const resCategory = await getCategory(resSummaryBook.category)
-      const resSubCategory = await getSubCategory(resSummaryBook.sub_category)
+      const resCategory: void | any = await getCategory(resSummaryBook.category)
+      const resSubCategory: void | any = await getSubCategory(
+        resSummaryBook.sub_category
+      )
       if (!unmounted) {
         setSummaryBook(resSummaryBook)
-        // setCategory(resCategory)
-        // setSubCategory(resSubCategory)
+        setCategory(resCategory)
+        setSubCategory(resSubCategory)
       }
     })()
     return () => {
@@ -38,7 +35,6 @@ const ShowPage = () => {
     <>
       <div className="summary_main">
         <div className="main-block">
-          <Link to="/">一覧へ戻る</Link>
           <div className="prof-area">
             <div className="_icon">
               <img src="" alt="" />
@@ -47,14 +43,31 @@ const ShowPage = () => {
           </div>
           <div className="summary-show">
             <div className="_header">
-              <h1 className="main-title">{summarybook.title}</h1>
+              <h1 className="main-title blue-main-title">
+                {summarybook.title}
+              </h1>
               <div className="tags">
-                {/* <span className="tag">{category}</span>
-                <span className="tag">{subCategory}</span> */}
+                {/* TODO リンク：カテゴリー記事に飛ばす */}
+                <span className="tag">{category.name}</span>
+                <span className="tag">{subCategory.name}</span>
               </div>
             </div>
             <div className="_body">
               <p className="_txt">{summarybook.content}</p>
+            </div>
+            <div className="_footer">
+              <dl>
+                <dt>値段：</dt>
+                <dd>{summarybook.price}円</dd>
+              </dl>
+              <dl>
+                <dt>著者：</dt>
+                <dd>{summarybook.author}</dd>
+              </dl>
+              <dl>
+                <dt>商品リンク：</dt>
+                <dd>{summarybook.product_links}</dd>
+              </dl>
             </div>
           </div>
         </div>

@@ -13,3 +13,10 @@
     margin: auto;
   }
 }
+
+.md-container {
+  @include pc() {
+    max-width: 840px;
+    margin: auto;
+  }
+}

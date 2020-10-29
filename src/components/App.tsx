@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo } from "react"
 // components
 import Sidebar from "./layouts/Sidebar"
 import SummaryList from "./summary/SummaryList"
-import { getSummaries } from "../utils/functions"
+import functions from "../utils/functions"
+const { getSummaries } = functions
 
 // sections
 
