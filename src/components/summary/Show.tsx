@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import firebase from "./../../firebase/config.jsx"
-const db = firebase.firestore()
 import Sidebar from "../layouts/Sidebar"
 import { SummaryBook, Category, SubCategory } from "../../types/summary"
-import {
-  getCategory,
-  getSubCategory,
-  getSummaryBook
-} from "../../utils/functions"
+import functions from "../../utils/functions"
+const { getSummaryBook, getCategory, getSubCategory } = functions
 
 const ShowPage = () => {
   const [summarybook, setSummaryBook] = useState<SummaryBook>({})

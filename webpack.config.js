@@ -41,7 +41,8 @@ module.exports = {
             outputPath: "fonts"
           }
         }
-      }
+      },
+      { test: /\.(gif|png|jpe?g|)$/, use: "url-loader" }
     ]
   },
 

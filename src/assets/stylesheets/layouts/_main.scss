@@ -15,6 +15,13 @@ a {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  ._summary-ttl {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  ._summary-txt {
+    font-size: 0.7rem;
+  }
 }
 
 .main-block {
@@ -25,11 +32,14 @@ a {
   .data-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     margin-bottom: 5rem;
 
     .data-item {
       width: 30%;
+      margin: 0 5% 2rem 0;
+      &:nth-of-type(3n) {
+        margin-right: 0;
+      }
     }
   }
 }

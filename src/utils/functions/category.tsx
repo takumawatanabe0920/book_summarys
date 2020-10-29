@@ -1,5 +1,5 @@
 import React from "react"
-import firebase from "../firebase/config.jsx"
+import firebase from "../../firebase/config.jsx"
 const db = firebase.firestore()
 
 export const getCategories = () => {
@@ -66,34 +66,15 @@ export const getSubCategory = (id: string) => {
   return snapShot
 }
 
-export const getSummaries = () => {
-  const snapShot = db
-    .collection("summary")
+export const categoryLinkingSubCategory = async (categoryId?: string) => {
+  const snapShot = await db
+    .collection("sub_category")
+    .where("category_id", "==", categoryId)
     .get()
     .then(res =>
       res.docs.map(doc => {
         return { id: doc.id, ...doc.data() }
       })
     )
-
-  return snapShot
-}
-
-export const getSummaryBook = (id: string) => {
-  const snapShot = db
-    .collection("summary")
-    .doc(id)
-    .get()
-    .then(doc => {
-      if (doc.exists) {
-        return doc.data().values
-      } else {
-        console.log("404")
-      }
-    })
-    .catch(error => {
-      console.log(`データを取得できませんでした (${error})`)
-    })
-
   return snapShot
 }

@@ -8,6 +8,7 @@ import Header from "../components/layouts/Header"
 import Footer from "../components/layouts/Footer"
 import CreatePage from "../components/summary/Create"
 import ShowPage from "../components/summary/Show"
+import SignUpPage from "../components/sign_up"
 
 ReactDOM.render(
   <div>
@@ -20,6 +21,7 @@ ReactDOM.render(
               <Route exact path="/" component={IndexPage} />
               <Route exact path="/summary/create" component={CreatePage} />
               <Route exact path="/summary/:id" component={ShowPage} />
+              <Route exact path="/sign_up" component={SignUpPage} />
             </Switch>
           </div>
         </div>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import firebase from "../../../firebase/config.jsx"
-const db = firebase.firestore()
 import Input from "./parts/Input"
 import Textarea from "./parts/Textarea"
 import Select from "./parts/Select"
@@ -10,7 +8,8 @@ import {
   ResCategory,
   ResSubCategory
 } from "../../../types/summary"
-import { getCategories } from "../../../utils/functions"
+import functions from "../../../utils/functions"
+const { getCategories, categoryLinkingSubCategory, createSummary } = functions
 
 const SummaryForm = () => {
   const [values, setValues] = useState<SummaryBook>({})
@@ -54,26 +53,13 @@ const SummaryForm = () => {
     event.persist()
     event.preventDefault()
     if (window.confirm("記事を作成しますか？")) {
-      db.collection("summary")
-        .add({
-          values
-        })
-        .then(res => {})
-        .catch(error => {})
+      createSummary(values)
     }
   }
 
   const subCategorySelect = async (categoryId?: string) => {
-    const snapShot = await db
-      .collection("sub_category")
-      .where("category_id", "==", categoryId)
-      .get()
-      .then(res =>
-        res.docs.map(doc => {
-          return { id: doc.id, ...doc.data() }
-        })
-      )
-    setSubCategories(snapShot)
+    const subCate = await categoryLinkingSubCategory(categoryId)
+    setSubCategories(subCate)
   }
 
   useEffect(() => {
