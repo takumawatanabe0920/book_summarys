@@ -5,7 +5,7 @@ import { SummaryBook, Category, SubCategory } from "../../types/summary"
 import functions from "../../utils/functions"
 const { getSummaryBook, getCategory, getSubCategory } = functions
 
-const ShowPage = () => {
+const SummaryShowPage = () => {
   const [summarybook, setSummaryBook] = useState<SummaryBook>({})
   const [category, setCategory] = useState<Category>({})
   const [subCategory, setSubCategory] = useState<SubCategory>({})
@@ -77,4 +77,4 @@ const ShowPage = () => {
   )
 }
 
-export default ShowPage
+export default SummaryShowPage

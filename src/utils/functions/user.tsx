@@ -67,17 +67,40 @@ export const login = (email: string, password: string) => {
   setUser()
 }
 
+export const logout = () => {
+  firebase
+    .auth()
+    .signOut()
+    .then(
+      () => {
+        // ログイン画面に戻る等
+        console.log("ログアウトしました")
+        deleteLocalStrage("user")
+      },
+      err => {
+        // エラーを表示する等
+        console.log(`ログアウト時にエラーが発生しました (${err})`)
+      }
+    )
+}
+
 //private
 const setLocalStrage = (user: CurrentUser) => {
   localStorage.setItem("user", JSON.stringify(user))
 }
 
+const deleteLocalStrage = (key: string) => {
+  localStorage.removeItem(key)
+}
+
 const setUser = () => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
+      console.log(user)
       // User is signed in.
-      const { displayName, email, photoURL } = user
+      const { uid, displayName, email, photoURL } = user
       const currentUser: CurrentUser = {
+        uid,
         displayName,
         email,
         photoURL

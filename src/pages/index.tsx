@@ -1,15 +1,16 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import "../assets/stylesheets/main.scss"
-import { Switch, Route, BrowserRouter as Router, Link } from "react-router-dom"
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom"
 // コンポーネント読み込み
 import IndexPage from "../components/App"
 import Header from "../components/layouts/Header"
 import Footer from "../components/layouts/Footer"
-import CreatePage from "../components/summary/Create"
-import ShowPage from "../components/summary/Show"
+import SummaryCreatePage from "../components/summary/Create"
+import SummaryShowPage from "../components/summary/Show"
 import SignUpPage from "../components/sign_up"
 import SignInPage from "../components/sign_in"
+import MypagePage from "../components/mypage"
 
 ReactDOM.render(
   <div>
@@ -20,10 +21,15 @@ ReactDOM.render(
           <div className="l-container">
             <Switch>
               <Route exact path="/" component={IndexPage} />
-              <Route exact path="/summary/create" component={CreatePage} />
-              <Route exact path="/summary/:id" component={ShowPage} />
+              <Route
+                exact
+                path="/summary/create"
+                component={SummaryCreatePage}
+              />
+              <Route exact path="/summary/:id" component={SummaryShowPage} />
               <Route exact path="/sign_up" component={SignUpPage} />
               <Route exact path="/sign_in" component={SignInPage} />
+              <Route exact path="/mypage" component={MypagePage} />
             </Switch>
           </div>
         </div>

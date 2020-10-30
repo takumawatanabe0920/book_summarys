@@ -6,6 +6,7 @@ export type User = Partial<{
 }>
 
 export type CurrentUser = Partial<{
+  uid: string
   displayName: string
   photoURL: string
   email: string

@@ -13,6 +13,7 @@ import {
   emailAuthMixin_sendVerifyMail,
   register,
   login,
+  logout,
   getCurrentUser
 } from "./user"
 
@@ -29,7 +30,8 @@ const functions = {
   getCurrentUser,
   emailAuthMixin_sendVerifyMail,
   register,
-  login
+  login,
+  logout
 }
 
 // import _ from 'underscore'
