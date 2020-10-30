@@ -1,30 +1,7 @@
 import React from "react"
+import { CurrentUser } from "../../types/user"
 import firebase from "../../firebase/config.jsx"
 const db = firebase.firestore()
-
-export const getCurrentUser = async () => {
-  console.log("called")
-  // return currentUser
-  let currentUser = {}
-  await firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      // User is signed in.
-      const { displayName, email, photoURL } = user
-      // console.log(user.email)
-      // console.log(user.displayName)
-      // console.log(user.photoURL)
-      currentUser = {
-        displayName,
-        email,
-        photoURL
-      }
-    } else {
-      console.log("not login")
-      // No user is signed in.
-    }
-  })
-  return currentUser
-}
 
 export const getUser = (email: string) => {
   const user = db
@@ -41,18 +18,12 @@ export const getUser = (email: string) => {
   return user
 }
 
-export const emailAuthMixin_sendVerifyMail = () => {
-  const currentUser = firebase.auth().currentUser
-  if (!currentUser.emailVerified) {
-    currentUser
-      .sendEmailVerification()
-      .then(() => {
-        console.log("送信しました！")
-      })
-      .catch(error => {
-        // 失敗した際の処理
-      })
-  }
+export const getCurrentUser = () => {
+  const currentUserData = localStorage.getItem("user")
+  const currentUser: CurrentUser = currentUserData
+    ? JSON.parse(currentUserData)
+    : ""
+  return currentUser
 }
 
 export const register = async (email: string, password: string) => {
@@ -65,6 +36,8 @@ export const register = async (email: string, password: string) => {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .catch(function(error) {})
+
+  setUser()
 
   //emailAuthMixin_sendVerifyMail()
 }
@@ -80,4 +53,42 @@ export const login = (email: string, password: string) => {
       var errorMessage = error.message
       // ...
     })
+  setUser()
+}
+
+//private
+const setLocalStrage = (user: CurrentUser) => {
+  localStorage.setItem("user", JSON.stringify(user))
+}
+
+const setUser = () => {
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      // User is signed in.
+      const { displayName, email, photoURL } = user
+      const currentUser: CurrentUser = {
+        displayName,
+        email,
+        photoURL
+      }
+      setLocalStrage(currentUser)
+    } else {
+      console.log("not login")
+    }
+  })
+}
+
+//not use
+export const emailAuthMixin_sendVerifyMail = () => {
+  const currentUser = firebase.auth().currentUser
+  if (!currentUser.emailVerified) {
+    currentUser
+      .sendEmailVerification()
+      .then(() => {
+        console.log("送信しました！")
+      })
+      .catch(error => {
+        // 失敗した際の処理
+      })
+  }
 }

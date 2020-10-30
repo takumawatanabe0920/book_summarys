@@ -33,7 +33,6 @@ const RegisterForm = () => {
     let unmounted = false
     ;(async () => {
       if (!unmounted) {
-        console.log("called")
         const user = await getCurrentUser()
         console.log(user)
       }
