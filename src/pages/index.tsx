@@ -9,6 +9,7 @@ import Footer from "../components/layouts/Footer"
 import CreatePage from "../components/summary/Create"
 import ShowPage from "../components/summary/Show"
 import SignUpPage from "../components/sign_up"
+import SignInPage from "../components/sign_in"
 
 ReactDOM.render(
   <div>
@@ -22,6 +23,7 @@ ReactDOM.render(
               <Route exact path="/summary/create" component={CreatePage} />
               <Route exact path="/summary/:id" component={ShowPage} />
               <Route exact path="/sign_up" component={SignUpPage} />
+              <Route exact path="/sign_in" component={SignInPage} />
             </Switch>
           </div>
         </div>

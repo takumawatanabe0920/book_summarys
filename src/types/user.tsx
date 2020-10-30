@@ -10,3 +10,8 @@ export type CurrentUser = Partial<{
   photoURL: string
   email: string
 }>
+
+export type Login = Partial<{
+  email: string
+  password: string
+}>

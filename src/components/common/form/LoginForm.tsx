@@ -1,48 +1,37 @@
 import React, { useState, useEffect } from "react"
 import Input from "./parts/Input"
-import { User } from "../../../types/user"
+import { Login } from "../../../types/user"
 import functions from "../../../utils/functions"
-const { register } = functions
+const { login } = functions
 
-const RegisterForm = () => {
-  const [values, setValues] = useState<User>({})
+const LoginForm = () => {
+  const [loginValues, setLogin] = useState<Login>({})
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist()
     const target = event.target
     const value = target.type === "checkbox" ? target.checked : target.value
     const name = target.name
-    setValues({ ...values, [name]: value })
+    setLogin({ ...loginValues, [name]: value })
   }
 
   const onSubmit = (event: React.MouseEvent) => {
+    console.log(loginValues)
     event.persist()
     event.preventDefault()
-    const { displayName, email, password, photoURL } = values
-    if (!displayName || !email || !password) {
-      console.log("名前とパスワードとメールを入力してください")
+    const { email, password } = loginValues
+    if (!email || !password) {
+      console.log("パスワードとメールを入力してください")
       return
     }
-    if (window.confirm("会員登録しますか？")) {
-      register(email, password, displayName, photoURL)
+    if (window.confirm("ログインしますか？")) {
+      login(email, password)
     }
   }
 
   return (
     <>
       <form className="form-table">
-        <Input
-          title="名前"
-          name="displayName"
-          placeholder="要約太郎"
-          required={true}
-          onChange={handleInputChange}
-        />
-        <Input
-          title="ユーザーアイコン"
-          name="photoURL"
-          onChange={handleInputChange}
-        />
         <Input
           title="メールアドレス"
           name="email"
@@ -59,7 +48,7 @@ const RegisterForm = () => {
         />
         <div className="btn-area mgt-2 inline">
           <button className="_btn submit" type="submit" onClick={onSubmit}>
-            登録する
+            ログインする
           </button>
         </div>
       </form>
@@ -67,4 +56,4 @@ const RegisterForm = () => {
   )
 }
 
-export default RegisterForm
+export default LoginForm

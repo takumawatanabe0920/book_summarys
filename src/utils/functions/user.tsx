@@ -26,7 +26,12 @@ export const getCurrentUser = () => {
   return currentUser
 }
 
-export const register = async (email: string, password: string) => {
+export const register = async (
+  email: string,
+  password: string,
+  displayName: string,
+  photoURL: string
+) => {
   const user = await getUser(email)
   if (user) {
     console.log("ユーザーが存在しています")
@@ -35,10 +40,16 @@ export const register = async (email: string, password: string) => {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .catch(function(error) {})
-
-  setUser()
-
+    .then(async result => {
+      await result.user.updateProfile({
+        displayName,
+        photoURL
+      })
+      await setUser()
+    })
+    .catch(error => {
+      console.log("error")
+    })
   //emailAuthMixin_sendVerifyMail()
 }
 
