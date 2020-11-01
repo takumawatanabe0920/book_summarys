@@ -26,7 +26,7 @@ const Header = () => {
           BOOK SUMMARY
         </Link>
         <div className="l-header__right-box">
-          <Link to="/summary/create">CREATE SUMMARY</Link>
+          {CurrentUser && <Link to="/summary/create">CREATE SUMMARY</Link>}
           {CurrentUser && <Link to="/mypage">MYPAGE</Link>}
           {!CurrentUser && <Link to="/sign_up">SIGN UP</Link>}
         </div>

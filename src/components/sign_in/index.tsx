@@ -9,7 +9,7 @@ const SignInPage = () => {
         <div className="md-container">
           <h1 className="main-title blue-main-title">ログイン</h1>
           <LoginForm />
-          <Link to="sign_in">会員登録</Link>
+          <Link to="/sign_up">会員登録</Link>
         </div>
       </div>
     </>

@@ -2,6 +2,8 @@ import React from "react"
 import ReactDOM from "react-dom"
 import "../assets/stylesheets/main.scss"
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom"
+import PrivateRoute from "../components/common/route/PrivateRoute"
+import GuestRoute from "../components/common/route/GuestRoute"
 // コンポーネント読み込み
 import IndexPage from "../components/App"
 import Header from "../components/layouts/Header"
@@ -21,15 +23,15 @@ ReactDOM.render(
           <div className="l-container">
             <Switch>
               <Route exact path="/" component={IndexPage} />
-              <Route
+              <PrivateRoute
                 exact
                 path="/summary/create"
                 component={SummaryCreatePage}
               />
+              <PrivateRoute exact path="/mypage" component={MypagePage} />
               <Route exact path="/summary/:id" component={SummaryShowPage} />
-              <Route exact path="/sign_up" component={SignUpPage} />
-              <Route exact path="/sign_in" component={SignInPage} />
-              <Route exact path="/mypage" component={MypagePage} />
+              <GuestRoute exact path="/sign_up" component={SignUpPage} />
+              <GuestRoute exact path="/sign_in" component={SignInPage} />
             </Switch>
           </div>
         </div>
