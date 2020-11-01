@@ -2,10 +2,16 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { CurrentUser } from "../../types/user"
 import functions from "../../utils/functions"
-const { getCurrentUser } = functions
+const { getCurrentUser, logout } = functions
 
-const Header = () => {
+const SignInPage = () => {
   const [CurrentUser, setCurrentUser] = useState<CurrentUser>({})
+
+  const handleLogout = () => {
+    if (window.confirm("ログインしますか？")) {
+      logout()
+    }
+  }
 
   useEffect(() => {
     let unmounted = false
@@ -19,20 +25,19 @@ const Header = () => {
       unmounted = true
     }
   }, [])
+
   return (
-    <header className="l-header__container">
-      <div className="l-header__top">
-        <Link className="l-header__logo" to="/">
-          BOOK SUMMARY
-        </Link>
-        <div className="l-header__right-box">
-          {CurrentUser && <Link to="/summary/create">CREATE SUMMARY</Link>}
-          {CurrentUser && <Link to="/mypage">MYPAGE</Link>}
-          {!CurrentUser && <Link to="/sign_up">SIGN UP</Link>}
+    <>
+      <div className="c-register">
+        <div className="md-container">
+          <h1 className="main-title blue-main-title">MY PAGE</h1>
+          <p>{CurrentUser.displayName}</p>
+          <p>{CurrentUser.email}</p>
+          <button onClick={handleLogout}>ログアウト</button>
         </div>
       </div>
-    </header>
+    </>
   )
 }
 
-export default Header
+export default SignInPage

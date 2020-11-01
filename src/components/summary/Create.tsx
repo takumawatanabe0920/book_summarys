@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import Sidebar from "../layouts/Sidebar"
 import SummaryForm from "../common/form/SummaryForm"
 
-const CreatePage = () => {
+const SummaryCreatePage = () => {
   return (
     <>
       <div className="summary_main">
@@ -17,4 +17,4 @@ const CreatePage = () => {
   )
 }
 
-export default CreatePage
+export default SummaryCreatePage

@@ -9,7 +9,6 @@ type Props = {
 
 const SummaryItem: FC<Props> = props => {
   const { data } = props
-  console.log(data)
   return (
     <>
       <Link to={`/summary/${data.id}`} className="data-item">

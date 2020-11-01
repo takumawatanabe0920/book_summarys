@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import Input from "./parts/Input"
 import Textarea from "./parts/Textarea"
 import Select from "./parts/Select"
+import firebase from "../../../firebase/config.jsx"
 import {
   SummaryBook,
   ResCategory,
