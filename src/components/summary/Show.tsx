@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import Sidebar from "../layouts/Sidebar"
-import { SummaryBook, Category, SubCategory } from "../../types/summary"
+import { ResSummaryBook, Category, SubCategory } from "../../types/summary"
 import functions from "../../utils/functions"
 const { getSummaryBook, getCategory, getSubCategory } = functions
 
 const SummaryShowPage = () => {
-  const [summarybook, setSummaryBook] = useState<SummaryBook>({})
+  const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
   const [category, setCategory] = useState<Category>({})
   const [subCategory, setSubCategory] = useState<SubCategory>({})
 
@@ -15,11 +15,12 @@ const SummaryShowPage = () => {
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      const resSummaryBook = await getSummaryBook(url.id)
+      const resSummaryBook: void | any = await getSummaryBook(url.id)
       const resCategory: void | any = await getCategory(resSummaryBook.category)
-      const resSubCategory: void | any = await getSubCategory(
-        resSummaryBook.sub_category
-      )
+      let resSubCategory: void | any = ""
+      if (resSummaryBook.sub_category) {
+        resSubCategory = await getSubCategory(resSummaryBook.sub_category)
+      }
       if (!unmounted) {
         setSummaryBook(resSummaryBook)
         setCategory(resCategory)
@@ -49,7 +50,9 @@ const SummaryShowPage = () => {
               <div className="tags">
                 {/* TODO リンク：カテゴリー記事に飛ばす */}
                 <span className="tag">{category.name}</span>
-                <span className="tag">{subCategory.name}</span>
+                <span className="tag">
+                  {subCategory ? subCategory.name : ""}
+                </span>
               </div>
             </div>
             <div className="_body">

@@ -3,14 +3,20 @@ import { useForm } from "react-hook-form"
 import Input from "./parts/Input"
 import Textarea from "./parts/Textarea"
 import Select from "./parts/Select"
-import firebase from "../../../firebase/config.jsx"
 import {
   SummaryBook,
   ResCategory,
   ResSubCategory
 } from "../../../types/summary"
+import { CurrentUser } from "../../../types/user"
 import functions from "../../../utils/functions"
-const { getCategories, categoryLinkingSubCategory, createSummary } = functions
+const {
+  getCategories,
+  categoryLinkingSubCategory,
+  createSummary,
+  getCurrentUser
+} = functions
+const user: CurrentUser = getCurrentUser()
 
 const SummaryForm = () => {
   const [values, setValues] = useState<SummaryBook>({})
@@ -51,8 +57,10 @@ const SummaryForm = () => {
   }
 
   const onSubmit = (event: React.MouseEvent) => {
+    console.log(values)
     event.persist()
     event.preventDefault()
+
     if (window.confirm("記事を作成しますか？")) {
       createSummary(values)
     }
@@ -67,8 +75,11 @@ const SummaryForm = () => {
     let unmounted = false
     ;(async () => {
       let cate_result = await getCategories()
+
       if (!unmounted) {
+        console.log("called-first")
         setCategories(cate_result)
+        setValues({ ...values, ["user_id"]: user.uid })
       }
     })()
     return () => {

@@ -10,8 +10,8 @@ const Header = () => {
   useEffect(() => {
     let unmounted = false
     ;(async () => {
+      const user: CurrentUser = getCurrentUser()
       if (!unmounted) {
-        const user: CurrentUser = getCurrentUser()
         setCurrentUser(user)
       }
     })()

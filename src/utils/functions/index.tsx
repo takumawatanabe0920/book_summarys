@@ -16,6 +16,13 @@ import {
   logout,
   getCurrentUser
 } from "./user"
+import {
+  getFavorite,
+  getFavorites,
+  createFavorite,
+  deleteFavorite,
+  getDonefavorite
+} from "./favorite"
 
 const functions = {
   getCategories,
@@ -31,7 +38,12 @@ const functions = {
   emailAuthMixin_sendVerifyMail,
   register,
   login,
-  logout
+  logout,
+  getDonefavorite,
+  getFavorites,
+  createFavorite,
+  deleteFavorite,
+  getFavorite
 }
 
 // import _ from 'underscore'
