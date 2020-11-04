@@ -3,7 +3,7 @@ import { deflate } from "zlib"
 
 //要約スキーマ
 export type SummaryBook = Partial<{
-  title: number
+  title: string
   content: string
   category: string
   sub_category: string
@@ -11,6 +11,7 @@ export type SummaryBook = Partial<{
   price: string
   review: string
   product_links: string
+  user_id: string
 }>
 
 export type Category = Partial<{
@@ -24,20 +25,14 @@ export type SubCategory = Partial<{
   slug: string
 }>
 
-export type ResSummaryData = {
-  id: string
-  values: SummaryBook
+export type ResSummaryBook = SummaryBook & {
+  id?: string
 }
 
-export type ResCategory = Partial<{
-  id: string
-  name: string
-  slug: string
-}>
+export type ResCategory = Category & {
+  id?: string
+}
 
-export type ResSubCategory = Partial<{
-  id: string
-  category_id: string
-  name: string
-  slug: string
-}>
+export type ResSubCategory = SubCategory & {
+  id?: string
+}

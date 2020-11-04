@@ -1,11 +1,17 @@
 import React from "react"
 import firebase from "../../firebase/config.jsx"
+import { SummaryBook } from "./../../types/summary"
 const db = firebase.firestore()
 
-export const createSummary = (values: {}) => {
+export const createSummary = (values: SummaryBook) => {
+  const { title, content, category, user_id } = values
+  if (!title || !content || !category || !user_id) {
+    console.log("データがたりません")
+    return
+  }
   db.collection("summary")
     .add({
-      values
+      ...values
     })
     .then(res => {})
     .catch(error => {})
@@ -31,7 +37,7 @@ export const getSummaryBook = (id: string) => {
     .get()
     .then(doc => {
       if (doc.exists) {
-        return doc.data().values
+        return doc.data()
       } else {
         console.log("404")
       }

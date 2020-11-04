@@ -1,17 +1,18 @@
 import React, { FC } from "react"
 import SummaryItem from "./SummaryItem"
-import { ResSummaryData } from "./../../types/summary"
+import { ResSummaryBook } from "./../../types/summary"
 
 type Props = {
-  dataList: ResSummaryData[]
+  dataList: ResSummaryBook[]
 }
 
 const SummaryList: FC<Props> = props => {
   const { dataList } = props
+  //console.log(dataList)
   return (
     <>
       <div className="data-list">
-        {dataList.map((data: ResSummaryData) => {
+        {dataList.map((data: ResSummaryBook) => {
           return <SummaryItem key={data.id} data={data} />
         })}
       </div>
