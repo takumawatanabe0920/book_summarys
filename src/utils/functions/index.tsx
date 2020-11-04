@@ -21,7 +21,8 @@ import {
   getFavorites,
   createFavorite,
   deleteFavorite,
-  getDonefavorite
+  getDonefavorite,
+  getfavoriteNum
 } from "./favorite"
 
 const functions = {
@@ -43,7 +44,8 @@ const functions = {
   getFavorites,
   createFavorite,
   deleteFavorite,
-  getFavorite
+  getFavorite,
+  getfavoriteNum
 }
 
 // import _ from 'underscore'

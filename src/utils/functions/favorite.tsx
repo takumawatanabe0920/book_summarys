@@ -3,20 +3,19 @@ import firebase from "../../firebase/config.jsx"
 const db = firebase.firestore()
 import { Favorite } from "../../types/favorite"
 
-export const getFavorite = async (userId?: string, summaryId?: string) => {
+export const getFavorite = (userId?: string, summaryId?: string) => {
   if (!userId) return
   if (!summaryId) return
-  const snapShot = await db
+  const snapShot = db
     .collection("favorite")
     .where("user_id", "==", userId)
     .where("summary_id", "==", summaryId)
     .get()
-    .then(res => {
+    .then(res =>
       res.docs.map(doc => {
         return { id: doc.id, ...doc.data() }
       })
-    })
-
+    )
   return snapShot
 }
 
@@ -34,13 +33,14 @@ export const getFavorites = () => {
 }
 
 export const getDonefavorite = (id: string) => {
+  console.log(id)
   const snapShot = db
-    .collection("category")
+    .collection("favorite")
     .doc(id)
     .get()
     .then(doc => {
       if (doc.exists) {
-        return doc.data()
+        return { id: doc.id, ...doc.data() }
       } else {
         console.log("404")
       }
@@ -50,6 +50,26 @@ export const getDonefavorite = (id: string) => {
     })
 
   return snapShot
+}
+
+export const getfavoriteNum = async (summaryId?: string) => {
+  console.log(summaryId)
+  const snapShot: any = await db
+    .collection("favorite")
+    .where("summary_id", "==", summaryId)
+    .get()
+    .then(res =>
+      res.docs.map((doc, _index) => {
+        let i = 1
+        return i + _index
+      })
+    )
+    .catch(error => {
+      console.log(`データを取得できませんでした (${error})`)
+    })
+  const [num] = snapShot
+
+  return num ? num : 0
 }
 
 export const createFavorite = (values: Favorite) => {
@@ -63,12 +83,16 @@ export const createFavorite = (values: Favorite) => {
     .add({
       ...values
     })
-    .then(res => {})
+    .then(res => res.id)
 
   return snapShot
 }
 
 export const deleteFavorite = (favoriteId: string) => {
+  if (!favoriteId) {
+    console.log("idが存在しません。")
+    return
+  }
   const snapShot = db
     .collection("favorite")
     .doc(favoriteId)

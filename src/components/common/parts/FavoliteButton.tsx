@@ -1,18 +1,20 @@
 import React, { useEffect, useState, FC } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart } from "@fortawesome/free-solid-svg-icons"
-import { Favorite } from "../../../types/favorite"
+import { Favorite, ResFavorite } from "../../../types/favorite"
 import functions from "../../../utils/functions"
-const { getFavorite, createFavorite, deleteFavorite } = functions
+import { number } from "prop-types"
+const {
+  getFavorite,
+  createFavorite,
+  deleteFavorite,
+  getfavoriteNum
+} = functions
 
-type Props = {
-  user_id: string
-  summary_id: string
-}
-
-const FavoliteButton: FC<Props> = props => {
+const FavoliteButton: FC<Favorite> = props => {
   const { user_id, summary_id } = props
-  const [favorites, setFavorites] = useState<Favorite>({})
+  const [favorites, setFavorites] = useState<ResFavorite>({})
+  const [favoritesNum, setFavoritesNum] = useState(0)
   const handleFavorite = async (event: React.MouseEvent<HTMLElement>) => {
     event.persist()
     event.preventDefault()
@@ -24,23 +26,33 @@ const FavoliteButton: FC<Props> = props => {
       console.log("記事がありません。")
       return
     }
-    console.log(favorites)
-    // if (Object.keys(favorites).length >= 0) {
-    //   console.log("called")
-    //   //deleteFavorite(favorite.id)
-    // } else {
-    //   createFavorite(props)
-    // }
-    createFavorite(props)
+    //レンダリングさせる必要がある
+    if (Object.keys(favorites).length > 0) {
+      deleteFavorite(favorites.id)
+      setFavorites({})
+      setFavoritesNum(favoritesNum - 1)
+    } else {
+      const id: string = await createFavorite(props)
+      if (!id) {
+        console.log("idが存在しません")
+        return
+      }
+      setFavorites({ id, ...props })
+      setFavoritesNum(favoritesNum + 1)
+    }
   }
 
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      const favorite = await getFavorite(user_id, summary_id)
-      console.log(favorite)
+      const [favorite] = await getFavorite(user_id, summary_id)
+      const count: number = await getfavoriteNum(summary_id)
+      console.log(count)
       if (!unmounted) {
-        //setFavorites(favorite)
+        if (favorite) {
+          setFavorites(favorite)
+          setFavoritesNum(count)
+        }
       }
     })()
     return () => {
@@ -51,9 +63,13 @@ const FavoliteButton: FC<Props> = props => {
   return (
     <>
       <div className="favolite-button" onClick={handleFavorite}>
-        <FontAwesomeIcon icon={faHeart} />
-        <FontAwesomeIcon icon={faHeart} className="clicked" />
+        {Object.keys(favorites).length > 0 ? (
+          <FontAwesomeIcon icon={faHeart} className="clicked" />
+        ) : (
+          <FontAwesomeIcon icon={faHeart} />
+        )}
       </div>
+      <div>{favoritesNum}</div>
     </>
   )
 }

@@ -16,7 +16,6 @@ const LoginForm = () => {
   }
 
   const onSubmit = (event: React.MouseEvent) => {
-    console.log(loginValues)
     event.persist()
     event.preventDefault()
     const { email, password } = loginValues
