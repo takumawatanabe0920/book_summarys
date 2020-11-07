@@ -1,14 +1,17 @@
 import React from "react"
 import { CurrentUser } from "../../types/user"
-import firebase from "../../firebase/config.jsx"
+import config from "../../firebase/config"
+const { firebase } = config
 const db = firebase.firestore()
 
-export const getUser = (email: string) => {
+export const getUser = (uid: string) => {
+  console.log(uid)
   const user = db
     .collection("user")
-    .doc(email)
+    .doc(uid)
     .get()
     .then(doc => {
+      console.log(doc)
       if (doc.exists) {
         return doc.data()
       } else {

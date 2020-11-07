@@ -32,6 +32,11 @@ module.exports = {
         use: ["style-loader", "css-loader", "sass-loader"]
       },
       {
+        type: "javascript/auto",
+        test: /\.json$/,
+        use: [{ loader: "json-loader" }]
+      },
+      {
         test: /\.(eot|ttf|woff|woff2)$/,
         use: {
           loader: "file-loader",

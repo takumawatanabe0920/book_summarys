@@ -17,9 +17,11 @@ const SummaryItem: FC<Props> = props => {
         <div className="_thumnail">
           <img src={articleImg} />
         </div>
-        <h3 className="_summary-ttl">{data.title}</h3>
-        <p className="_summary-txt">{data.author}</p>
-        <FavoliteButton user_id={data.user_id} summary_id={data.id} />
+        <div className="_txt-box">
+          <h3 className="_summary-ttl">{data.title}</h3>
+          <p className="_summary-txt">{data.author}</p>
+          <FavoliteButton user_id={data.user_id} summary_id={data.id} />
+        </div>
       </Link>
     </>
   )
