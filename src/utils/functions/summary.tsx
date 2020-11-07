@@ -1,7 +1,6 @@
 import React from "react"
 import { SummaryBook } from "./../../types/summary"
-import config from "../../firebase/config"
-const { firebase } = config
+import firebase from "../../firebase/config"
 const db = firebase.firestore()
 
 export const createSummary = (values: SummaryBook) => {

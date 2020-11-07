@@ -1,6 +1,5 @@
 import React from "react"
-import config from "../../firebase/config"
-const { firebase } = config
+import firebase from "../../firebase/config"
 const db = firebase.firestore()
 
 export const getCategories = () => {

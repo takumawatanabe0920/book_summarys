@@ -1,8 +1,5 @@
 import React from "react"
 import firebase from "firebase"
-//import * as admin from "firebase-admin"
-//var admin = require("firebase-admin")
-//import serviceAccount from "./serviceAccountKey.json"
 import "firebase/firestore"
 import "firebase/auth"
 
@@ -20,17 +17,4 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
 }
 
-//console.log(JSON.stringify(serviceAccount))
-//console.log(admin)
-
-// admin.initializeApp({
-//   credential: admin.credential.cert(JSON.stringify(serviceAccount)),
-//   databaseURL: "https://pizza-planet-0920.firebaseio.com"
-// })
-
-const config = {
-  firebase
-  //admin
-}
-
-export default config
+export default firebase

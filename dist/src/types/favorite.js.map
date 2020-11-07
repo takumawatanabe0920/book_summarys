@@ -1,0 +1,1 @@
+{"version":3,"file":"favorite.js","sourceRoot":"","sources":["../../../src/types/favorite.tsx"],"names":[],"mappings":"","sourcesContent":["import React, { FC } from \"react\"\n\nexport type Favorite = Partial<{\n  user_id: string\n  summary_id: string\n}>\n\nexport type ResFavorite = Favorite & {\n  id?: string\n}\n"]}

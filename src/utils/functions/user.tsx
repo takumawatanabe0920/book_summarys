@@ -1,7 +1,6 @@
 import React from "react"
 import { CurrentUser } from "../../types/user"
-import config from "../../firebase/config"
-const { firebase } = config
+import firebase from "../../firebase/config"
 const db = firebase.firestore()
 
 export const getUser = (uid: string) => {
@@ -11,7 +10,6 @@ export const getUser = (uid: string) => {
     .doc(uid)
     .get()
     .then(doc => {
-      console.log(doc)
       if (doc.exists) {
         return doc.data()
       } else {
