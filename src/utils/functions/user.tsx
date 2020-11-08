@@ -1,10 +1,10 @@
 import React from "react"
+import axios from "axios"
 import { CurrentUser } from "../../types/user"
 import firebase from "../../firebase/config"
 const db = firebase.firestore()
 
 export const getUser = (uid: string) => {
-  console.log(uid)
   const user = db
     .collection("user")
     .doc(uid)
@@ -51,7 +51,6 @@ export const register = async (
     .catch(error => {
       console.log("error")
     })
-  //emailAuthMixin_sendVerifyMail()
 }
 
 export const login = (email: string, password: string) => {
@@ -83,6 +82,18 @@ export const logout = () => {
         console.log(`ログアウト時にエラーが発生しました (${err})`)
       }
     )
+}
+
+export const getUrl = () => {
+  axios
+    .get("http://localhost:3012/v1/users", {
+      headers: {
+        Authorization: "Bearer 8213f5cd-5fds2-4891-83d0-48d172ffab77"
+      }
+    })
+    .then(res => {
+      console.log(res)
+    })
 }
 
 //private

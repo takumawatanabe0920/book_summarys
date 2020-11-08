@@ -53,8 +53,10 @@ module.exports = {
 
   // モジュール解決
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".ts", ".tsx", ".js", ".json"],
+    alias: {}
   },
+  plugins: [],
 
   // 開発モード設定
   devtool: "source-map",
