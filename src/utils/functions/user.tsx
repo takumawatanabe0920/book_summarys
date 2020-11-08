@@ -2,23 +2,28 @@ import React from "react"
 import axios from "axios"
 import { CurrentUser } from "../../types/user"
 import firebase from "../../firebase/config"
-const db = firebase.firestore()
 
-export const getUser = (uid: string) => {
-  const user = db
-    .collection("user")
-    .doc(uid)
-    .get()
-    .then(doc => {
-      if (doc.exists) {
-        return doc.data()
-      } else {
-        return ""
-      }
+//api
+export const getUser = async (uid: string) => {
+  console.log("called")
+  const data = {
+    headers: {
+      Authorization: "Bearer 8213f5cd-5fds2-4891-83d0-48d172ffab77"
+    },
+    params: { uid }
+  }
+  const response = await axios
+    .get("http://localhost:3012/v1/users", data)
+    .then(res => {
+      return res.data
     })
-  return user
+    .catch(err => {
+      return err.response.data
+    })
+  return response
 }
 
+//firebase
 export const getCurrentUser = () => {
   const currentUserData = localStorage.getItem("user")
   const currentUser: CurrentUser = currentUserData
@@ -82,18 +87,6 @@ export const logout = () => {
         console.log(`ログアウト時にエラーが発生しました (${err})`)
       }
     )
-}
-
-export const getUrl = () => {
-  axios
-    .get("http://localhost:3012/v1/users", {
-      headers: {
-        Authorization: "Bearer 8213f5cd-5fds2-4891-83d0-48d172ffab77"
-      }
-    })
-    .then(res => {
-      console.log(res)
-    })
 }
 
 //private

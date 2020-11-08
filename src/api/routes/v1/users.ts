@@ -13,12 +13,25 @@ admin.initializeApp({
 })
 
 router.get("/", async (req: any, res: any) => {
-  console.log("called!!!!!!!!!!")
-  const result = []
-  // ユーザ一覧の取得は、1000件まで
-  let listUsersResult = await admin.auth().listUsers(1000)
-  result.push(...listUsersResult.users)
-  console.log(result)
+  const { uid } = req.query
+  try {
+    const user = await admin.auth().getUser(uid)
+
+    res.status(200)
+    return res.json({
+      status: 200,
+      msg: "success",
+      data: user
+    })
+  } catch (e) {
+    console.log(e.message)
+    res.status(400)
+    return res.json({
+      status: 400,
+      msg: e.message,
+      data: []
+    })
+  }
 })
 
 module.exports = router

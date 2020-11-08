@@ -47,7 +47,6 @@ const FavoliteButton: FC<Favorite> = props => {
     ;(async () => {
       const [favorite] = await getFavorite(user_id, summary_id)
       const count: number = await getfavoriteNum(summary_id)
-      console.log(count)
       if (!unmounted) {
         if (favorite) {
           setFavorites(favorite)

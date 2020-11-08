@@ -12,7 +12,8 @@ import SummaryCreatePage from "../components/summary/Create"
 import SummaryShowPage from "../components/summary/Show"
 import SignUpPage from "../components/sign_up"
 import SignInPage from "../components/sign_in"
-import MypagePage from "../components/mypage"
+import MypagePage from "../components/user/Mypage"
+import UserDetailPage from "../components/user/UserDetail"
 
 ReactDOM.render(
   <div>
@@ -29,6 +30,7 @@ ReactDOM.render(
                 component={SummaryCreatePage}
               />
               <PrivateRoute exact path="/mypage" component={MypagePage} />
+              <Route exact path="/user/:id" component={UserDetailPage} />
               <Route exact path="/summary/:id" component={SummaryShowPage} />
               <GuestRoute exact path="/sign_up" component={SignUpPage} />
               <GuestRoute exact path="/sign_in" component={SignInPage} />
