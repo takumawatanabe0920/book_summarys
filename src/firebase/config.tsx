@@ -1,6 +1,8 @@
+import React from "react"
 import firebase from "firebase"
 import "firebase/firestore"
 import "firebase/auth"
+
 const firebaseConfig = {
   apiKey: "AIzaSyCvJDYnkhnbzc9IsASUKeeCYSyFJJ-52mQ",
   authDomain: "pizza-planet-0920.firebaseapp.com",

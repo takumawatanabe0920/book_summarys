@@ -32,6 +32,11 @@ module.exports = {
         use: ["style-loader", "css-loader", "sass-loader"]
       },
       {
+        type: "javascript/auto",
+        test: /\.json$/,
+        use: [{ loader: "json-loader" }]
+      },
+      {
         test: /\.(eot|ttf|woff|woff2)$/,
         use: {
           loader: "file-loader",
@@ -42,14 +47,16 @@ module.exports = {
           }
         }
       },
-      { test: /\.(gif|png|jpe?g|)$/, use: "url-loader" }
+      { test: /\.(gif|png|jpg|)$/, use: "url-loader" }
     ]
   },
 
   // モジュール解決
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".ts", ".tsx", ".js", ".json"],
+    alias: {}
   },
+  plugins: [],
 
   // 開発モード設定
   devtool: "source-map",

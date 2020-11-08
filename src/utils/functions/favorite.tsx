@@ -1,5 +1,5 @@
 import React from "react"
-import firebase from "../../firebase/config.jsx"
+import firebase from "../../firebase/config"
 const db = firebase.firestore()
 import { Favorite } from "../../types/favorite"
 
@@ -33,7 +33,6 @@ export const getFavorites = () => {
 }
 
 export const getDonefavorite = (id: string) => {
-  console.log(id)
   const snapShot = db
     .collection("favorite")
     .doc(id)
@@ -53,7 +52,6 @@ export const getDonefavorite = (id: string) => {
 }
 
 export const getfavoriteNum = async (summaryId?: string) => {
-  console.log(summaryId)
   const snapShot: any = await db
     .collection("favorite")
     .where("summary_id", "==", summaryId)

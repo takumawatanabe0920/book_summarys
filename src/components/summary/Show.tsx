@@ -3,7 +3,13 @@ import { useParams } from "react-router-dom"
 import Sidebar from "../layouts/Sidebar"
 import { ResSummaryBook, Category, SubCategory } from "../../types/summary"
 import functions from "../../utils/functions"
-const { getSummaryBook, getCategory, getSubCategory } = functions
+const {
+  getSummaryBook,
+  getCategory,
+  getSubCategory,
+  getUser,
+  getUrl
+} = functions
 
 const SummaryShowPage = () => {
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
@@ -14,6 +20,7 @@ const SummaryShowPage = () => {
 
   useEffect(() => {
     let unmounted = false
+    getUrl()
     ;(async () => {
       const resSummaryBook: void | any = await getSummaryBook(url.id)
       const resCategory: void | any = await getCategory(resSummaryBook.category)
@@ -21,6 +28,8 @@ const SummaryShowPage = () => {
       if (resSummaryBook.sub_category) {
         resSubCategory = await getSubCategory(resSummaryBook.sub_category)
       }
+      const resUser = await getUser(resSummaryBook.user_id)
+
       if (!unmounted) {
         setSummaryBook(resSummaryBook)
         setCategory(resCategory)
