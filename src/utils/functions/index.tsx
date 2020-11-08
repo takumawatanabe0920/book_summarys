@@ -14,8 +14,7 @@ import {
   register,
   login,
   logout,
-  getCurrentUser,
-  getUrl
+  getCurrentUser
 } from "./user"
 import {
   getFavorite,
@@ -46,8 +45,7 @@ const functions = {
   createFavorite,
   deleteFavorite,
   getFavorite,
-  getfavoriteNum,
-  getUrl
+  getfavoriteNum
 }
 
 // import _ from 'underscore'

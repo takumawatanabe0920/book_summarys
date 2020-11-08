@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
+import { Link } from "react-router-dom"
 import Sidebar from "../layouts/Sidebar"
 import { ResSummaryBook, Category, SubCategory } from "../../types/summary"
 import functions from "../../utils/functions"
-const {
-  getSummaryBook,
-  getCategory,
-  getSubCategory,
-  getUser,
-  getUrl
-} = functions
+const { getSummaryBook, getCategory, getSubCategory } = functions
 
 const SummaryShowPage = () => {
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
@@ -20,7 +15,6 @@ const SummaryShowPage = () => {
 
   useEffect(() => {
     let unmounted = false
-    getUrl()
     ;(async () => {
       const resSummaryBook: void | any = await getSummaryBook(url.id)
       const resCategory: void | any = await getCategory(resSummaryBook.category)
@@ -28,7 +22,6 @@ const SummaryShowPage = () => {
       if (resSummaryBook.sub_category) {
         resSubCategory = await getSubCategory(resSummaryBook.sub_category)
       }
-      const resUser = await getUser(resSummaryBook.user_id)
 
       if (!unmounted) {
         setSummaryBook(resSummaryBook)
@@ -49,7 +42,9 @@ const SummaryShowPage = () => {
             <div className="_icon">
               <img src="" alt="" />
             </div>
-            <div className="_icon">渡辺拓馬</div>
+            <Link to={`/user/${summarybook.user_id}`} className="_icon">
+              渡辺拓馬
+            </Link>
           </div>
           <div className="summary-show">
             <div className="_header">
