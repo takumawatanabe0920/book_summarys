@@ -15,7 +15,7 @@ const RegisterForm = () => {
     setValues({ ...values, [name]: value })
   }
 
-  const onSubmit = (event: React.MouseEvent) => {
+  const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
     const { displayName, email, password, photoURL } = values
@@ -24,7 +24,7 @@ const RegisterForm = () => {
       return
     }
     if (window.confirm("会員登録しますか？")) {
-      register(email, password, displayName, photoURL)
+      await register(email, password, displayName, photoURL)
     }
   }
 

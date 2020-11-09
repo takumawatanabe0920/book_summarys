@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import useReactRouter from "use-react-router"
 import Input from "./parts/Input"
 import Textarea from "./parts/Textarea"
 import Select from "./parts/Select"
+
 import {
   SummaryBook,
   ResCategory,
@@ -23,10 +25,11 @@ const SummaryForm = () => {
   const [categories, setCategories] = useState<ResCategory[]>([])
   const [subCategories, setSubCategories] = useState<ResSubCategory[]>([])
   const [isSelectCategory, setIsSelectCategory] = useState<boolean>(false)
-
   const { register, handleSubmit, errors, formState } = useForm<SummaryBook>({
     mode: "onChange"
   })
+
+  const { history } = useReactRouter()
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist()
@@ -56,13 +59,20 @@ const SummaryForm = () => {
     subCategorySelect(value)
   }
 
-  const onSubmit = (event: React.MouseEvent) => {
-    console.log(values)
+  const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
 
     if (window.confirm("記事を作成しますか？")) {
-      createSummary(values)
+      const resSummary: { id?: string; status: number } = await createSummary(
+        values
+      )
+      if (resSummary && resSummary.status === 200) {
+        history.push(`/summary/${resSummary.id}`)
+      } else {
+        console.log("失敗しました。")
+        history.push("/")
+      }
     }
   }
 
