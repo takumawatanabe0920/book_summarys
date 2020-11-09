@@ -1,4 +1,5 @@
 import React from "react"
+import dayjs from "dayjs"
 import firebase from "../../firebase/config"
 const db = firebase.firestore()
 import { Favorite } from "../../types/favorite"
@@ -76,6 +77,8 @@ export const createFavorite = (values: Favorite) => {
     console.log("idがありません")
     return
   }
+  values.create_date = dayjs().unix()
+  values.update_date = dayjs().unix()
   const snapShot = db
     .collection("favorite")
     .add({

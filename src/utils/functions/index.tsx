@@ -24,6 +24,7 @@ import {
   getDonefavorite,
   getfavoriteNum
 } from "./favorite"
+import { readQuery } from "./defalt"
 
 const functions = {
   getCategories,
@@ -45,7 +46,8 @@ const functions = {
   createFavorite,
   deleteFavorite,
   getFavorite,
-  getfavoriteNum
+  getfavoriteNum,
+  readQuery
 }
 
 // import _ from 'underscore'

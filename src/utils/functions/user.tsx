@@ -5,7 +5,6 @@ import firebase from "../../firebase/config"
 
 //api
 export const getUser = async (uid: string) => {
-  console.log("called")
   const data = {
     headers: {
       Authorization: "Bearer 8213f5cd-5fds2-4891-83d0-48d172ffab77"
@@ -38,11 +37,11 @@ export const register = async (
   displayName: string,
   photoURL: string
 ) => {
-  const user = await getUser(email)
-  if (user) {
-    console.log("ユーザーが存在しています")
-    return
-  }
+  // const user = await getUser(email)
+  // if (user) {
+  //   console.log("ユーザーが存在しています")
+  //   return
+  // }
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)

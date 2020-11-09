@@ -12,6 +12,8 @@ export type SummaryBook = Partial<{
   review: string
   product_links: string
   user_id: string
+  create_date: number
+  update_date: number
 }>
 
 export type Category = Partial<{
