@@ -30,6 +30,7 @@ import {
   getfavoriteNum
 } from "./favorite"
 import { readQuery } from "./defalt"
+import { createBrowsing, getMyBrowsing } from "./Browsing"
 
 const functions = {
   getCategories,
@@ -53,14 +54,9 @@ const functions = {
   getFavorite,
   getfavoriteNum,
   readQuery,
-  getSummariesCount
+  getSummariesCount,
+  createBrowsing,
+  getMyBrowsing
 }
-
-// import _ from 'underscore'
-// import bluebird from 'bluebird'
-// _.mapObject(models, function(val) {
-//   bluebird.promisifyAll(val)
-//   bluebird.promisifyAll(val.prototype)
-// })
 
 export default functions

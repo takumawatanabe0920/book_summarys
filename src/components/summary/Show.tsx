@@ -3,8 +3,18 @@ import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
 import Sidebar from "../layouts/Sidebar"
 import { ResSummaryBook, Category, SubCategory } from "../../types/summary"
+import { CurrentUser } from "../../types/user"
+import { ResBrowsing } from "../../types/browsing"
 import functions from "../../utils/functions"
-const { getSummaryBook, getCategory, getSubCategory } = functions
+const {
+  getSummaryBook,
+  getCategory,
+  getSubCategory,
+  createBrowsing,
+  getCurrentUser,
+  getMyBrowsing
+} = functions
+const user: CurrentUser = getCurrentUser()
 
 const SummaryShowPage = () => {
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
@@ -23,6 +33,13 @@ const SummaryShowPage = () => {
         resSubCategory = await getSubCategory(resSummaryBook.sub_category)
       }
 
+      if (url && url.id && user) {
+        const browsing = { summary_id: url.id, user_id: user.uid }
+        let [res]: ResBrowsing[] = await getMyBrowsing(browsing.user_id)
+        if (res.summary_id.id !== browsing.summary_id) {
+          createBrowsing(browsing)
+        }
+      }
       if (!unmounted) {
         setSummaryBook(resSummaryBook)
         setCategory(resCategory)
