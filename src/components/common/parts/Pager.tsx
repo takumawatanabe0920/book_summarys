@@ -14,8 +14,6 @@ const Pager: FC<props> = props => {
   const history = useHistory()
   let path = useLocation().pathname
 
-  console.log(dataNum)
-
   const updateData = (num?: number) => {
     setPage(num)
     let searchParams: { pages?: number } = {}
