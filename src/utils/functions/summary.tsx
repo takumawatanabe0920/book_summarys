@@ -58,6 +58,17 @@ export const getSummaries = async (limit?: number, page?: number) => {
   return next
 }
 
+export const getSummariesCount = async () => {
+  let docNum = await db
+    .collection("summary")
+    .get()
+    .then(snap => {
+      return snap.size // will return the collection size
+    })
+
+  return docNum
+}
+
 export const getSummaryBook = (id: string) => {
   const snapShot = db
     .collection("summary")
