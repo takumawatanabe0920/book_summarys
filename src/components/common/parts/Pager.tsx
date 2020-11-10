@@ -2,10 +2,19 @@ import React, { useEffect, useState, FC } from "react"
 import { useLocation, useHistory } from "react-router-dom"
 import queryString from "query-string"
 
-const Pager: React.FunctionComponent<{ fetchData: any }> = ({ fetchData }) => {
-  const [page, setPage] = useState(0)
+type props = {
+  fetchData: any
+  dataNum: number
+}
+
+const Pager: FC<props> = props => {
+  const [page, setPage] = useState(1)
+
+  const { fetchData, dataNum } = props
   const history = useHistory()
   let path = useLocation().pathname
+
+  console.log(dataNum)
 
   const updateData = (num?: number) => {
     setPage(num)
@@ -14,6 +23,32 @@ const Pager: React.FunctionComponent<{ fetchData: any }> = ({ fetchData }) => {
     let searchQuery = queryString.stringify(searchParams)
     history.push(`${path}?${searchQuery}`)
     fetchData(num)
+  }
+
+  const prevNum = () => {
+    let prevNum = page - 1
+    if (!(prevNum > 0)) {
+      return ""
+    } else {
+      return (
+        <a className="prev" onClick={() => updateData(prevNum)}>
+          {prevNum}
+        </a>
+      )
+    }
+  }
+
+  const nextNum = () => {
+    let nextNum = page + 1
+    if (nextNum >= Math.ceil(dataNum / 6)) {
+      return ""
+    } else {
+      return (
+        <a className="next" onClick={() => updateData(nextNum)}>
+          {nextNum}
+        </a>
+      )
+    }
   }
 
   useEffect(() => {
@@ -30,13 +65,9 @@ const Pager: React.FunctionComponent<{ fetchData: any }> = ({ fetchData }) => {
   return (
     <>
       <div>
-        <a className="prev" onClick={() => updateData(1)}>
-          {1}
-        </a>
-        <p className="num">{2}</p>
-        <a className="next" onClick={() => updateData(3)}>
-          {3}
-        </a>
+        {prevNum()}
+        <p className="num">{page}</p>
+        {nextNum()}
       </div>
     </>
   )

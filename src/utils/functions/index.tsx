@@ -7,7 +7,12 @@ import {
   getSubCategory,
   categoryLinkingSubCategory
 } from "./category"
-import { getSummaries, getSummaryBook, createSummary } from "./summary"
+import {
+  getSummaries,
+  getSummaryBook,
+  createSummary,
+  getSummariesCount
+} from "./summary"
 import {
   getUser,
   emailAuthMixin_sendVerifyMail,
@@ -47,7 +52,8 @@ const functions = {
   deleteFavorite,
   getFavorite,
   getfavoriteNum,
-  readQuery
+  readQuery,
+  getSummariesCount
 }
 
 // import _ from 'underscore'
