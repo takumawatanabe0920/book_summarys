@@ -1,5 +1,5 @@
 import React from "react"
-import { ResSummaryBook } from "../../types/summary"
+import { ResSummaryBook } from "./../types/summary"
 
 export type Browsing = Partial<{
   user_id: string
@@ -8,7 +8,10 @@ export type Browsing = Partial<{
   update_date: number
 }>
 
-export type ResBrowsing = Browsing & {
-  id?: string
-  summary_id?: ResSummaryBook
-}
+export type ResBrowsing = Partial<{
+  id: string
+  user_id: string
+  summary_id: ResSummaryBook
+  create_date: number
+  update_date: number
+}>

@@ -1,3 +1,4 @@
+import React from "react"
 export type User = Partial<{
   displayName: string
   photoURL: string

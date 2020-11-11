@@ -4,7 +4,6 @@ import { Browsing } from "../../types/browsing"
 import firebase from "../../firebase/config"
 const db = firebase.firestore()
 import { getSummaryBook } from "./summary"
-console.log(getSummaryBook)
 
 export const createBrowsing = (values: Browsing) => {
   const { summary_id, user_id } = values

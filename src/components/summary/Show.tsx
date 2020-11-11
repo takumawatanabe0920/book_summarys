@@ -37,6 +37,7 @@ const SummaryShowPage = () => {
         const browsing = { summary_id: url.id, user_id: user.uid }
         let [res]: ResBrowsing[] = await getMyBrowsing(browsing.user_id)
         if (res.summary_id.id !== browsing.summary_id) {
+          //すぐにfirebaseに反映されないため、遅延処理を入れたい
           createBrowsing(browsing)
         }
       }
