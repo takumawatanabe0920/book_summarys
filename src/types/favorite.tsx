@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React from "react"
 
 export type Favorite = Partial<{
   user_id: string

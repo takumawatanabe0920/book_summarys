@@ -76,7 +76,7 @@ export const getSummaryBook = (id: string) => {
     .get()
     .then(doc => {
       if (doc.exists) {
-        return doc.data()
+        return { id: doc.id, ...doc.data() }
       } else {
         console.log("404")
       }

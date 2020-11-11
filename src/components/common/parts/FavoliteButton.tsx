@@ -32,7 +32,8 @@ const FavoliteButton: FC<Favorite> = props => {
       setFavorites({})
       setFavoritesNum(favoritesNum - 1)
     } else {
-      const id: string = await createFavorite(props)
+      let newProps = { ...props }
+      const id = await createFavorite(newProps)
       if (!id) {
         console.log("idが存在しません")
         return
