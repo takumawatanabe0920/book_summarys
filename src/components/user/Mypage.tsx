@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { CurrentUser } from "../../types/user"
 import { ResBrowsing } from "../../types/browsing"
 import functions from "../../utils/functions"
-const { getCurrentUser, logout, getMyBrowsing } = functions
+const { getCurrentUser, logout, getMyBrowsing, formatDateHour } = functions
 const user: CurrentUser = getCurrentUser()
 
 const Mypage = () => {
@@ -54,7 +54,7 @@ const Mypage = () => {
                     </dl>
                     <dl>
                       <dt>閲覧日時</dt>
-                      <dd>{browing.update_date}</dd>
+                      <dd>{formatDateHour(browing.update_date)}</dd>
                     </dl>
                   </div>
                 )

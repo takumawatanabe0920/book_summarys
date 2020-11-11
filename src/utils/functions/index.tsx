@@ -29,7 +29,7 @@ import {
   getDonefavorite,
   getfavoriteNum
 } from "./favorite"
-import { readQuery } from "./defalt"
+import { readQuery, formatDateHour } from "./defalt"
 import { createBrowsing, getMyBrowsing } from "./Browsing"
 
 const functions = {
@@ -56,7 +56,8 @@ const functions = {
   readQuery,
   getSummariesCount,
   createBrowsing,
-  getMyBrowsing
+  getMyBrowsing,
+  formatDateHour
 }
 
 export default functions

@@ -1,14 +1,19 @@
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { Link } from "react-router-dom"
 import { ResSummaryBook } from "../../types/summary"
+import { CurrentUser } from "../../types/user"
 import articleImg from "../../static/images/izumi-img.jpg"
-import FavoliteButton from "./../common/parts/FavoliteButton"
+import FavoliteButton from "../common/parts/FavoriteButton"
+import functions from "../../utils/functions"
+const { getCurrentUser } = functions
+const user: CurrentUser = getCurrentUser()
 
 type Props = {
   data: ResSummaryBook
 }
 
 const SummaryItem: FC<Props> = props => {
+  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const { data } = props
 
   return (
@@ -20,7 +25,7 @@ const SummaryItem: FC<Props> = props => {
         <div className="_txt-box">
           <h3 className="_summary-ttl">{data.title}</h3>
           <p className="_summary-txt">{data.author}</p>
-          <FavoliteButton user_id={data.user_id} summary_id={data.id} />
+          <FavoliteButton user_id={currentUser.uid} summary_id={data.id} />
         </div>
       </Link>
     </>
