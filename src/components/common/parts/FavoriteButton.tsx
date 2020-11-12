@@ -10,7 +10,8 @@ const {
   createFavorite,
   deleteFavorite,
   getfavoriteNum,
-  getCurrentUser
+  getCurrentUser,
+  updateFavoriteSummaries
 } = functions
 const user: CurrentUser = getCurrentUser()
 
@@ -37,6 +38,7 @@ const FavoliteButton: FC<Favorite> = props => {
     //レンダリングさせる必要がある
     if (Object.keys(currentUserfavorites).length > 0) {
       deleteFavorite(currentUserfavorites.id)
+      updateFavoriteSummaries(currentUserfavorites.id, summary_id)
       setCurrentUserFavorites({})
       setFavoritesNum(favoritesNum - 1)
     } else {
@@ -46,6 +48,7 @@ const FavoliteButton: FC<Favorite> = props => {
         console.log("idが存在しません")
         return
       }
+      updateFavoriteSummaries(id, summary_id)
       setCurrentUserFavorites({ id, ...props })
       setFavoritesNum(favoritesNum + 1)
     }

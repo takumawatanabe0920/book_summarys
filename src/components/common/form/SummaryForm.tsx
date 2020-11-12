@@ -62,6 +62,7 @@ const SummaryForm = () => {
   const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
+    values.favorite_id = []
 
     if (window.confirm("記事を作成しますか？")) {
       const resSummary: { id?: string; status: number } = await createSummary(

@@ -50,7 +50,7 @@ const Mypage = () => {
                   <div key={browing.id}>
                     <dl>
                       <dt>記事</dt>
-                      <dd>{browing.summary_id.title}</dd>
+                      <dd>{browing.summary_id && browing.summary_id.title}</dd>
                     </dl>
                     <dl>
                       <dt>閲覧日時</dt>

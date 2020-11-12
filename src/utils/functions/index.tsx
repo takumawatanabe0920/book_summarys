@@ -11,7 +11,9 @@ import {
   getSummaries,
   getSummaryBook,
   createSummary,
-  getSummariesCount
+  getSummariesCount,
+  updateFavoriteSummaries,
+  getRankingSummaries
 } from "./summary"
 import {
   getUser,
@@ -41,6 +43,9 @@ const functions = {
   getSummaries,
   getSummaryBook,
   createSummary,
+  updateFavoriteSummaries,
+  getRankingSummaries,
+  getSummariesCount,
   getUser,
   getCurrentUser,
   emailAuthMixin_sendVerifyMail,
@@ -54,7 +59,6 @@ const functions = {
   getFavorite,
   getfavoriteNum,
   readQuery,
-  getSummariesCount,
   createBrowsing,
   getMyBrowsing,
   formatDateHour
