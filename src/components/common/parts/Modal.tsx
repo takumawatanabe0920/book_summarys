@@ -1,6 +1,5 @@
 import React, { useEffect, useState, FC } from "react"
-import QuestionModal from "./modal/QuestionModal"
-import DefaultModal from "./modal/DefaultModal"
+import { QuestionModal, DefaultModal } from "../../../components"
 
 type props = {
   modalInfo: { title?: string; content?: string }

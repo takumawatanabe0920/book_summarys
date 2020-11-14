@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { Link } from "react-router-dom"
-import { ResSummaryBook } from "../../types/summary"
-import functions from "../../utils/functions"
-const { getSummaries, getRankingSummaries } = functions
+import { ResSummaryBook } from "../../types"
+import { getSummaries, getRankingSummaries } from "../../utils/functions"
 
 const Sidebar = () => {
   const [allRankingSummaries, setAllRankingSummaries] = useState<

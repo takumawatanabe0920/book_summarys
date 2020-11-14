@@ -1,18 +1,16 @@
 import React, { useEffect, useState, FC } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart } from "@fortawesome/free-solid-svg-icons"
-import { Favorite, ResFavorite } from "../../../types/favorite"
-import { CurrentUser } from "../../../types/user"
-import functions from "../../../utils/functions"
-import { number } from "prop-types"
-const {
+import { Favorite, ResFavorite, CurrentUser } from "../../../types"
+import {
   getFavorite,
   createFavorite,
   deleteFavorite,
   getfavoriteNum,
   getCurrentUser,
   updateFavoriteSummaries
-} = functions
+} from "../../../utils/functions"
+import { number } from "prop-types"
 const user: CurrentUser = getCurrentUser()
 
 const FavoliteButton: FC<Favorite> = props => {

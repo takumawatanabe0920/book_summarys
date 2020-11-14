@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useMemo } from "react"
 // components
 import Sidebar from "./layouts/Sidebar"
-import SummaryList from "./summary/SummaryList"
-import functions from "./../utils/functions"
-import Pager from "./common/parts/Pager"
-const { getSummaries, readQuery, getSummariesCount } = functions
+import { SummaryList, Pager } from "./../components"
+import {
+  getSummaries,
+  readQuery,
+  getSummariesCount
+} from "./../utils/functions"
 
 // sections
 
-const IndexPage = () => {
+const HomePage = () => {
   const [summaries, setSummaries] = useState([])
   const [summariesNum, setSummariesNum] = useState(0)
   const [page, setPage] = useState(Number(readQuery("pages") || 1))
@@ -47,4 +49,4 @@ const IndexPage = () => {
   )
 }
 
-export default IndexPage
+export default HomePage

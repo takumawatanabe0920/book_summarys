@@ -1,6 +1,5 @@
 import React, { useEffect, useState, FC } from "react"
-import Textarea from "../../form/parts/Textarea"
-import Select from "../../form/parts/Select"
+import { Textarea, Select } from "../../../../components"
 
 type props = {
   modalInfo?: { title?: string; content?: string }

@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import Sidebar from "../layouts/Sidebar"
-import SummaryForm from "../common/form/SummaryForm"
+import { SummaryForm } from "./../../components"
 
 const SummaryCreatePage = () => {
   return (

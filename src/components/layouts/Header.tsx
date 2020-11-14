@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { CurrentUser } from "../../types/user"
-import functions from "../../utils/functions"
-const { getCurrentUser } = functions
+import { CurrentUser } from "../../types"
+import { getCurrentUser } from "../../utils/functions"
 
 const Header = () => {
   const [CurrentUser, setCurrentUser] = useState<CurrentUser>({})

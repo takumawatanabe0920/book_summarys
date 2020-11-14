@@ -2,18 +2,22 @@ import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
 import Sidebar from "../layouts/Sidebar"
-import { ResSummaryBook, Category, SubCategory } from "../../types/summary"
-import { CurrentUser } from "../../types/user"
-import { ResBrowsing } from "../../types/browsing"
-import functions from "../../utils/functions"
-const {
+import {
+  ResSummaryBook,
+  Category,
+  SubCategory,
+  CurrentUser,
+  ResBrowsing
+} from "../../types"
+import SummaryDetails from "./parts/SummaryDetails"
+import {
   getSummaryBook,
   getCategory,
   getSubCategory,
   createBrowsing,
   getCurrentUser,
   getMyBrowsing
-} = functions
+} from "../../utils/functions"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryShowPage = () => {
@@ -55,47 +59,11 @@ const SummaryShowPage = () => {
   return (
     <>
       <div className="summary_main">
-        <div className="main-block">
-          <div className="prof-area">
-            <div className="_icon">
-              <img src="" alt="" />
-            </div>
-            <Link to={`/user/${summarybook.user_id}`} className="_icon">
-              渡辺拓馬
-            </Link>
-          </div>
-          <div className="summary-show">
-            <div className="_header">
-              <h1 className="main-title blue-main-title">
-                {summarybook.title}
-              </h1>
-              <div className="tags">
-                {/* TODO リンク：カテゴリー記事に飛ばす */}
-                <span className="tag">{category.name}</span>
-                <span className="tag">
-                  {subCategory ? subCategory.name : ""}
-                </span>
-              </div>
-            </div>
-            <div className="_body">
-              <p className="_txt">{summarybook.content}</p>
-            </div>
-            <div className="_footer">
-              <dl>
-                <dt>値段：</dt>
-                <dd>{summarybook.price}円</dd>
-              </dl>
-              <dl>
-                <dt>著者：</dt>
-                <dd>{summarybook.author}</dd>
-              </dl>
-              <dl>
-                <dt>商品リンク：</dt>
-                <dd>{summarybook.product_links}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
+        <SummaryDetails
+          summaryBook={summarybook}
+          category={category}
+          subCategory={subCategory}
+        />
         <Sidebar />
       </div>
     </>

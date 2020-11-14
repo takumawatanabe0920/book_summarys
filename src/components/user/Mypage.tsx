@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { CurrentUser } from "../../types/user"
 import { ResBrowsing } from "../../types/browsing"
-import functions from "../../utils/functions"
-const { getCurrentUser, logout, getMyBrowsing, formatDateHour } = functions
+import {
+  getCurrentUser,
+  logout,
+  getMyBrowsing,
+  formatDateHour
+} from "../../utils/functions"
 const user: CurrentUser = getCurrentUser()
 
 const Mypage = () => {

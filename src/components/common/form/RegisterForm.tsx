@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react"
-import Input from "./parts/Input"
-import { User } from "../../../types/user"
-import functions from "../../../utils/functions"
-const { register } = functions
+import { Input } from "../../../components"
+import { User } from "../../../types"
+import { register } from "../../../utils/functions"
 
 const RegisterForm = () => {
   const [values, setValues] = useState<User>({})

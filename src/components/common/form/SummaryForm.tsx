@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import useReactRouter from "use-react-router"
-import Input from "./parts/Input"
-import Textarea from "./parts/Textarea"
-import Select from "./parts/Select"
-
+import { Input, Textarea, Select } from "../../../components"
 import {
   SummaryBook,
   ResCategory,
-  ResSubCategory
-} from "../../../types/summary"
-import { CurrentUser } from "../../../types/user"
-import functions from "../../../utils/functions"
-const {
+  ResSubCategory,
+  CurrentUser
+} from "../../../types"
+import {
   getCategories,
   categoryLinkingSubCategory,
   createSummary,
   getCurrentUser
-} = functions
+} from "../../../utils/functions"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryForm = () => {

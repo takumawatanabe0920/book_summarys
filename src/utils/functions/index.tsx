@@ -34,7 +34,7 @@ import {
 import { readQuery, formatDateHour } from "./defalt"
 import { createBrowsing, getMyBrowsing } from "./Browsing"
 
-const functions = {
+export {
   getCategories,
   getCategory,
   getSubCategories,
@@ -63,5 +63,3 @@ const functions = {
   getMyBrowsing,
   formatDateHour
 }
-
-export default functions

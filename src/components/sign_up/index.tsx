@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import RegisterForm from "../common/form/RegisterForm"
+import { RegisterForm } from "./../../components"
 
 const SignUpPage = () => {
   return (

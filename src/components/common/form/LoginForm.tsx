@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react"
-import Input from "./parts/Input"
-import { Login } from "../../../types/user"
-import functions from "../../../utils/functions"
-const { login } = functions
+import { Input } from "../../../components"
+import { Login } from "../../../types"
+import { login } from "../../../utils/functions"
 
 const LoginForm = () => {
   const [loginValues, setLogin] = useState<Login>({})
