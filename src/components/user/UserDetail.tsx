@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { User } from "./../../types/user"
-import { getUser } from "../../utils/functions"
+import { getUser } from "../../firebase/functions"
 
 const UserDetailPage = () => {
   const [User, setUser] = useState<User>({})

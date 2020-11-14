@@ -9,7 +9,7 @@ import {
   getfavoriteNum,
   getCurrentUser,
   updateFavoriteSummaries
-} from "../../../utils/functions"
+} from "../../../firebase/functions"
 import { number } from "prop-types"
 const user: CurrentUser = getCurrentUser()
 

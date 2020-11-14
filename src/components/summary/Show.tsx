@@ -17,7 +17,7 @@ import {
   createBrowsing,
   getCurrentUser,
   getMyBrowsing
-} from "../../utils/functions"
+} from "../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryShowPage = () => {

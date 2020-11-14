@@ -1,7 +1,7 @@
 import React from "react"
 import dayjs from "dayjs"
 import { Browsing } from "../../types/browsing"
-import firebase from "../../firebase/config"
+import firebase from "../config"
 const db = firebase.firestore()
 import { getSummaryBook } from "./summary"
 

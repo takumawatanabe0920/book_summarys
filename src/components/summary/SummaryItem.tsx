@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { ResSummaryBook, CurrentUser } from "../../types"
 import articleImg from "../../static/images/izumi-img.jpg"
 import { FavoriteButton } from "./../../components"
-import { getCurrentUser } from "../../utils/functions"
+import { getCurrentUser } from "../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 type Props = {

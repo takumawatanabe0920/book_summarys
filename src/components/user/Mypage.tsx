@@ -7,7 +7,7 @@ import {
   logout,
   getMyBrowsing,
   formatDateHour
-} from "../../utils/functions"
+} from "../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const Mypage = () => {

@@ -13,7 +13,7 @@ import {
   categoryLinkingSubCategory,
   createSummary,
   getCurrentUser
-} from "../../../utils/functions"
+} from "../../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryForm = () => {

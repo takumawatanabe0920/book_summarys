@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Input } from "../../../components"
 import { Login } from "../../../types"
-import { login } from "../../../utils/functions"
+import { login } from "../../../firebase/functions"
 
 const LoginForm = () => {
   const [loginValues, setLogin] = useState<Login>({})

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Input } from "../../../components"
 import { User } from "../../../types"
-import { register } from "../../../utils/functions"
+import { register } from "../../../firebase/functions"
 
 const RegisterForm = () => {
   const [values, setValues] = useState<User>({})

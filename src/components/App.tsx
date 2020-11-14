@@ -6,7 +6,7 @@ import {
   getSummaries,
   readQuery,
   getSummariesCount
-} from "./../utils/functions"
+} from "../firebase/functions"
 
 // sections
 
