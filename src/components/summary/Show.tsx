@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
-import Sidebar from "../layouts/Sidebar"
 import {
   ResSummaryBook,
   Category,
   SubCategory,
   CurrentUser,
-  ResBrowsing
+  ResBrowsing,
+  SummaryComment as SummaryCommentType,
+  ResSummaryComment
 } from "../../types"
-import SummaryDetails from "./parts/SummaryDetails"
+import {
+  SummaryDetails,
+  SummaryComment,
+  SummaryCommentForm,
+  Sidebar
+} from "./../../components"
 import {
   getSummaryBook,
   getCategory,
   getSubCategory,
   createBrowsing,
   getCurrentUser,
-  getMyBrowsing
+  getMyBrowsings,
+  getSummaryComment
 } from "../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
@@ -24,22 +31,28 @@ const SummaryShowPage = () => {
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
   const [category, setCategory] = useState<Category>({})
   const [subCategory, setSubCategory] = useState<SubCategory>({})
+  const [summaryCommentList, setSummaryCommentList] = useState<
+    ResSummaryComment[]
+  >([])
 
-  const url: { id: string } = useParams()
+  const slug: { id: string } = useParams()
 
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      const resSummaryBook: void | any = await getSummaryBook(url.id)
+      const resSummaryBook: void | any = await getSummaryBook(slug.id)
       const resCategory: void | any = await getCategory(resSummaryBook.category)
       let resSubCategory: void | any = ""
       if (resSummaryBook.sub_category) {
         resSubCategory = await getSubCategory(resSummaryBook.sub_category)
       }
+      const resSummaryComment:
+        | void
+        | ResSummaryComment[] = await getSummaryComment(slug.id)
 
-      if (url && url.id && user) {
-        const browsing = { summary_id: url.id, user_id: user.uid }
-        let [res]: ResBrowsing[] = await getMyBrowsing(browsing.user_id)
+      if (slug && slug.id && user) {
+        const browsing = { summary_id: slug.id, user_id: user.uid }
+        let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
         if (!res || res.summary_id.id !== browsing.summary_id) {
           //すぐにfirebaseに反映されないため、遅延処理を入れたい
           createBrowsing(browsing)
@@ -49,6 +62,7 @@ const SummaryShowPage = () => {
         setSummaryBook(resSummaryBook)
         setCategory(resCategory)
         setSubCategory(resSubCategory)
+        setSummaryCommentList(resSummaryComment)
       }
     })()
     return () => {
@@ -59,11 +73,23 @@ const SummaryShowPage = () => {
   return (
     <>
       <div className="summary_main">
-        <SummaryDetails
-          summaryBook={summarybook}
-          category={category}
-          subCategory={subCategory}
-        />
+        <div className="main-block">
+          <SummaryDetails
+            summaryBook={summarybook}
+            category={category}
+            subCategory={subCategory}
+          />
+          <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
+          {user.uid ? (
+            <SummaryCommentForm
+              slug={slug}
+              user_id={user.uid}
+              summary_id={slug.id}
+            />
+          ) : (
+            <p>ログインをしてからコメントをしよう</p>
+          )}
+        </div>
         <Sidebar />
       </div>
     </>

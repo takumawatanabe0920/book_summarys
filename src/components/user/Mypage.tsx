@@ -5,7 +5,7 @@ import { ResBrowsing } from "../../types/browsing"
 import {
   getCurrentUser,
   logout,
-  getMyBrowsing,
+  getMyBrowsings,
   formatDateHour
 } from "../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
@@ -25,7 +25,7 @@ const Mypage = () => {
     ;(async () => {
       let resBrowing: ResBrowsing[]
       if (user) {
-        resBrowing = await getMyBrowsing(user.uid)
+        resBrowing = await getMyBrowsings(user.uid)
       }
       if (!unmounted) {
         setMyBrowings(resBrowing)

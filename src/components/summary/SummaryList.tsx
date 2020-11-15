@@ -1,6 +1,6 @@
 import React, { FC } from "react"
-import SummaryItem from "./SummaryItem"
-import { ResSummaryBook } from "./../../types/summary"
+import { SummaryItem } from "./../../components"
+import { ResSummaryBook } from "./../../types"
 
 type Props = {
   dataList: ResSummaryBook[]

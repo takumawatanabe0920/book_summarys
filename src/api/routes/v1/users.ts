@@ -15,7 +15,7 @@ admin.initializeApp({
 router.get("/", async (req: any, res: any) => {
   const { uid } = req.query
   try {
-    const user = await admin.auth().getUser(uid)
+    const user: Promise<any> = await admin.auth().getUser(uid)
 
     res.status(200)
     return res.json({

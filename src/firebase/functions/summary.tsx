@@ -1,6 +1,5 @@
 import React from "react"
-import { SummaryBook } from "../../types/summary"
-import { ResFavorite } from "../../types/favorite"
+import { SummaryBook } from "../../types"
 import firebase from "../config"
 import dayjs from "dayjs"
 const db = firebase.firestore()
@@ -36,7 +35,6 @@ export const updateFavoriteSummaries = async (
     return transaction.get(sfDocRef).then(doc => {
       let favArray = doc.data().favorite_id
       let isDoneFavorite: boolean = favArray.includes(favorite_id)
-      console.log(isDoneFavorite)
       if (isDoneFavorite) {
         let index = favArray.indexOf(favorite_id)
         if (index > -1) {
@@ -68,11 +66,9 @@ export const getRankingSummaries = async (limit?: number) => {
     .get()
     .then(res =>
       res.docs.map(doc => {
-        console.log(doc)
         return { id: doc.id, ...doc.data() }
       })
     )
-  console.log(response)
   return response
 }
 

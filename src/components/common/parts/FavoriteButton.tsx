@@ -8,7 +8,8 @@ import {
   deleteFavorite,
   getfavoriteNum,
   getCurrentUser,
-  updateFavoriteSummaries
+  updateFavoriteSummaries,
+  createNotification
 } from "../../../firebase/functions"
 import { number } from "prop-types"
 const user: CurrentUser = getCurrentUser()
@@ -42,6 +43,7 @@ const FavoliteButton: FC<Favorite> = props => {
     } else {
       let newProps = { ...props }
       const id = await createFavorite(newProps)
+      createNotification({ user_id, target_id: summary_id, type: "favorite" })
       if (!id) {
         console.log("idが存在しません")
         return

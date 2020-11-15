@@ -26,6 +26,7 @@ const Header = () => {
         </Link>
         <div className="l-header__right-box">
           {CurrentUser && <Link to="/summary/create">CREATE SUMMARY</Link>}
+          {CurrentUser && <Link to="/notification">NOTIFICATIONS</Link>}
           {CurrentUser && <Link to="/mypage">MYPAGE</Link>}
           {!CurrentUser && <Link to="/sign_up">SIGN UP</Link>}
         </div>

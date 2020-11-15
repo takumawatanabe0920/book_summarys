@@ -23,6 +23,13 @@ import SummaryList from "./summary/SummaryList"
 import SummaryShowPage from "./summary/Show"
 import MypagePage from "./user/Mypage"
 import UserDetailPage from "./user/UserDetail"
+import SummaryComment from "./coment/SummaryComment"
+import SummaryCommentForm from "./coment/SummaryCommentForm"
+import CommentList from "./coment/CommentList"
+import CommentItem from "./coment/CommentItem"
+import NotificationPage from "./notifications"
+import NotificationList from "./notifications/NotificationList"
+import NotificationItem from "./notifications/NotificationItem"
 import HomePage from "./App"
 
 export {
@@ -51,5 +58,12 @@ export {
   SummaryShowPage,
   MypagePage,
   UserDetailPage,
-  HomePage
+  SummaryComment,
+  HomePage,
+  CommentList,
+  CommentItem,
+  SummaryCommentForm,
+  NotificationPage,
+  NotificationList,
+  NotificationItem
 }

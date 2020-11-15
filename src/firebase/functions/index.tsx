@@ -32,7 +32,14 @@ import {
   getfavoriteNum
 } from "./favorite"
 import { readQuery, formatDateHour } from "./defalt"
-import { createBrowsing, getMyBrowsing } from "./Browsing"
+import { createBrowsing, getMyBrowsings } from "./browsing"
+import {
+  createSummaryComment,
+  getMyComment,
+  getSummaryComment,
+  getIdComment
+} from "./comment"
+import { createNotification, getMyNotifications } from "./notification"
 
 export {
   getCategories,
@@ -60,6 +67,12 @@ export {
   getfavoriteNum,
   readQuery,
   createBrowsing,
-  getMyBrowsing,
-  formatDateHour
+  getMyBrowsings,
+  formatDateHour,
+  getMyComment,
+  createSummaryComment,
+  getSummaryComment,
+  getIdComment,
+  createNotification,
+  getMyNotifications
 }

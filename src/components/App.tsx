@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react"
 // components
-import Sidebar from "./layouts/Sidebar"
-import { SummaryList, Pager } from "./../components"
+import { SummaryList, Pager, Sidebar } from "./../components"
 import {
   getSummaries,
   readQuery,

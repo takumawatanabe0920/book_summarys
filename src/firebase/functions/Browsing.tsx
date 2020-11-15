@@ -1,9 +1,9 @@
 import React from "react"
 import dayjs from "dayjs"
-import { Browsing } from "../../types/browsing"
+import { Browsing } from "../../types"
 import firebase from "../config"
 const db = firebase.firestore()
-import { getSummaryBook } from "./summary"
+import { getSummaryBook } from "../functions"
 
 export const createBrowsing = (values: Browsing) => {
   const { summary_id, user_id } = values
@@ -29,7 +29,7 @@ export const createBrowsing = (values: Browsing) => {
   return response
 }
 
-export const getMyBrowsing = (userId?: string) => {
+export const getMyBrowsings = (userId?: string) => {
   const snapShot = db
     .collection("browsing")
     .where("user_id", "==", userId)
