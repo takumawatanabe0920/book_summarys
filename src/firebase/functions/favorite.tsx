@@ -1,6 +1,6 @@
 import React from "react"
 import dayjs from "dayjs"
-import firebase from "../../firebase/config"
+import firebase from "../config"
 const db = firebase.firestore()
 import { Favorite } from "../../types/favorite"
 
@@ -53,22 +53,20 @@ export const getDonefavorite = (id: string) => {
 }
 
 export const getfavoriteNum = async (summaryId?: string) => {
-  const snapShot: any = await db
+  let count: number = 0
+  await db
     .collection("favorite")
     .where("summary_id", "==", summaryId)
     .get()
     .then(res =>
-      res.docs.map((doc, _index) => {
-        let i = 1
-        return i + _index
+      res.docs.map(doc => {
+        return count++
       })
     )
     .catch(error => {
       console.log(`データを取得できませんでした (${error})`)
     })
-  const [num] = snapShot
-
-  return num ? num : 0
+  return count ? count : 0
 }
 
 export const createFavorite = (values: Favorite) => {
@@ -84,8 +82,9 @@ export const createFavorite = (values: Favorite) => {
     .add({
       ...values
     })
-    .then(res => res.id)
-
+    .then(res => {
+      return res.id
+    })
   return snapShot
 }
 

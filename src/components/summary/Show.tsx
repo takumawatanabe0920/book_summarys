@@ -1,42 +1,59 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
-import Sidebar from "../layouts/Sidebar"
-import { ResSummaryBook, Category, SubCategory } from "../../types/summary"
-import { CurrentUser } from "../../types/user"
-import { ResBrowsing } from "../../types/browsing"
-import functions from "../../utils/functions"
-const {
+import {
+  ResSummaryBook,
+  Category,
+  SubCategory,
+  CurrentUser,
+  ResBrowsing,
+  SummaryComment as SummaryCommentType,
+  ResSummaryComment
+} from "../../types"
+import {
+  SummaryDetails,
+  SummaryComment,
+  SummaryCommentForm,
+  Sidebar
+} from "./../../components"
+import {
   getSummaryBook,
   getCategory,
   getSubCategory,
   createBrowsing,
   getCurrentUser,
-  getMyBrowsing
-} = functions
+  getMyBrowsings,
+  getSummaryComment
+} from "../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryShowPage = () => {
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
   const [category, setCategory] = useState<Category>({})
   const [subCategory, setSubCategory] = useState<SubCategory>({})
+  const [summaryCommentList, setSummaryCommentList] = useState<
+    ResSummaryComment[]
+  >([])
 
-  const url: { id: string } = useParams()
+  const slug: { id: string } = useParams()
 
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      const resSummaryBook: void | any = await getSummaryBook(url.id)
+      const resSummaryBook: void | any = await getSummaryBook(slug.id)
       const resCategory: void | any = await getCategory(resSummaryBook.category)
       let resSubCategory: void | any = ""
       if (resSummaryBook.sub_category) {
         resSubCategory = await getSubCategory(resSummaryBook.sub_category)
       }
+      const resSummaryComment:
+        | void
+        | ResSummaryComment[] = await getSummaryComment(slug.id)
 
-      if (url && url.id && user) {
-        const browsing = { summary_id: url.id, user_id: user.uid }
-        let [res]: ResBrowsing[] = await getMyBrowsing(browsing.user_id)
-        if (res.summary_id.id !== browsing.summary_id) {
+      if (slug && slug.id && user) {
+        const browsing = { summary_id: slug.id, user_id: user.uid }
+        let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
+        if (!res || res.summary_id.id !== browsing.summary_id) {
           //すぐにfirebaseに反映されないため、遅延処理を入れたい
           createBrowsing(browsing)
         }
@@ -45,6 +62,7 @@ const SummaryShowPage = () => {
         setSummaryBook(resSummaryBook)
         setCategory(resCategory)
         setSubCategory(resSubCategory)
+        setSummaryCommentList(resSummaryComment)
       }
     })()
     return () => {
@@ -56,45 +74,21 @@ const SummaryShowPage = () => {
     <>
       <div className="summary_main">
         <div className="main-block">
-          <div className="prof-area">
-            <div className="_icon">
-              <img src="" alt="" />
-            </div>
-            <Link to={`/user/${summarybook.user_id}`} className="_icon">
-              渡辺拓馬
-            </Link>
-          </div>
-          <div className="summary-show">
-            <div className="_header">
-              <h1 className="main-title blue-main-title">
-                {summarybook.title}
-              </h1>
-              <div className="tags">
-                {/* TODO リンク：カテゴリー記事に飛ばす */}
-                <span className="tag">{category.name}</span>
-                <span className="tag">
-                  {subCategory ? subCategory.name : ""}
-                </span>
-              </div>
-            </div>
-            <div className="_body">
-              <p className="_txt">{summarybook.content}</p>
-            </div>
-            <div className="_footer">
-              <dl>
-                <dt>値段：</dt>
-                <dd>{summarybook.price}円</dd>
-              </dl>
-              <dl>
-                <dt>著者：</dt>
-                <dd>{summarybook.author}</dd>
-              </dl>
-              <dl>
-                <dt>商品リンク：</dt>
-                <dd>{summarybook.product_links}</dd>
-              </dl>
-            </div>
-          </div>
+          <SummaryDetails
+            summaryBook={summarybook}
+            category={category}
+            subCategory={subCategory}
+          />
+          <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
+          {user.uid ? (
+            <SummaryCommentForm
+              slug={slug}
+              user_id={user.uid}
+              summary_id={slug.id}
+            />
+          ) : (
+            <p>ログインをしてからコメントをしよう</p>
+          )}
         </div>
         <Sidebar />
       </div>

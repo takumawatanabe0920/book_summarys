@@ -11,7 +11,9 @@ import {
   getSummaries,
   getSummaryBook,
   createSummary,
-  getSummariesCount
+  getSummariesCount,
+  updateFavoriteSummaries,
+  getRankingSummaries
 } from "./summary"
 import {
   getUser,
@@ -29,10 +31,17 @@ import {
   getDonefavorite,
   getfavoriteNum
 } from "./favorite"
-import { readQuery } from "./defalt"
-import { createBrowsing, getMyBrowsing } from "./Browsing"
+import { readQuery, formatDateHour } from "./defalt"
+import { createBrowsing, getMyBrowsings } from "./browsing"
+import {
+  createSummaryComment,
+  getMyComment,
+  getSummaryComment,
+  getIdComment
+} from "./comment"
+import { createNotification, getMyNotifications } from "./notification"
 
-const functions = {
+export {
   getCategories,
   getCategory,
   getSubCategories,
@@ -41,6 +50,9 @@ const functions = {
   getSummaries,
   getSummaryBook,
   createSummary,
+  updateFavoriteSummaries,
+  getRankingSummaries,
+  getSummariesCount,
   getUser,
   getCurrentUser,
   emailAuthMixin_sendVerifyMail,
@@ -54,9 +66,13 @@ const functions = {
   getFavorite,
   getfavoriteNum,
   readQuery,
-  getSummariesCount,
   createBrowsing,
-  getMyBrowsing
+  getMyBrowsings,
+  formatDateHour,
+  getMyComment,
+  createSummaryComment,
+  getSummaryComment,
+  getIdComment,
+  createNotification,
+  getMyNotifications
 }
-
-export default functions

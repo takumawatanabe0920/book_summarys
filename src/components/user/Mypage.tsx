@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { CurrentUser } from "../../types/user"
 import { ResBrowsing } from "../../types/browsing"
-import functions from "../../utils/functions"
-const { getCurrentUser, logout, getMyBrowsing } = functions
+import {
+  getCurrentUser,
+  logout,
+  getMyBrowsings,
+  formatDateHour
+} from "../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const Mypage = () => {
@@ -21,7 +25,7 @@ const Mypage = () => {
     ;(async () => {
       let resBrowing: ResBrowsing[]
       if (user) {
-        resBrowing = await getMyBrowsing(user.uid)
+        resBrowing = await getMyBrowsings(user.uid)
       }
       if (!unmounted) {
         setMyBrowings(resBrowing)
@@ -50,11 +54,11 @@ const Mypage = () => {
                   <div key={browing.id}>
                     <dl>
                       <dt>記事</dt>
-                      <dd>{browing.summary_id.title}</dd>
+                      <dd>{browing.summary_id && browing.summary_id.title}</dd>
                     </dl>
                     <dl>
                       <dt>閲覧日時</dt>
-                      <dd>{browing.update_date}</dd>
+                      <dd>{formatDateHour(browing.update_date)}</dd>
                     </dl>
                   </div>
                 )

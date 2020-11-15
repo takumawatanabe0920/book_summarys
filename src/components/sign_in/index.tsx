@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import LoginForm from "../common/form/LoginForm"
+import { LoginForm } from "./../../components"
 
 const SignInPage = () => {
   return (

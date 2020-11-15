@@ -1,6 +1,6 @@
 import React from "react"
-import { SummaryBook } from "./../../types/summary"
-import firebase from "../../firebase/config"
+import { SummaryBook } from "../../types"
+import firebase from "../config"
 import dayjs from "dayjs"
 const db = firebase.firestore()
 
@@ -23,6 +23,52 @@ export const createSummary = (values: SummaryBook) => {
       return { status: 400 }
     })
 
+  return response
+}
+
+export const updateFavoriteSummaries = async (
+  favorite_id?: string,
+  summary_id?: string
+) => {
+  const sfDocRef = db.collection("summary").doc(summary_id)
+  db.runTransaction(transaction => {
+    return transaction.get(sfDocRef).then(doc => {
+      let favArray = doc.data().favorite_id
+      let isDoneFavorite: boolean = favArray.includes(favorite_id)
+      if (isDoneFavorite) {
+        let index = favArray.indexOf(favorite_id)
+        if (index > -1) {
+          favArray.splice(index, 1)
+        }
+      } else {
+        favArray.push(favorite_id)
+      }
+      transaction.update(sfDocRef, {
+        favorite_id: favArray,
+        favorite_count: favArray.length
+      })
+    })
+  })
+    .then(function(newPopulation) {
+      console.log("Population increased to ", newPopulation)
+    })
+    .catch(function(err) {
+      // This will be an "population is too big" error.
+      console.error(err)
+    })
+}
+
+export const getRankingSummaries = async (limit?: number) => {
+  const response = await db
+    .collection("summary")
+    .orderBy("favorite_count", "desc")
+    .limit(limit)
+    .get()
+    .then(res =>
+      res.docs.map(doc => {
+        return { id: doc.id, ...doc.data() }
+      })
+    )
   return response
 }
 

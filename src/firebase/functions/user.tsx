@@ -1,7 +1,7 @@
 import React from "react"
 import axios from "axios"
 import { CurrentUser } from "../../types/user"
-import firebase from "../../firebase/config"
+import firebase from "../config"
 
 //api
 export const getUser = async (uid: string) => {

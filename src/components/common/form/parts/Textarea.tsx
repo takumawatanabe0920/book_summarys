@@ -1,7 +1,7 @@
 import React, { FC } from "react"
 
 type Props = {
-  title: string
+  title?: string
   value?: string
   placeholder?: string
   required?: boolean

@@ -1,20 +1,28 @@
 import React, { useEffect, useState, FC } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart } from "@fortawesome/free-solid-svg-icons"
-import { Favorite, ResFavorite } from "../../../types/favorite"
-import functions from "../../../utils/functions"
-import { number } from "prop-types"
-const {
+import { Favorite, ResFavorite, CurrentUser } from "../../../types"
+import {
   getFavorite,
   createFavorite,
   deleteFavorite,
-  getfavoriteNum
-} = functions
+  getfavoriteNum,
+  getCurrentUser,
+  updateFavoriteSummaries,
+  createNotification
+} from "../../../firebase/functions"
+import { number } from "prop-types"
+const user: CurrentUser = getCurrentUser()
 
 const FavoliteButton: FC<Favorite> = props => {
   const { user_id, summary_id } = props
+  const [currentUserfavorites, setCurrentUserFavorites] = useState<ResFavorite>(
+    {}
+  )
   const [favorites, setFavorites] = useState<ResFavorite>({})
+  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [favoritesNum, setFavoritesNum] = useState(0)
+
   const handleFavorite = async (event: React.MouseEvent<HTMLElement>) => {
     event.persist()
     event.preventDefault()
@@ -27,18 +35,21 @@ const FavoliteButton: FC<Favorite> = props => {
       return
     }
     //レンダリングさせる必要がある
-    if (Object.keys(favorites).length > 0) {
-      deleteFavorite(favorites.id)
-      setFavorites({})
+    if (Object.keys(currentUserfavorites).length > 0) {
+      deleteFavorite(currentUserfavorites.id)
+      updateFavoriteSummaries(currentUserfavorites.id, summary_id)
+      setCurrentUserFavorites({})
       setFavoritesNum(favoritesNum - 1)
     } else {
       let newProps = { ...props }
       const id = await createFavorite(newProps)
+      createNotification({ user_id, target_id: summary_id, type: "favorite" })
       if (!id) {
         console.log("idが存在しません")
         return
       }
-      setFavorites({ id, ...props })
+      updateFavoriteSummaries(id, summary_id)
+      setCurrentUserFavorites({ id, ...props })
       setFavoritesNum(favoritesNum + 1)
     }
   }
@@ -46,13 +57,13 @@ const FavoliteButton: FC<Favorite> = props => {
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      const [favorite] = await getFavorite(user_id, summary_id)
+      const [favorite] = await getFavorite(currentUser.uid, summary_id)
       const count: number = await getfavoriteNum(summary_id)
       if (!unmounted) {
         if (favorite) {
-          setFavorites(favorite)
-          setFavoritesNum(count)
+          setCurrentUserFavorites(favorite)
         }
+        setFavoritesNum(count)
       }
     })()
     return () => {
@@ -63,7 +74,7 @@ const FavoliteButton: FC<Favorite> = props => {
   return (
     <>
       <div className="favolite-button" onClick={handleFavorite}>
-        {Object.keys(favorites).length > 0 ? (
+        {Object.keys(currentUserfavorites).length > 0 ? (
           <FontAwesomeIcon icon={faHeart} className="clicked" />
         ) : (
           <FontAwesomeIcon icon={faHeart} />

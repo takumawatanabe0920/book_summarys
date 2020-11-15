@@ -1,5 +1,5 @@
 import React from "react"
-import { ResSummaryBook } from "./../types/summary"
+import { ResSummaryBook } from "./summary"
 
 export type Browsing = Partial<{
   user_id: string

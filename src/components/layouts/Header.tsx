@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { CurrentUser } from "../../types/user"
-import functions from "../../utils/functions"
-const { getCurrentUser } = functions
+import { CurrentUser } from "../../types"
+import { getCurrentUser } from "../../firebase/functions"
 
 const Header = () => {
   const [CurrentUser, setCurrentUser] = useState<CurrentUser>({})
@@ -27,6 +26,7 @@ const Header = () => {
         </Link>
         <div className="l-header__right-box">
           {CurrentUser && <Link to="/summary/create">CREATE SUMMARY</Link>}
+          {CurrentUser && <Link to="/notification">NOTIFICATIONS</Link>}
           {CurrentUser && <Link to="/mypage">MYPAGE</Link>}
           {!CurrentUser && <Link to="/sign_up">SIGN UP</Link>}
         </div>
