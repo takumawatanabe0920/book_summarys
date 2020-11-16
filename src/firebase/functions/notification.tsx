@@ -1,5 +1,10 @@
 import React from "react"
-import { Notification, ResSummaryComment } from "../../types"
+import {
+  Notification,
+  SummaryComment,
+  ResultResponse,
+  SummaryBook
+} from "../../types"
 import { getSummaryBook, getIdComment } from "../functions"
 import firebase from "../config"
 import dayjs from "dayjs"
@@ -22,14 +27,14 @@ export const createNotification = (values: Notification) => {
       return { id: res.id, status: 200 }
     })
     .catch(error => {
-      return { status: 400 }
+      return { status: 400, error }
     })
 
   return response
 }
 
 export const getMyNotifications = (user_id: string) => {
-  const snapShot = db
+  const response = db
     .collection("notification")
     .where("user_id", "==", user_id)
     //.orderBy("update_date")
@@ -38,10 +43,10 @@ export const getMyNotifications = (user_id: string) => {
       async res =>
         await Promise.all(
           res.docs.map(async doc => {
-            const resSummary: void | { id: string } = await getSummaryBook(
+            const resSummary: ResultResponse<SummaryBook> = await getSummaryBook(
               doc.data().target_id
             )
-            let resSummaryComment: void | ResSummaryComment = {}
+            let resSummaryComment: ResultResponse<SummaryComment>
             if (!resSummary) {
               resSummaryComment = await getIdComment(doc.data().target_id)
             }
@@ -58,5 +63,5 @@ export const getMyNotifications = (user_id: string) => {
         )
     )
 
-  return snapShot
+  return response
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { Link } from "react-router-dom"
-import { ResSummaryBook } from "../../types"
+import { ResSummaryBook, ResultResponseList } from "../../types"
 import { getSummaries, getRankingSummaries } from "../../firebase/functions"
 
 const Sidebar = () => {
@@ -17,11 +17,17 @@ const Sidebar = () => {
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      let summariesRankingDataList = await getRankingSummaries(3)
-      console.log(summariesRankingDataList)
-      // let count = await getSummariesCount()
+      let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
+        3
+      )
+      // let count: number = await getSummariesCount()
       if (!unmounted) {
-        setAllRankingSummaries(summariesRankingDataList)
+        if (
+          resSummariesRankingDataList &&
+          resSummariesRankingDataList.status === 200
+        ) {
+          setAllRankingSummaries(resSummariesRankingDataList.data)
+        }
         // setRankingThisWeekSummaries(summariesDataList)
         // setThisMonthSummaries()
       }

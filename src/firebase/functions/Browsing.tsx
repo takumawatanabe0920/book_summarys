@@ -19,7 +19,6 @@ export const createBrowsing = (values: Browsing) => {
       ...values
     })
     .then(res => {
-      console.log({ id: res.id, status: 200 })
       return { id: res.id, status: 200 }
     })
     .catch(error => {

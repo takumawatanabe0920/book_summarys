@@ -6,7 +6,10 @@ import {
   SummaryBook,
   ResCategory,
   ResSubCategory,
-  CurrentUser
+  CurrentUser,
+  ResultResponse,
+  ResultResponseList,
+  ResFavorite
 } from "../../../types"
 import {
   getCategories,
@@ -61,7 +64,7 @@ const SummaryForm = () => {
     values.favorite_id = []
 
     if (window.confirm("記事を作成しますか？")) {
-      const resSummary: { id?: string; status: number } = await createSummary(
+      const resSummary: ResultResponse<SummaryBook> = await createSummary(
         values
       )
       if (resSummary && resSummary.status === 200) {
@@ -74,18 +77,23 @@ const SummaryForm = () => {
   }
 
   const subCategorySelect = async (categoryId?: string) => {
-    const subCate = await categoryLinkingSubCategory(categoryId)
-    setSubCategories(subCate)
+    const resSubCategoryList: ResultResponseList<ResFavorite> = await categoryLinkingSubCategory(
+      categoryId
+    )
+    if (resSubCategoryList && resSubCategoryList.status === 200) {
+      setSubCategories(resSubCategoryList.data)
+    }
   }
 
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      let cate_result = await getCategories()
+      const resCategoryList: ResultResponseList<ResFavorite> = await getCategories()
 
       if (!unmounted) {
-        console.log("called-first")
-        setCategories(cate_result)
+        if (resCategoryList && resCategoryList.status === 200) {
+          setCategories(resCategoryList.data)
+        }
         setValues({ ...values, ["user_id"]: user.uid })
       }
     })()

@@ -1,7 +1,12 @@
 import React, { useEffect, useState, FC } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHeart } from "@fortawesome/free-solid-svg-icons"
-import { Favorite, ResFavorite, CurrentUser } from "../../../types"
+import {
+  Favorite,
+  ResFavorite,
+  CurrentUser,
+  ResultResponseList
+} from "../../../types"
 import {
   getFavorite,
   createFavorite,
@@ -57,12 +62,31 @@ const FavoliteButton: FC<Favorite> = props => {
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      const [favorite] = await getFavorite(currentUser.uid, summary_id)
+      if (!currentUser) return
+      const resfavoriteList: ResultResponseList<ResFavorite> = await getFavorite(
+        currentUser.uid,
+        summary_id
+      )
+      if (!unmounted) {
+        if (
+          resfavoriteList &&
+          resfavoriteList.status === 200 &&
+          resfavoriteList.data.length > 0
+        ) {
+          setCurrentUserFavorites(resfavoriteList.data[0])
+        }
+      }
+    })()
+    return () => {
+      unmounted = true
+    }
+  }, [])
+
+  useEffect(() => {
+    let unmounted = false
+    ;(async () => {
       const count: number = await getfavoriteNum(summary_id)
       if (!unmounted) {
-        if (favorite) {
-          setCurrentUserFavorites(favorite)
-        }
         setFavoritesNum(count)
       }
     })()
