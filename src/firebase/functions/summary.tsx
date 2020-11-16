@@ -1,10 +1,17 @@
 import React from "react"
-import { SummaryBook } from "../../types"
+import {
+  SummaryBook,
+  ResSummaryBook,
+  ResultResponseList,
+  ResultResponse
+} from "../../types"
 import firebase from "../config"
 import dayjs from "dayjs"
 const db = firebase.firestore()
 
-export const createSummary = (values: SummaryBook) => {
+export const createSummary = (
+  values: SummaryBook
+): Promise<ResultResponse<SummaryBook>> => {
   const { title, content, category, user_id } = values
   if (!title || !content || !category || !user_id) {
     return
@@ -20,7 +27,7 @@ export const createSummary = (values: SummaryBook) => {
       return { id: res.id, status: 200 }
     })
     .catch(error => {
-      return { status: 400 }
+      return { status: 400, data: error }
     })
 
   return response
@@ -29,7 +36,7 @@ export const createSummary = (values: SummaryBook) => {
 export const updateFavoriteSummaries = async (
   favorite_id?: string,
   summary_id?: string
-) => {
+): Promise<void> => {
   const sfDocRef = db.collection("summary").doc(summary_id)
   db.runTransaction(transaction => {
     return transaction.get(sfDocRef).then(doc => {
@@ -58,22 +65,31 @@ export const updateFavoriteSummaries = async (
     })
 }
 
-export const getRankingSummaries = async (limit?: number) => {
+export const getRankingSummaries = async (
+  limit?: number
+): Promise<ResultResponseList<ResSummaryBook>> => {
   const response = await db
     .collection("summary")
     .orderBy("favorite_count", "desc")
     .limit(limit)
     .get()
-    .then(res =>
-      res.docs.map(doc => {
+    .then(res => {
+      let resData: ResSummaryBook[] = res.docs.map(doc => {
         return { id: doc.id, ...doc.data() }
       })
-    )
+      return { status: 200, data: resData }
+    })
+    .catch(function(error) {
+      return { status: 400, error }
+    })
   return response
 }
 
-export const getSummaries = async (limit?: number, page?: number) => {
-  if (!limit) return []
+export const getSummaries = async (
+  limit?: number,
+  page?: number
+): Promise<ResultResponseList<ResSummaryBook>> => {
+  if (!limit) return
   let data
   const skip = page - 1
   if (skip === 0) {
@@ -85,8 +101,8 @@ export const getSummaries = async (limit?: number, page?: number) => {
       .limit(limit * skip)
       .get()
       .then(
-        documentSnapshots =>
-          documentSnapshots.docs[documentSnapshots.docs.length - 1]
+        documentresponses =>
+          documentresponses.docs[documentresponses.docs.length - 1]
       )
   }
 
@@ -96,15 +112,19 @@ export const getSummaries = async (limit?: number, page?: number) => {
     .startAfter(data)
     .limit(limit)
     .get()
-    .then(res =>
-      res.docs.map(doc => {
+    .then(res => {
+      let resData: ResSummaryBook[] = res.docs.map(doc => {
         return { id: doc.id, ...doc.data() }
       })
-    )
+      return { status: 200, data: resData }
+    })
+    .catch(function(error) {
+      return { status: 400, error }
+    })
   return next
 }
 
-export const getSummariesCount = async () => {
+export const getSummariesCount = async (): Promise<number> => {
   let docNum = await db
     .collection("summary")
     .get()
@@ -115,21 +135,21 @@ export const getSummariesCount = async () => {
   return docNum
 }
 
-export const getSummaryBook = (id: string) => {
-  const snapShot = db
+export const getSummaryBook = (
+  id: string
+): Promise<ResultResponse<SummaryBook>> => {
+  const response = db
     .collection("summary")
     .doc(id)
     .get()
     .then(doc => {
       if (doc.exists) {
-        return { id: doc.id, ...doc.data() }
-      } else {
-        console.log("404")
+        return { id: doc.id, status: 200, ...doc.data() }
       }
     })
     .catch(error => {
-      console.log(`データを取得できませんでした (${error})`)
+      return { status: 400, error }
     })
 
-  return snapShot
+  return response
 }

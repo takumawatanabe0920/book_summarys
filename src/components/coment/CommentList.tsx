@@ -11,7 +11,6 @@ interface PropsData {
 
 function CommentList<T extends PropsData>(props: Props<T>): JSX.Element {
   const { dataList } = props
-  console.log(dataList)
 
   return (
     <>

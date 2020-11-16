@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { CurrentUser } from "../../types"
 import { getCurrentUser } from "../../firebase/functions"
+const user: CurrentUser = getCurrentUser()
 
 const Header = () => {
-  const [CurrentUser, setCurrentUser] = useState<CurrentUser>({})
+  const [CurrentUser, setCurrentUser] = useState<CurrentUser>(user)
 
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      const user: CurrentUser = getCurrentUser()
       if (!unmounted) {
-        setCurrentUser(user)
       }
     })()
     return () => {
       unmounted = true
     }
   }, [])
+
   return (
     <header className="l-header__container">
       <div className="l-header__top">

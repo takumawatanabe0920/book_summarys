@@ -13,6 +13,7 @@ import { User, CurrentUser, Login } from "./user"
 import { ResBrowsing, Browsing } from "./browsing"
 import { SummaryComment, ResSummaryComment } from "./comment"
 import { Notification, ResNotification } from "./notification"
+import { ResultResponse, ResultResponseList } from "./default"
 
 export {
   Favorite,
@@ -31,5 +32,7 @@ export {
   SummaryComment,
   ResSummaryComment,
   Notification,
-  ResNotification
+  ResNotification,
+  ResultResponse,
+  ResultResponseList
 }

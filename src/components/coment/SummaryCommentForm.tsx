@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FC } from "react"
 import useReactRouter from "use-react-router"
 import { Textarea } from "./../../components"
-import { CurrentUser, SummaryComment } from "./../../types"
+import { CurrentUser, SummaryComment, ResultResponse } from "./../../types"
 import {
   getCurrentUser,
   createSummaryComment,
@@ -17,7 +17,6 @@ type Props = {
 
 const SummaryCommentForm: FC<Props> = props => {
   const { slug, user_id, summary_id } = props
-
   const [comments, setComments] = useState<SummaryComment>({
     user_id,
     summary_id
@@ -47,10 +46,9 @@ const SummaryCommentForm: FC<Props> = props => {
     }
 
     if (window.confirm("記事を作成しますか？")) {
-      const resCommnet: {
-        id?: string
-        status: number
-      } = await createSummaryComment(comments)
+      const resCommnet: ResultResponse<SummaryComment> = await createSummaryComment(
+        comments
+      )
       if (resCommnet && resCommnet.status === 200) {
         createNotification({
           user_id,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react"
 // components
 import { SummaryList, Pager, Sidebar } from "./../components"
+import { ResSummaryBook, ResultResponseList } from "./../types"
 import {
   getSummaries,
   readQuery,
@@ -21,11 +22,16 @@ const HomePage = () => {
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      let summariesDataList = await getSummaries(6, page)
-      let count = await getSummariesCount()
+      let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
+        6,
+        page
+      )
+      let count: number = await getSummariesCount()
       if (!unmounted) {
+        if (resSummariesDataList && resSummariesDataList.status === 200) {
+          setSummaries(resSummariesDataList.data)
+        }
         setSummariesNum(count)
-        setSummaries(summariesDataList)
       }
     })()
     return () => {

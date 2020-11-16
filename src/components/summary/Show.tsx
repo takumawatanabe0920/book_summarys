@@ -8,7 +8,8 @@ import {
   CurrentUser,
   ResBrowsing,
   SummaryComment as SummaryCommentType,
-  ResSummaryComment
+  ResSummaryComment,
+  ResultResponseList
 } from "../../types"
 import {
   SummaryDetails,
@@ -28,6 +29,7 @@ import {
 const user: CurrentUser = getCurrentUser()
 
 const SummaryShowPage = () => {
+  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
   const [category, setCategory] = useState<Category>({})
   const [subCategory, setSubCategory] = useState<SubCategory>({})
@@ -46,12 +48,12 @@ const SummaryShowPage = () => {
       if (resSummaryBook.sub_category) {
         resSubCategory = await getSubCategory(resSummaryBook.sub_category)
       }
-      const resSummaryComment:
-        | void
-        | ResSummaryComment[] = await getSummaryComment(slug.id)
+      const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComment(
+        slug.id
+      )
 
-      if (slug && slug.id && user) {
-        const browsing = { summary_id: slug.id, user_id: user.uid }
+      if (slug && slug.id && currentUser) {
+        const browsing = { summary_id: slug.id, user_id: currentUser.uid }
         let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
         if (!res || res.summary_id.id !== browsing.summary_id) {
           //すぐにfirebaseに反映されないため、遅延処理を入れたい
@@ -62,7 +64,9 @@ const SummaryShowPage = () => {
         setSummaryBook(resSummaryBook)
         setCategory(resCategory)
         setSubCategory(resSubCategory)
-        setSummaryCommentList(resSummaryComment)
+        if (resSummaryCommentList && resSummaryCommentList.status === 200) {
+          setSummaryCommentList(resSummaryCommentList.data)
+        }
       }
     })()
     return () => {

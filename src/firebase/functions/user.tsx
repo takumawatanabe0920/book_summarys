@@ -4,7 +4,7 @@ import { CurrentUser } from "../../types/user"
 import firebase from "../config"
 
 //api
-export const getUser = async (uid: string) => {
+export const getUser = async (uid: string): Promise<any> => {
   const data = {
     headers: {
       Authorization: "Bearer 8213f5cd-5fds2-4891-83d0-48d172ffab77"
@@ -23,7 +23,7 @@ export const getUser = async (uid: string) => {
 }
 
 //firebase
-export const getCurrentUser = () => {
+export const getCurrentUser = (): CurrentUser => {
   const currentUserData = localStorage.getItem("user")
   const currentUser: CurrentUser = currentUserData
     ? JSON.parse(currentUserData)
@@ -57,8 +57,7 @@ export const register = async (
     })
 }
 
-export const login = (email: string, password: string) => {
-  console.log(email, password)
+export const login = (email: string, password: string): void => {
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
@@ -71,7 +70,7 @@ export const login = (email: string, password: string) => {
   setUser()
 }
 
-export const logout = () => {
+export const logout = (): void => {
   firebase
     .auth()
     .signOut()
@@ -89,15 +88,15 @@ export const logout = () => {
 }
 
 //private
-const setLocalStrage = (user: CurrentUser) => {
+const setLocalStrage = (user: CurrentUser): void => {
   localStorage.setItem("user", JSON.stringify(user))
 }
 
-const deleteLocalStrage = (key: string) => {
+const deleteLocalStrage = (key: string): void => {
   localStorage.removeItem(key)
 }
 
-const setUser = () => {
+const setUser = (): void => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       console.log(user)

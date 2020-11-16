@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
-import { getUser } from "../../../firebase/functions"
 import { ResSummaryBook, Category, SubCategory } from "../../../types"
 
 type Props = {

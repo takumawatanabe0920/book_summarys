@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { User } from "./../../types/user"
+import { User } from "./../../types"
 import { getUser } from "../../firebase/functions"
 
 const UserDetailPage = () => {
@@ -11,9 +11,8 @@ const UserDetailPage = () => {
     let unmounted = false
     let user: User = {}
     ;(async () => {
-      const res: any = await getUser(url.id)
+      const res = await getUser(url.id)
       if (res.status && res.status === 200) {
-        console.log(res.data)
         const { displayName, photoURL, email, password } = res.data
         user = { displayName, photoURL, email, password }
       }
