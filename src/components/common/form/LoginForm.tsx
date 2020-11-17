@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react"
-import { Input } from "../../../components"
+import { Input, Alert } from "../../../components"
 import { Login } from "../../../types"
 import { login } from "../../../firebase/functions"
+import useAlertState from "../../../assets/hooks/useAlertState"
 
 const LoginForm = () => {
   const [loginValues, setLogin] = useState<Login>({})
+  const [
+    isShowAlert,
+    alertStatus,
+    alertText,
+    throwAlert,
+    closeAlert
+  ] = useAlertState(false)
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist()
@@ -14,13 +22,12 @@ const LoginForm = () => {
     setLogin({ ...loginValues, [name]: value })
   }
 
-  const onSubmit = (event: React.MouseEvent) => {
+  const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
     const { email, password } = loginValues
     if (!email || !password) {
-      console.log("パスワードとメールを入力してください")
-      return
+      return await throwAlert("danger", "パスワードとメールを入力してください")
     }
     if (window.confirm("ログインしますか？")) {
       login(email, password)
@@ -29,6 +36,11 @@ const LoginForm = () => {
 
   return (
     <>
+      <Alert
+        is_show_alert={isShowAlert}
+        alert_status={alertStatus}
+        alert_text={alertText}
+      />
       <form className="form-table">
         <Input
           title="メールアドレス"

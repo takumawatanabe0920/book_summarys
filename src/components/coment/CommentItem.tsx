@@ -13,7 +13,6 @@ interface PropsData {
 
 function CommentItem<T extends PropsData>(props: Props<T>): JSX.Element {
   const { data } = props
-  console.log(data)
 
   return (
     <>

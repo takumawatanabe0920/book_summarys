@@ -5,7 +5,9 @@ import {
   Favorite,
   ResFavorite,
   CurrentUser,
-  ResultResponseList
+  ResultResponseList,
+  ResultResponse,
+  SummaryBook
 } from "../../../types"
 import {
   getFavorite,
@@ -16,6 +18,8 @@ import {
   updateFavoriteSummaries,
   createNotification
 } from "../../../firebase/functions"
+import { Alert } from "../../../components"
+import useAlertState from "../../../assets/hooks/useAlertState"
 import { number } from "prop-types"
 const user: CurrentUser = getCurrentUser()
 
@@ -27,35 +31,50 @@ const FavoliteButton: FC<Favorite> = props => {
   const [favorites, setFavorites] = useState<ResFavorite>({})
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [favoritesNum, setFavoritesNum] = useState(0)
+  const [
+    isShowAlert,
+    alertStatus,
+    alertText,
+    throwAlert,
+    closeAlert
+  ] = useAlertState(false)
 
   const handleFavorite = async (event: React.MouseEvent<HTMLElement>) => {
     event.persist()
     event.preventDefault()
     if (!user_id) {
-      console.log("ログインしてください。")
-      return
+      return await throwAlert("danger", "ログインしてください。")
     }
     if (!summary_id) {
-      console.log("記事がありません。")
-      return
+      return await throwAlert("danger", "記事が存在しません。")
     }
     //レンダリングさせる必要がある
     if (Object.keys(currentUserfavorites).length > 0) {
-      deleteFavorite(currentUserfavorites.id)
-      updateFavoriteSummaries(currentUserfavorites.id, summary_id)
-      setCurrentUserFavorites({})
-      setFavoritesNum(favoritesNum - 1)
+      const resDeleteFavorite: ResultResponse<SummaryBook> = await deleteFavorite(
+        currentUserfavorites.id
+      )
+      if (resDeleteFavorite && resDeleteFavorite.status === 200) {
+        updateFavoriteSummaries(currentUserfavorites.id, summary_id)
+        setCurrentUserFavorites({})
+        setFavoritesNum(favoritesNum - 1)
+        await throwAlert("danger", "いいねを解除しました。")
+      } else {
+        await throwAlert("danger", "いいねの解除に失敗しました。")
+      }
     } else {
       let newProps = { ...props }
-      const id = await createFavorite(newProps)
-      createNotification({ user_id, target_id: summary_id, type: "favorite" })
-      if (!id) {
-        console.log("idが存在しません")
-        return
+      const resFavorite: ResultResponse<SummaryBook> = await createFavorite(
+        newProps
+      )
+      if (resFavorite && resFavorite.status === 200) {
+        updateFavoriteSummaries(resFavorite.id, summary_id)
+        setCurrentUserFavorites({ id: resFavorite.id, ...props })
+        setFavoritesNum(favoritesNum + 1)
+        createNotification({ user_id, target_id: summary_id, type: "favorite" })
+        await throwAlert("success", "いいねしました。")
+      } else {
+        await throwAlert("danger", "いいねに失敗しました。")
       }
-      updateFavoriteSummaries(id, summary_id)
-      setCurrentUserFavorites({ id, ...props })
-      setFavoritesNum(favoritesNum + 1)
     }
   }
 
@@ -97,6 +116,11 @@ const FavoliteButton: FC<Favorite> = props => {
 
   return (
     <>
+      <Alert
+        is_show_alert={isShowAlert}
+        alert_status={alertStatus}
+        alert_text={alertText}
+      />
       <div className="favolite-button" onClick={handleFavorite}>
         {Object.keys(currentUserfavorites).length > 0 ? (
           <FontAwesomeIcon icon={faHeart} className="clicked" />

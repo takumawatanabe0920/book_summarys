@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import useReactRouter from "use-react-router"
-import { Input, Textarea, Select } from "../../../components"
+import { Input, Textarea, Select, Alert } from "../../../components"
 import {
   SummaryBook,
   ResCategory,
@@ -17,9 +17,17 @@ import {
   createSummary,
   getCurrentUser
 } from "../../../firebase/functions"
+import useAlertState from "../../../assets/hooks/useAlertState"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryForm = () => {
+  const [
+    isShowAlert,
+    alertStatus,
+    alertText,
+    throwAlert,
+    closeAlert
+  ] = useAlertState(false)
   const [values, setValues] = useState<SummaryBook>({})
   const [categories, setCategories] = useState<ResCategory[]>([])
   const [subCategories, setSubCategories] = useState<ResSubCategory[]>([])
@@ -68,7 +76,9 @@ const SummaryForm = () => {
         values
       )
       if (resSummary && resSummary.status === 200) {
-        history.push(`/summary/${resSummary.id}`)
+        await throwAlert("success", "記事が作成されました。")
+        setValues({})
+        //history.push(`/summary/${resSummary.id}`)
       } else {
         console.log("失敗しました。")
         history.push("/")
@@ -82,14 +92,16 @@ const SummaryForm = () => {
     )
     if (resSubCategoryList && resSubCategoryList.status === 200) {
       setSubCategories(resSubCategoryList.data)
+    } else {
+      await throwAlert("danger", "エラーが発生しました。")
     }
   }
 
   useEffect(() => {
     let unmounted = false
+    closeAlert()
     ;(async () => {
       const resCategoryList: ResultResponseList<ResFavorite> = await getCategories()
-
       if (!unmounted) {
         if (resCategoryList && resCategoryList.status === 200) {
           setCategories(resCategoryList.data)
@@ -104,6 +116,11 @@ const SummaryForm = () => {
 
   return (
     <>
+      <Alert
+        is_show_alert={isShowAlert}
+        alert_status={alertStatus}
+        alert_text={alertText}
+      />
       <form className="form-table">
         <Input
           title="本のタイトル"

@@ -82,7 +82,9 @@ export const getfavoriteNum = async (summaryId?: string): Promise<number> => {
   return count ? count : 0
 }
 
-export const createFavorite = (values: Favorite) => {
+export const createFavorite = (
+  values: Favorite
+): Promise<ResultResponse<Favorite>> => {
   const { user_id, summary_id } = values
   if (!user_id || !summary_id) {
     console.log("idがありません")
@@ -96,8 +98,12 @@ export const createFavorite = (values: Favorite) => {
       ...values
     })
     .then(res => {
-      return res.id
+      return { id: res.id, status: 200 }
     })
+    .catch(error => {
+      return { status: 400, data: error }
+    })
+
   return response
 }
 

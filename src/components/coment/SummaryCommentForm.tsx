@@ -1,12 +1,13 @@
 import React, { useState, useEffect, FC } from "react"
 import useReactRouter from "use-react-router"
-import { Textarea } from "./../../components"
+import { Textarea, Alert } from "./../../components"
 import { CurrentUser, SummaryComment, ResultResponse } from "./../../types"
 import {
   getCurrentUser,
   createSummaryComment,
   createNotification
 } from "./../../firebase/functions"
+import useAlertState from "./../../assets/hooks/useAlertState"
 const user: CurrentUser = getCurrentUser()
 
 type Props = {
@@ -17,13 +18,24 @@ type Props = {
 
 const SummaryCommentForm: FC<Props> = props => {
   const { slug, user_id, summary_id } = props
-  const [comments, setComments] = useState<SummaryComment>({
+  const initialState = {
     user_id,
-    summary_id
+    summary_id,
+    comment: ""
+  }
+  const [comments, setComments] = useState<SummaryComment>({
+    ...initialState
   })
   const [summaryCommentList, setSummaryCommentList] = useState<
     SummaryComment[]
   >()
+  const [
+    isShowAlert,
+    alertStatus,
+    alertText,
+    throwAlert,
+    closeAlert
+  ] = useAlertState(false)
   const { history } = useReactRouter()
 
   const handleTextareaChange = (
@@ -40,9 +52,11 @@ const SummaryCommentForm: FC<Props> = props => {
     event.persist()
     event.preventDefault()
     const { user_id, summary_id, comment } = comments
-    if (!summary_id || !user_id || !comment) {
-      console.log("no goot")
-      return
+    if (!summary_id || !user_id) {
+      return await throwAlert("danger", "エラーが発生しました。")
+    }
+    if (!comment) {
+      return await throwAlert("danger", "コメントが入力されてません。")
     }
 
     if (window.confirm("記事を作成しますか？")) {
@@ -55,16 +69,17 @@ const SummaryCommentForm: FC<Props> = props => {
           target_id: resCommnet.id,
           type: "summary_comment"
         })
-        history.push(`/summary/${slug.id}`)
+        await throwAlert("success", "コメントに成功しました。")
+        history.replace(`/`)
       } else {
-        console.log("失敗しました。")
-        history.push(`/summary/${slug.id}`)
+        await throwAlert("danger", "コメントに失敗しました。")
       }
     }
   }
 
   useEffect(() => {
     let unmounted = false
+    closeAlert()
     ;(async () => {
       if (!unmounted) {
       }
@@ -76,6 +91,11 @@ const SummaryCommentForm: FC<Props> = props => {
 
   return (
     <>
+      <Alert
+        is_show_alert={isShowAlert}
+        alert_status={alertStatus}
+        alert_text={alertText}
+      />
       <div>
         <h3>コメント</h3>
         <form className="form-table">
