@@ -1,6 +1,5 @@
 import React, { useEffect, useState, FC } from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faHeart } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon, faHeart } from "../../../utils/fontawesome"
 import {
   Favorite,
   ResFavorite,
@@ -128,7 +127,7 @@ const FavoliteButton: FC<Favorite> = props => {
           <FontAwesomeIcon icon={faHeart} />
         )}
       </div>
-      <div>{favoritesNum}</div>
+      {/* <div>{favoritesNum}</div> */}
     </>
   )
 }

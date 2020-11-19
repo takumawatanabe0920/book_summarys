@@ -18,16 +18,10 @@ import {
   getCurrentUser
 } from "../../../firebase/functions"
 import useAlertState from "../../../assets/hooks/useAlertState"
+import RichEditor from "./../../../utils/richtext"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryForm = () => {
-  const [
-    isShowAlert,
-    alertStatus,
-    alertText,
-    throwAlert,
-    closeAlert
-  ] = useAlertState(false)
   const [values, setValues] = useState<SummaryBook>({})
   const [categories, setCategories] = useState<ResCategory[]>([])
   const [subCategories, setSubCategories] = useState<ResSubCategory[]>([])
@@ -35,6 +29,13 @@ const SummaryForm = () => {
   const { register, handleSubmit, errors, formState } = useForm<SummaryBook>({
     mode: "onChange"
   })
+  const [
+    isShowAlert,
+    alertStatus,
+    alertText,
+    throwAlert,
+    closeAlert
+  ] = useAlertState(false)
 
   const { history } = useReactRouter()
 
@@ -175,6 +176,7 @@ const SummaryForm = () => {
           placeholder="https://~"
           onChange={handleInputChange}
         />
+        <RichEditor />
 
         <div className="btn-area mgt-2 inline">
           <button className="_btn submit" type="submit" onClick={onSubmit}>

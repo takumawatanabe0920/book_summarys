@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { Input, Alert } from "../../../components"
-import { Login } from "../../../types"
+import { Login, ResultResponse } from "../../../types"
 import { login } from "../../../firebase/functions"
 import useAlertState from "../../../assets/hooks/useAlertState"
+import useReactRouter from "use-react-router"
 
 const LoginForm = () => {
   const [loginValues, setLogin] = useState<Login>({})
@@ -13,6 +14,7 @@ const LoginForm = () => {
     throwAlert,
     closeAlert
   ] = useAlertState(false)
+  const { history } = useReactRouter()
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist()
@@ -30,7 +32,14 @@ const LoginForm = () => {
       return await throwAlert("danger", "パスワードとメールを入力してください")
     }
     if (window.confirm("ログインしますか？")) {
-      login(email, password)
+      const resLogin: ResultResponse<Login> = await login(email, password)
+      if (resLogin && resLogin.status === 200) {
+        await throwAlert("success", "ログインしました。")
+        history.replace(`/`)
+      } else {
+        await throwAlert("danger", "ログインに失敗しました。")
+        history.replace(`/`)
+      }
     }
   }
 

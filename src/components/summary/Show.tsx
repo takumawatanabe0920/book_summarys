@@ -55,8 +55,10 @@ const SummaryShowPage = () => {
       if (slug && slug.id && currentUser) {
         const browsing = { summary_id: slug.id, user_id: currentUser.uid }
         let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
-        if (!res || res.summary_id.id !== browsing.summary_id) {
-          //すぐにfirebaseに反映されないため、遅延処理を入れたい
+        if (
+          !res.summary_id ||
+          (res && res.summary_id && res.summary_id.id !== browsing.summary_id)
+        ) {
           createBrowsing(browsing)
         }
       }

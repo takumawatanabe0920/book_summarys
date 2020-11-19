@@ -23,9 +23,7 @@ function SummaryComment<T>(props: Props<T>): JSX.Element {
   return (
     <>
       <div className="comment_main">
-        <div className="main-block">
-          <CommentList<T> dataList={dataList} />
-        </div>
+        <CommentList<T> dataList={dataList} />
       </div>
     </>
   )

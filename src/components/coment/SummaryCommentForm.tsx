@@ -97,7 +97,7 @@ const SummaryCommentForm: FC<Props> = props => {
         alert_text={alertText}
       />
       <div>
-        <h3>コメント</h3>
+        <h3>投稿する</h3>
         <form className="form-table">
           <Textarea
             name="comment"

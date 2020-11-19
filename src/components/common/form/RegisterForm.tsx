@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react"
-import { Input } from "../../../components"
-import { User } from "../../../types"
+import { Input, Alert } from "../../../components"
+import { User, ResultResponse } from "../../../types"
+import useAlertState from "../../../assets/hooks/useAlertState"
 import { register } from "../../../firebase/functions"
 
 const RegisterForm = () => {
   const [values, setValues] = useState<User>({})
+  const [
+    isShowAlert,
+    alertStatus,
+    alertText,
+    throwAlert,
+    closeAlert
+  ] = useAlertState(false)
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist()
@@ -19,16 +27,45 @@ const RegisterForm = () => {
     event.preventDefault()
     const { displayName, email, password, photoURL } = values
     if (!displayName || !email || !password) {
-      console.log("名前とパスワードとメールを入力してください")
-      return
+      return await throwAlert(
+        "success",
+        "名前とパスワードとメールを入力してください"
+      )
     }
     if (window.confirm("会員登録しますか？")) {
-      await register(email, password, displayName, photoURL)
+      const resRegister: ResultResponse<User> = await register(
+        email,
+        password,
+        displayName,
+        photoURL
+      )
+      if (resRegister && resRegister.status === 200) {
+        await throwAlert("success", "会員登録に成功しました。")
+      } else {
+        await throwAlert("danger", "会員登録に失敗しました。")
+      }
     }
   }
 
+  useEffect(() => {
+    let unmounted = false
+    closeAlert()
+    ;(async () => {
+      if (!unmounted) {
+      }
+    })()
+    return () => {
+      unmounted = true
+    }
+  }, [])
+
   return (
     <>
+      <Alert
+        is_show_alert={isShowAlert}
+        alert_status={alertStatus}
+        alert_text={alertText}
+      />
       <form className="form-table">
         <Input
           title="名前"

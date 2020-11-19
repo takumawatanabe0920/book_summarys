@@ -40,12 +40,86 @@ a {
     margin-bottom: 5rem;
 
     .data-item {
-      width: 31.5%;
-      margin: 0 2.5% 1rem 0;
+      width: 48.5%;
+      margin: 0 3% 1rem 0;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
 
-      &:nth-of-type(3n) {
+      &:nth-of-type(2n) {
         margin-right: 0;
+      }
+
+      ._summary-ttl {
+        font-weight: bold;
+        font-size: 1rem;
+        letter-spacing: 2.4px;
+      }
+
+      ._summary-txt {
+        height: 55px;
+        overflow: hidden;
+        font-size: 0.8rem;
+      }
+
+      .favorite-area {
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .favorite-button {
+        color: #e24949;
+        font-size: 1.125rem;
+        margin-right: 0.2rem;
+        &._lg {
+          font-size: 1.5rem;
+        }
+      }
+
+      .favoriteNum {
+        color: #e24949;
+        font-size: 1rem;
+        line-height: 1.4;
+      }
+
+      .MuiCardContent-root {
+        padding: 1rem 1rem 0rem;
+      }
+
+      .summary-bottom {
+        justify-content: space-between;
+      }
+
+      .user-name {
+        font-size: 0.8rem;
+      }
+
+      .categories {
+        margin-bottom: 0.7rem;
+        .main-tag {
+          color: #fff;
+          font-weight: bold;
+          font-size: 0.8rem;
+          padding: 0.2rem 0.4rem;
+          border-radius: 0.2rem;
+
+          &.sport-tag {
+            background: #2f66cc;
+          }
+          &.nature-tag {
+            background: #61bd4f;
+          }
+          &.novel-tag {
+            background: #00c2e0;
+          }
+          &.business-tag {
+            background: #eb5a46;
+          }
+          &.magazin-tag {
+            background: #ff9f1a;
+          }
+          &.all-tag {
+            background: #f2d600;
+          }
+        }
       }
     }
   }
