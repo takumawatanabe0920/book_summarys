@@ -1,7 +1,16 @@
 import React from "react"
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from "draft-js"
+import { EditorState, RichUtils, getDefaultKeyBinding } from "draft-js"
+import { Map } from "immutable"
+import Editor from "draft-js-plugins-editor"
+import createImagePlugin from "draft-js-image-plugin"
+import { FontAwesomeIcon, faListUl, faListOl } from "./../../utils/fontawesome"
+
+const imagePlugin = createImagePlugin()
+
+const plugins = [imagePlugin]
 
 import "draft-js/dist/Draft.css"
+import "draft-js-image-plugin/lib/plugin.css"
 
 const { useState, useRef, useCallback } = React
 
@@ -44,6 +53,13 @@ const RichEditor = (props: any) => {
     [editorState, setEditorState]
   )
 
+  const customRenderMap = Map({
+    unstyled: {
+      element: "p",
+      aliasedElements: ["p"]
+    }
+  })
+
   // If the user changes block type before entering any text, we can
   // either style the placeholder or hide it. Let's just hide it now.
   let className = "RichEditor-editor"
@@ -77,13 +93,14 @@ const RichEditor = (props: any) => {
       />
       <div className={className} onClick={focus}>
         <Editor
+          blockRenderMap={customRenderMap}
           blockStyleFn={getBlockStyle}
           customStyleMap={styleMap}
           editorState={editorState}
+          plugins={plugins}
           handleKeyCommand={handleKeyCommand}
           keyBindingFn={mapKeyToEditorCommand}
           onChange={setEditorState}
-          placeholder="Tell a story..."
           ref={editor}
           spellCheck={true}
         />
@@ -112,36 +129,53 @@ function getBlockStyle(block: any) {
 }
 
 const StyleButton = (props: any) => {
-  const { onToggle, active, label, style } = props
+  const { onToggle, active, label, style, type } = props
   let className = "RichEditor-styleButton"
   if (active) {
     className += " RichEditor-activeButton"
   }
 
-  return (
-    <span
-      className={className}
-      onMouseDown={e => {
-        e.preventDefault()
-        onToggle(style)
-      }}
-    >
-      {label}
-    </span>
-  )
+  if (type == "text") {
+    return (
+      <span
+        className={className}
+        onMouseDown={e => {
+          e.preventDefault()
+          onToggle(style)
+        }}
+        dangerouslySetInnerHTML={{ __html: label }}
+      ></span>
+    )
+  } else if (type === "icon") {
+    return (
+      <span
+        className={className}
+        onMouseDown={e => {
+          e.preventDefault()
+          onToggle(style)
+        }}
+      >
+        <FontAwesomeIcon icon={label} />
+      </span>
+    )
+  }
 }
 
 const BLOCK_TYPES = [
-  { label: "H1", style: "header-one" },
-  { label: "H2", style: "header-two" },
-  { label: "H3", style: "header-three" },
-  { label: "H4", style: "header-four" },
-  { label: "H5", style: "header-five" },
-  { label: "H6", style: "header-six" },
-  { label: "Blockquote", style: "blockquote" },
-  { label: "UL", style: "unordered-list-item" },
-  { label: "OL", style: "ordered-list-item" },
-  { label: "Code Block", style: "code-block" }
+  { label: "メインタイトル", style: "header-one", iconType: "text" },
+  { label: "サブタイトル", style: "header-two", iconType: "text" },
+  { label: `大文字`, style: "header-three", iconType: "text" },
+  {
+    label: `<blockquote>A</blockquote>`,
+    style: "blockquote",
+    iconType: "text"
+  },
+  {
+    label: faListUl,
+    style: "unordered-list-item",
+    iconType: "icon"
+  },
+  { label: faListOl, style: "ordered-list-item", iconType: "icon" }
 ]
 
 const BlockStyleControls = (props: any) => {
@@ -154,13 +188,14 @@ const BlockStyleControls = (props: any) => {
 
   return (
     <div className="RichEditor-controls">
-      {BLOCK_TYPES.map(type => (
+      {BLOCK_TYPES.map((type, index) => (
         <StyleButton
-          key={type.label}
+          key={index}
           active={type.style === blockType}
           label={type.label}
           onToggle={onToggle}
           style={type.style}
+          type={type.iconType}
         />
       ))}
     </div>
@@ -168,10 +203,13 @@ const BlockStyleControls = (props: any) => {
 }
 
 const INLINE_STYLES = [
-  { label: "Bold", style: "BOLD" },
-  { label: "Italic", style: "ITALIC" },
-  { label: "Underline", style: "UNDERLINE" },
-  { label: "Monospace", style: "CODE" }
+  { label: `<b>B</b>`, style: "BOLD", iconType: "text" },
+  { label: `<em>A</em>`, style: "ITALIC", iconType: "text" },
+  {
+    label: `<span class="under-line">A</span>`,
+    style: "UNDERLINE",
+    iconType: "text"
+  }
 ]
 
 const InlineStyleControls = (props: any) => {
@@ -179,13 +217,14 @@ const InlineStyleControls = (props: any) => {
   const currentStyle = editorState.getCurrentInlineStyle()
   return (
     <div className="RichEditor-controls">
-      {INLINE_STYLES.map(type => (
+      {INLINE_STYLES.map((type, index) => (
         <StyleButton
-          key={type.label}
+          key={index}
           active={currentStyle.has(type.style)}
           label={type.label}
           onToggle={onToggle}
           style={type.style}
+          type={type.iconType}
         />
       ))}
     </div>
