@@ -15,27 +15,38 @@
     }
 
     h2 {
-      font-size: 1.5rem;
       margin: 2.5rem 0;
       padding-bottom: 0.25rem;
+
+      span {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
     }
 
     h3 {
       margin: 2rem 0;
+      span {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
     }
 
-    p {
+    span {
       margin: 1.25rem 0 0;
       font-size: 0.93rem;
       display: block;
       line-height: 1.87;
-      font-weight: 400;
       color: rgba(0, 0, 0, 0.84);
     }
 
     li {
       font-size: 0.93rem;
       padding-bottom: 1rem;
+      margin: 0 0 0 1.5rem;
+      span {
+        margin: initial;
+      }
     }
 
     .public-DraftEditor-content[contenteditable="true"] {

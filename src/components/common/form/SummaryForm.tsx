@@ -18,7 +18,7 @@ import {
   getCurrentUser
 } from "../../../firebase/functions"
 import useAlertState from "../../../assets/hooks/useAlertState"
-import RichEditor from "./../../../utils/richtext"
+import { RichEditor } from "./../../../utils/richtext"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryForm = () => {
@@ -65,6 +65,10 @@ const SummaryForm = () => {
     setValues({ ...values, [name]: value })
     setIsSelectCategory(true)
     subCategorySelect(value)
+  }
+
+  const handleEditorChange = (value: any) => {
+    setValues({ ...values, content: value })
   }
 
   const onSubmit = async (event: React.MouseEvent) => {
@@ -131,12 +135,7 @@ const SummaryForm = () => {
           onChange={handleInputChange}
         />
         {errors.title && "作者名は1文字以上、20文字以下でなければなりません。"}
-        <Textarea
-          title="本の内容"
-          name="content"
-          required={true}
-          onChange={handleTextareaChange}
-        />
+        <RichEditor title="本の内容" handleEditorChange={handleEditorChange} />
         <Select
           title="本のカテゴリー"
           name="category"
@@ -176,7 +175,6 @@ const SummaryForm = () => {
           placeholder="https://~"
           onChange={handleInputChange}
         />
-        <RichEditor />
 
         <div className="btn-area mgt-2 inline">
           <button className="_btn submit" type="submit" onClick={onSubmit}>

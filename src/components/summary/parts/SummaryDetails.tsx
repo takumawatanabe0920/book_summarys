@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { ResSummaryBook, Category, SubCategory } from "../../../types"
+import { ReadOnlyEditor } from "../../../utils/richtext"
 
 type Props = {
   summaryBook: ResSummaryBook
@@ -39,7 +40,7 @@ const SummaryDetails: FC<Props> = props => {
           </div>
         </div>
         <div className="_body">
-          <p className="_txt">{summaryBook.content}</p>
+          <ReadOnlyEditor editorState={summaryBook.content} />
         </div>
         <div className="_footer">
           <dl>
