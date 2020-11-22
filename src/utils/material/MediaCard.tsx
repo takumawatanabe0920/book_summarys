@@ -9,7 +9,12 @@ import {
   ResCategory
 } from "../../types"
 import { FavoriteButton } from "../../components"
-import { getUser, getCategory, getCurrentUser } from "../../firebase/functions"
+import {
+  getUser,
+  getCategory,
+  getCurrentUser,
+  getImage
+} from "../../firebase/functions"
 import articleImg from "../../static/images/izumi-img.jpg"
 import { Link } from "react-router-dom"
 import {
@@ -23,7 +28,6 @@ import {
   Button,
   FavoriteIcon
 } from "."
-import { ReadOnlyEditor } from "../../utils/richtext"
 const user: CurrentUser = getCurrentUser()
 
 const useStyles = makeStyles({
@@ -47,9 +51,11 @@ const MediaCard: FC<Props> = props => {
     category,
     user_id,
     content,
-    discription
+    discription,
+    thumbnail
   } = props.data
   const [User, setUser] = useState<User>({})
+  const [summaryThumbnail, setSummaryThumbnail] = useState<string>("")
 
   const formatTagColor = (_categoryName: string): string => {
     switch (_categoryName) {
@@ -78,10 +84,16 @@ const MediaCard: FC<Props> = props => {
         user = { displayName, photoURL, email, password }
       }
       const resCategory: void | any = await getCategory(category)
+      const resThumnail: ResultResponse<string> | void = await getImage(
+        thumbnail
+      )
       if (!unmounted) {
         setUser(user)
         if (resCategory && resCategory.status === 200) {
           setMyCategory(resCategory)
+        }
+        if (resThumnail && resThumnail.status === 200) {
+          setSummaryThumbnail(resThumnail.data)
         }
       }
     })()
@@ -96,7 +108,7 @@ const MediaCard: FC<Props> = props => {
         <CardActionArea>
           <CardMedia
             className={classes.media}
-            image={articleImg}
+            image={summaryThumbnail ? summaryThumbnail : articleImg}
             title="Contemplative Reptile"
           />
           <CardContent>

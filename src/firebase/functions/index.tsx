@@ -31,7 +31,7 @@ import {
   getDonefavorite,
   getfavoriteNum
 } from "./favorite"
-import { readQuery, formatDateHour, uploadImage } from "./defalt"
+import { readQuery, formatDateHour, uploadImage, getImage } from "./defalt"
 import { createBrowsing, getMyBrowsings } from "./browsing"
 import {
   createSummaryComment,
@@ -75,5 +75,6 @@ export {
   getIdComment,
   createNotification,
   getMyNotifications,
-  uploadImage
+  uploadImage,
+  getImage
 }

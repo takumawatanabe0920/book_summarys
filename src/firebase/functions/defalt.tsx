@@ -27,3 +27,21 @@ export const uploadImage = (
     })
   return response
 }
+
+export const getImage = (_imgPath: string): Promise<ResultResponse<string>> => {
+  if (!_imgPath) return
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(_imgPath)
+
+  const response = ref
+    .getDownloadURL()
+    .then(url => {
+      return { status: 200, data: url }
+    })
+    .catch(error => {
+      return { status: 400, error }
+    })
+  return response
+}
