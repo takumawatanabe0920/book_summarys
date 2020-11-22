@@ -30,6 +30,7 @@ import CommentItem from "./coment/CommentItem"
 import NotificationPage from "./notifications"
 import NotificationList from "./notifications/NotificationList"
 import NotificationItem from "./notifications/NotificationItem"
+import Alert from "./common/parts/Alert"
 import HomePage from "./App"
 
 export {
@@ -65,5 +66,6 @@ export {
   SummaryCommentForm,
   NotificationPage,
   NotificationList,
-  NotificationItem
+  NotificationItem,
+  Alert
 }

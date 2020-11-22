@@ -6,7 +6,7 @@ import {
   SummaryBook
 } from "../../types"
 import { getSummaryBook, getIdComment } from "../functions"
-import firebase from "../config"
+import { firebase } from "../config"
 import dayjs from "dayjs"
 const db = firebase.firestore()
 

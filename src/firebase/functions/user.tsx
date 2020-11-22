@@ -1,7 +1,7 @@
 import React from "react"
 import axios from "axios"
-import { CurrentUser } from "../../types/user"
-import firebase from "../config"
+import { User, CurrentUser, Login, ResultResponse } from "../../types"
+import { firebase } from "../config"
 
 //api
 export const getUser = async (uid: string): Promise<any> => {
@@ -31,18 +31,18 @@ export const getCurrentUser = (): CurrentUser => {
   return currentUser
 }
 
-export const register = async (
+export const register = (
   email: string,
   password: string,
   displayName: string,
   photoURL: string
-) => {
+): Promise<ResultResponse<User>> => {
   // const user = await getUser(email)
   // if (user) {
   //   console.log("ユーザーが存在しています")
   //   return
   // }
-  firebase
+  const response = firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(async result => {
@@ -51,40 +51,43 @@ export const register = async (
         photoURL
       })
       await setUser()
+      return { status: 200 }
     })
     .catch(error => {
-      console.log("error")
+      return { status: 200, error }
     })
+  return response
 }
 
-export const login = (email: string, password: string): void => {
-  firebase
+export const login = (
+  email: string,
+  password: string
+): Promise<ResultResponse<Login>> => {
+  const response = firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code
-      var errorMessage = error.message
-      // ...
+    .then(async res => {
+      await setUser()
+      return { status: 200 }
     })
-  setUser()
+    .catch(error => {
+      return { status: 400, error }
+    })
+  return response
 }
 
-export const logout = (): void => {
-  firebase
+export const logout = (): Promise<ResultResponse<Login>> => {
+  const response = firebase
     .auth()
     .signOut()
-    .then(
-      () => {
-        // ログイン画面に戻る等
-        console.log("ログアウトしました")
-        deleteLocalStrage("user")
-      },
-      err => {
-        // エラーを表示する等
-        console.log(`ログアウト時にエラーが発生しました (${err})`)
-      }
-    )
+    .then(async res => {
+      await deleteLocalStrage("user")
+      return { status: 200 }
+    })
+    .catch(error => {
+      return { status: 400, error }
+    })
+  return response
 }
 
 //private

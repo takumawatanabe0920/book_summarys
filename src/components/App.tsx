@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react"
 // components
 import { SummaryList, Pager, Sidebar } from "./../components"
 import { ResSummaryBook, ResultResponseList } from "./../types"
+import useReactRouter from "use-react-router"
 import {
   getSummaries,
   readQuery,
@@ -14,6 +15,7 @@ const HomePage = () => {
   const [summaries, setSummaries] = useState([])
   const [summariesNum, setSummariesNum] = useState(0)
   const [page, setPage] = useState(Number(readQuery("pages") || 1))
+  const { history } = useReactRouter()
 
   const fetchData = (num?: number) => {
     setPage(num)

@@ -1,0 +1,42 @@
+.comment_main {
+  .comment-list {
+    .comment-item {
+      border-bottom: 1px solid #ddd;
+      width: 100%;
+      font-size: 1.4rem;
+      padding: 1rem 0;
+
+      .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+
+        ._header-left {
+          display: flex;
+          align-items: center;
+          font-size: 0.9rem;
+          font-weight: 500;
+          .user-name {
+            margin-left: 0.5rem;
+          }
+        }
+
+        ._header-right {
+          ._date {
+            color: #777;
+            font-weight: 500;
+            font-size: 0.8rem;
+          }
+        }
+      }
+
+      .comment-body {
+        padding: 1.5rem 1.5rem 0.5rem;
+        ._comment-txt {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}

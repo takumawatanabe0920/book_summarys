@@ -1,15 +1,16 @@
 import React from "react"
 import dayjs from "dayjs"
 import { Browsing } from "../../types"
-import firebase from "../config"
+import { firebase } from "../config"
 const db = firebase.firestore()
 import { getSummaryBook } from "../functions"
 
 export const createBrowsing = (values: Browsing) => {
   const { summary_id, user_id } = values
   if (!summary_id || !user_id) {
-    console.log("no goot")
-    return
+    if (!summary_id || !user_id) {
+      return { status: 400, error: "summary_idかuser_idがありません。" }
+    }
   }
   values.create_date = dayjs().unix()
   values.update_date = dayjs().unix()
@@ -22,6 +23,7 @@ export const createBrowsing = (values: Browsing) => {
       return { id: res.id, status: 200 }
     })
     .catch(error => {
+      console.log(error)
       return { status: 400 }
     })
 

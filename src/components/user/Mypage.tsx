@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { CurrentUser } from "../../types/user"
+import useReactRouter from "use-react-router"
+import { CurrentUser, ResultResponse, Login } from "../../types"
+import { Alert } from "./../../components"
 import { ResBrowsing } from "../../types/browsing"
 import {
   getCurrentUser,
@@ -8,20 +10,36 @@ import {
   getMyBrowsings,
   formatDateHour
 } from "../../firebase/functions"
+import useAlertState from "./../../assets/hooks/useAlertState"
 const user: CurrentUser = getCurrentUser()
 
 const Mypage = () => {
   const [CurrentUser, setCurrentUser] = useState<CurrentUser>({})
   const [myBrowings, setMyBrowings] = useState<ResBrowsing[]>([])
+  const [
+    isShowAlert,
+    alertStatus,
+    alertText,
+    throwAlert,
+    closeAlert
+  ] = useAlertState(false)
+  const { history } = useReactRouter()
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (window.confirm("ログインしますか？")) {
-      logout()
+      const resLogout: ResultResponse<Login> = await logout()
+      if (resLogout && resLogout.status === 200) {
+        await throwAlert("success", "ログアウトしました。")
+        history.replace(`/`)
+      } else {
+        await throwAlert("danger", "ログアウトが失敗しました。")
+      }
     }
   }
 
   useEffect(() => {
     let unmounted = false
+    closeAlert()
     ;(async () => {
       let resBrowing: ResBrowsing[]
       if (user) {
@@ -39,6 +57,11 @@ const Mypage = () => {
 
   return (
     <>
+      <Alert
+        is_show_alert={isShowAlert}
+        alert_status={alertStatus}
+        alert_text={alertText}
+      />
       <div className="c-register">
         <div className="md-container">
           <div className="user-mypage">
