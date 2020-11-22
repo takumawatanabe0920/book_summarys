@@ -23,6 +23,7 @@ import {
   Button,
   FavoriteIcon
 } from "."
+import { ReadOnlyEditor } from "../../utils/richtext"
 const user: CurrentUser = getCurrentUser()
 
 const useStyles = makeStyles({
@@ -39,7 +40,15 @@ const MediaCard: FC<Props> = props => {
   const [myCategory, setMyCategory] = useState<Category>({})
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const classes = useStyles()
-  const { id, title, favorite_count, category, user_id, content } = props.data
+  const {
+    id,
+    title,
+    favorite_count,
+    category,
+    user_id,
+    content,
+    discription
+  } = props.data
   const [User, setUser] = useState<User>({})
 
   const formatTagColor = (_categoryName: string): string => {
@@ -61,7 +70,6 @@ const MediaCard: FC<Props> = props => {
 
   useEffect(() => {
     let unmounted = false
-    console.log(category)
     ;(async () => {
       let resUser = await getUser(user_id)
       let user: User = {}
@@ -116,7 +124,8 @@ const MediaCard: FC<Props> = props => {
               component="p"
               className="_summary-txt"
             >
-              {content}
+              {discription}
+              {/* <ReadOnlyEditor editorState={content} /> */}
             </Typography>
           </CardContent>
         </CardActionArea>

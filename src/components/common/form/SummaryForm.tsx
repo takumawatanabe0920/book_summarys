@@ -15,17 +15,25 @@ import {
   getCategories,
   categoryLinkingSubCategory,
   createSummary,
-  getCurrentUser
+  getCurrentUser,
+  uploadImage
 } from "../../../firebase/functions"
 import useAlertState from "../../../assets/hooks/useAlertState"
-import { RichEditor } from "./../../../utils/richtext"
+import { RichEditor, ReadOnlyEditor } from "./../../../utils/richtext"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryForm = () => {
   const [values, setValues] = useState<SummaryBook>({})
   const [categories, setCategories] = useState<ResCategory[]>([])
+  const [publishingSettings, setPublishingSettings] = useState([
+    { id: "public", name: "公開" },
+    { id: "private", name: "非公開" }
+  ])
   const [subCategories, setSubCategories] = useState<ResSubCategory[]>([])
   const [isSelectCategory, setIsSelectCategory] = useState<boolean>(false)
+  const [isPreview, setIsPreview] = useState<boolean>(false)
+  const [image, setImage] = useState<File>()
+  const [imageUrl, setImageUrl] = useState<string | void>("")
   const { register, handleSubmit, errors, formState } = useForm<SummaryBook>({
     mode: "onChange"
   })
@@ -62,6 +70,7 @@ const SummaryForm = () => {
     const target = event.target
     const value = target.value
     const name = target.name
+    console.log({ ...values, [name]: value })
     setValues({ ...values, [name]: value })
     setIsSelectCategory(true)
     subCategorySelect(value)
@@ -69,26 +78,6 @@ const SummaryForm = () => {
 
   const handleEditorChange = (value: any) => {
     setValues({ ...values, content: value })
-  }
-
-  const onSubmit = async (event: React.MouseEvent) => {
-    event.persist()
-    event.preventDefault()
-    values.favorite_id = []
-
-    if (window.confirm("記事を作成しますか？")) {
-      const resSummary: ResultResponse<SummaryBook> = await createSummary(
-        values
-      )
-      if (resSummary && resSummary.status === 200) {
-        await throwAlert("success", "記事が作成されました。")
-        setValues({})
-        //history.push(`/summary/${resSummary.id}`)
-      } else {
-        console.log("失敗しました。")
-        history.push("/")
-      }
-    }
   }
 
   const subCategorySelect = async (categoryId?: string) => {
@@ -102,37 +91,88 @@ const SummaryForm = () => {
     }
   }
 
-  useEffect(() => {
-    let unmounted = false
-    closeAlert()
-    ;(async () => {
-      const resCategoryList: ResultResponseList<ResFavorite> = await getCategories()
-      if (!unmounted) {
-        if (resCategoryList && resCategoryList.status === 200) {
-          setCategories(resCategoryList.data)
-        }
-        setValues({ ...values, ["user_id"]: user.uid })
-      }
-    })()
-    return () => {
-      unmounted = true
+  const handleChangeThumbnail = (_fileImg: File): string | void => {
+    //const fileBase64 = getBase64(file)
+    if (validateImageUploads(_fileImg)) return
+    if (_fileImg.type.startsWith("image/")) {
+      const imgUrl = window.URL.createObjectURL(_fileImg)
+      return imgUrl
     }
-  }, [])
+  }
 
-  return (
-    <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
-      <form className="form-table">
+  const validateImageUploads = (_file: File): string | void => {
+    if (!_file) return
+    if (_file.size > 1000000) {
+      throwAlert("danger", "ファイルサイズが1MBを超えています")
+      return "err"
+    }
+  }
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.persist()
+    const target = event.target
+    const imgFile = target.files[0]
+    const resImgUrl = handleChangeThumbnail(imgFile)
+    setImageUrl(resImgUrl)
+    setImage(imgFile)
+  }
+
+  const onTogglePreview = (event: React.MouseEvent) => {
+    event.persist()
+    event.preventDefault()
+    setIsPreview(!isPreview)
+  }
+
+  const onSubmit = async (event: React.MouseEvent) => {
+    event.persist()
+    event.preventDefault()
+    values.favorite_id = []
+
+    if (window.confirm("記事を作成しますか？")) {
+      const resUpload: ResultResponse<any> = await uploadImage(image, "summary")
+      if (resUpload.status === 200) {
+        values.thumbnail = resUpload.data
+      } else {
+        return await throwAlert("danger", "画像のアップロードに失敗しました。")
+      }
+      console.log(values)
+      const resSummary: ResultResponse<SummaryBook> = await createSummary(
+        values
+      )
+      if (resSummary && resSummary.status === 200) {
+        await throwAlert("success", "記事が作成されました。")
+        setValues({})
+        //history.push(`/summary/${resSummary.id}`)
+      } else {
+        history.push("/")
+      }
+    }
+  }
+
+  const editForm = () => {
+    return (
+      <>
         <Input
           title="本のタイトル"
           name="title"
           placeholder="人を動かす"
           required={true}
           onChange={handleInputChange}
+        />
+        <Input
+          title="サムネイル"
+          name="thumbnail"
+          required={true}
+          type="file"
+          onChange={handleImageChange}
+        />
+        {imageUrl && <img src={imageUrl} alt="" />}
+        <Textarea
+          title="リード分"
+          name="discription"
+          placeholder="一覧表示時に表示される文章になります。"
+          required={true}
+          onChange={handleTextareaChange}
         />
         {errors.title && "作者名は1文字以上、20文字以下でなければなりません。"}
         <RichEditor title="本の内容" handleEditorChange={handleEditorChange} />
@@ -163,6 +203,13 @@ const SummaryForm = () => {
           placeholder="4000円"
           onChange={handleInputChange}
         />
+        <Select
+          title="公開設定"
+          name="publishing_status"
+          required={true}
+          dataList={publishingSettings}
+          onChange={handleSelectChange}
+        />
         <Input
           title="評価(5段階)"
           name="review"
@@ -175,7 +222,43 @@ const SummaryForm = () => {
           placeholder="https://~"
           onChange={handleInputChange}
         />
+      </>
+    )
+  }
 
+  const preview = () => {
+    return (
+      <>{values.content && <ReadOnlyEditor editorState={values.content} />}</>
+    )
+  }
+
+  useEffect(() => {
+    let unmounted = false
+    closeAlert()
+    ;(async () => {
+      const resCategoryList: ResultResponseList<ResFavorite> = await getCategories()
+      if (!unmounted) {
+        if (resCategoryList && resCategoryList.status === 200) {
+          setCategories(resCategoryList.data)
+        }
+        setValues({ ...values, ["user_id"]: user.uid })
+      }
+    })()
+    return () => {
+      unmounted = true
+    }
+  }, [])
+
+  return (
+    <>
+      <Alert
+        is_show_alert={isShowAlert}
+        alert_status={alertStatus}
+        alert_text={alertText}
+      />
+      {isPreview && preview()}
+      <form className="form-table">
+        {!isPreview && editForm()}
         <div className="btn-area mgt-2 inline">
           <button className="_btn submit" type="submit" onClick={onSubmit}>
             作成する
@@ -183,6 +266,13 @@ const SummaryForm = () => {
           {/* <button className="_btn submit" type="submit">
             編集する
           </button> */}
+          <button
+            className="_btn preview"
+            type="button"
+            onClick={onTogglePreview}
+          >
+            {isPreview ? "編集する" : "プレビュー"}
+          </button>
           <button className="_btn remove" type="button">
             削除する
           </button>

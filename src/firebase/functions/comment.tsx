@@ -6,7 +6,7 @@ import {
   ResultResponse,
   ResultResponseList
 } from "../../types"
-import firebase from "../config"
+import { firebase } from "../config"
 const db = firebase.firestore()
 
 export const createSummaryComment = (

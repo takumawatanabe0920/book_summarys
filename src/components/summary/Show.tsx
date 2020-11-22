@@ -55,7 +55,7 @@ const SummaryShowPage = () => {
         const browsing = { summary_id: slug.id, user_id: currentUser.uid }
         let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
         if (
-          !res.summary_id ||
+          !res ||
           (res && res.summary_id && res.summary_id.id !== browsing.summary_id)
         ) {
           createBrowsing(browsing)
