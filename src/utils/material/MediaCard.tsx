@@ -24,17 +24,10 @@ import {
   CardActions,
   CardActionArea,
   Typography,
-  makeStyles,
   Button,
   FavoriteIcon
 } from "."
 const user: CurrentUser = getCurrentUser()
-
-const useStyles = makeStyles({
-  media: {
-    height: 140
-  }
-})
 
 type Props = {
   data: ResSummaryBook
@@ -43,7 +36,6 @@ type Props = {
 const MediaCard: FC<Props> = props => {
   const [myCategory, setMyCategory] = useState<Category>({})
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
-  const classes = useStyles()
   const {
     id,
     title,
@@ -107,7 +99,7 @@ const MediaCard: FC<Props> = props => {
       <Card>
         <CardActionArea>
           <CardMedia
-            className={classes.media}
+            className="media"
             image={summaryThumbnail ? summaryThumbnail : articleImg}
             title="Contemplative Reptile"
           />

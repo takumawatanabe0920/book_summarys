@@ -44,6 +44,10 @@ a {
       margin: 0 3% 1rem 0;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
 
+      .media {
+        height: 140px;
+      }
+
       &:nth-of-type(2n) {
         margin-right: 0;
       }

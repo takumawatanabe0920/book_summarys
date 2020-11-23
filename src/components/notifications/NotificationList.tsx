@@ -14,10 +14,13 @@ function NotificationList<T extends PropsData>(props: Props<T>): JSX.Element {
   console.log(dataList)
   return (
     <>
-      <div className="data-list">
+      <div className="notification-list">
         {dataList.map((data: T) => {
           return <NotificationItem<T> key={data.id} data={data} />
         })}
+        {/* {dataList.map((data: T) => {
+          return <NotificationItem<T> key={data.id} data={data} />
+        })} */}
       </div>
     </>
   )

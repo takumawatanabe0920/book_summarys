@@ -3,7 +3,9 @@ import {
   Notification,
   SummaryComment,
   ResultResponse,
-  SummaryBook
+  SummaryBook,
+  ResNotification,
+  ResultResponseList
 } from "../../types"
 import { getSummaryBook, getIdComment } from "../functions"
 import { firebase } from "../config"
@@ -33,10 +35,11 @@ export const createNotification = (values: Notification) => {
   return response
 }
 
-export const getMyNotifications = (user_id: string) => {
+export const getMyNotifications = (user_id: string, type: string) => {
   const response = db
     .collection("notification")
     .where("user_id", "==", user_id)
+    .where("type", "==", type)
     //.orderBy("update_date")
     .get()
     .then(

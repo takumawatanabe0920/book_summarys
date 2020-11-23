@@ -3,8 +3,8 @@
 const express = require("express")
 const cors = require("cors")
 const bodyParser = require("body-parser")
-const multer = require("multer")
-const multipart = multer()
+// const multer = require("multer")
+// const multipart = multer()
 
 const webpack = require("webpack")
 const webpackDevMiddleware = require("webpack-dev-middleware")

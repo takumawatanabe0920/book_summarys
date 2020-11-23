@@ -1,5 +1,7 @@
 // pathモジュールの読み込み
 const path = require("path")
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin
 
 module.exports = {
   // モードを開発モードにする
@@ -56,7 +58,7 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js", ".json"],
     alias: {}
   },
-  plugins: [],
+  plugins: [new BundleAnalyzerPlugin()],
 
   // 開発モード設定
   devtool: "source-map",
