@@ -52,14 +52,13 @@ module.exports = {
       { test: /\.(gif|png|jpg|svg|)$/, use: "url-loader" }
     ]
   },
-
   // モジュール解決
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
     alias: {}
   },
-  //plugins: [],
-  plugins: [new BundleAnalyzerPlugin()],
+  plugins: [],
+  //plugins: [new BundleAnalyzerPlugin()],
   // new BundleAnalyzerPlugin()
 
   // 開発モード設定
@@ -69,5 +68,15 @@ module.exports = {
     contentBase: "./dist",
     host: "0.0.0.0",
     port: 3016
+  },
+
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM",
+    firebase: "firebase",
+    // "firebase/auth": "firebase/auth",
+    //"firebase/storage": "firebase/storage",
+    // "firebase/firestore": "firebase/firestore",
+    "@material-ui/core": "MaterialUI"
   }
 }

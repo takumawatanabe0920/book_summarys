@@ -1,7 +1,7 @@
 import React from "react"
-import firebase from "firebase"
-import "firebase/firestore"
+import * as firebase from "firebase/app"
 import "firebase/storage"
+import "firebase/firestore"
 import "firebase/auth"
 
 const firebaseConfig = {
@@ -17,6 +17,9 @@ const firebaseConfig = {
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
 }
+
 const storage = firebase.storage()
+
+// const storage = {}
 
 export { firebase, storage }
