@@ -1,5 +1,4 @@
 import React, { useEffect, useState, FC } from "react"
-import { FontAwesomeIcon, faHeart } from "../../../utils/fontawesome"
 import {
   Favorite,
   ResFavorite,
@@ -19,7 +18,7 @@ import {
 } from "../../../firebase/functions"
 import { Alert } from "../../../components"
 import useAlertState from "../../../assets/hooks/useAlertState"
-import { number } from "prop-types"
+import { FavoriteIcon } from "../../../utils/material"
 const user: CurrentUser = getCurrentUser()
 
 const FavoliteButton: FC<Favorite> = props => {
@@ -122,9 +121,9 @@ const FavoliteButton: FC<Favorite> = props => {
       />
       <div className="favolite-button" onClick={handleFavorite}>
         {Object.keys(currentUserfavorites).length > 0 ? (
-          <FontAwesomeIcon icon={faHeart} className="clicked" />
+          <FavoriteIcon className="favorite-button isClick" />
         ) : (
-          <FontAwesomeIcon icon={faHeart} />
+          <FavoriteIcon className="favorite-button" />
         )}
       </div>
       {/* <div>{favoritesNum}</div> */}

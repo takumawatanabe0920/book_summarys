@@ -71,9 +71,13 @@ a {
       }
 
       .favorite-button {
-        color: #e24949;
+        color: #dadada;
         font-size: 1.125rem;
         margin-right: 0.2rem;
+
+        &.isClick {
+          color: #e24949;
+        }
 
         &._lg {
           font-size: 1.5rem;

@@ -15,7 +15,6 @@ import {
   getCurrentUser,
   getImage
 } from "../../firebase/functions"
-import articleImg from "../../static/images/izumi-img.jpg"
 import { Link } from "react-router-dom"
 import {
   Card,
@@ -98,11 +97,11 @@ const MediaCard: FC<Props> = props => {
     <Link to={`/summary/${id}`} className="data-item">
       <Card>
         <CardActionArea>
-          <CardMedia
+          {/* <CardMedia
             className="media"
-            image={summaryThumbnail ? summaryThumbnail : articleImg}
+            image={summaryThumbnail}
             title="Contemplative Reptile"
-          />
+          /> */}
           <CardContent>
             <div className="categories">
               <span
@@ -135,7 +134,7 @@ const MediaCard: FC<Props> = props => {
         </CardActionArea>
         <CardActions>
           <div className="favorite-area">
-            <FavoriteIcon className="favorite-button" />
+            <FavoriteIcon className="favorite-button isClick" />
             <p className="favoriteNum">{favorite_count}</p>
           </div>
         </CardActions>

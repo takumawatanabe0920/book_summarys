@@ -49,7 +49,7 @@ module.exports = {
           }
         }
       },
-      { test: /\.(gif|png|jpg|)$/, use: "url-loader" }
+      { test: /\.(gif|png|jpg|svg|)$/, use: "url-loader" }
     ]
   },
 
@@ -58,7 +58,9 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js", ".json"],
     alias: {}
   },
+  //plugins: [],
   plugins: [new BundleAnalyzerPlugin()],
+  // new BundleAnalyzerPlugin()
 
   // 開発モード設定
   devtool: "source-map",

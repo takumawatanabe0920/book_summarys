@@ -1,6 +1,6 @@
 import React from "react"
 import { CommentItem } from "./../../components"
-import { FontAwesomeIcon, faComments } from "./../../utils/fontawesome"
+import { comments } from "../../utils/icons"
 
 interface Props<T> {
   dataList: T[]
@@ -17,7 +17,9 @@ function CommentList<T extends PropsData>(props: Props<T>): JSX.Element {
     <>
       <div className="comment-list">
         <div className="_icon-title">
-          <FontAwesomeIcon icon={faComments} />
+          <div className="_comment-logo">
+            <img src={comments} alt="コメント" />
+          </div>
           <h3 className="_title">コメント</h3>
         </div>
         {dataList.map((data: T) => {

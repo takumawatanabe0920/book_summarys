@@ -11,8 +11,13 @@
 ._icon-title {
   display: flex;
   align-items: center;
+
   ._title {
     font-weight: bold;
     margin-left: 0.75rem;
+  }
+
+  ._comment-logo {
+    width: 1.5rem;
   }
 }
