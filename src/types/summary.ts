@@ -7,7 +7,7 @@ export type SummaryBook = Partial<{
   content: any
   discription: string
   category: any
-  sub_category: string
+  sub_category: any
   author: string
   price: string
   review: string

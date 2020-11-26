@@ -192,7 +192,6 @@ const SummaryForm = () => {
           dataList={categories}
           onChange={handleSelectCategoryChange}
         />
-        {isSelectCategory ? "true" : "false"}
         {isSelectCategory && (
           <Select
             title="本のサブカテゴリー"

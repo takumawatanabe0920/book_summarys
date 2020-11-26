@@ -4,12 +4,11 @@ import {
   ResSummaryBook,
   ResultResponseList,
   ResultResponse,
-  ResCategory,
-  ResUser
+  ResCategory
 } from "../../types"
 import { firebase } from "../config"
 import dayjs from "dayjs"
-import { getCategory, getUser } from "./"
+import { getCategory, getSubCategory } from "./"
 const db = firebase.firestore()
 
 export const createSummary = (
@@ -77,10 +76,25 @@ export const getRankingSummaries = async (
     .orderBy("favorite_count", "desc")
     .limit(limit)
     .get()
-    .then(res => {
-      let resData: ResSummaryBook[] = res.docs.map(doc => {
-        return { id: doc.id, ...doc.data() }
-      })
+    .then(async res => {
+      let resData: ResSummaryBook[] = await Promise.all(
+        res.docs.map(async doc => {
+          const [resCategory, resSubCategory] = await Promise.all([
+            await getCategory(doc.data().category),
+            await getSubCategory(doc.data().sub_category)
+          ])
+          let category: ResCategory
+          if (resCategory && resCategory.status === 200) {
+            category = resCategory.data
+          }
+          let sub_category: ResCategory
+          if (resSubCategory && resSubCategory.status === 200) {
+            sub_category = resSubCategory.data
+          }
+
+          return { id: doc.id, ...doc.data(), category, sub_category }
+        })
+      )
       return { status: 200, data: resData }
     })
     .catch(function(error) {
@@ -119,16 +133,22 @@ export const getSummaries = async (
     .limit(limit)
     .get()
     .then(async res => {
-      let resData: any = await Promise.all(
+      let resData: ResSummaryBook[] = await Promise.all(
         res.docs.map(async doc => {
-          const resCategory: ResultResponse<ResCategory> = await getCategory(
-            doc.data().category
-          )
+          const [resCategory, resSubCategory] = await Promise.all([
+            await getCategory(doc.data().category),
+            await getSubCategory(doc.data().sub_category)
+          ])
           let category: ResCategory
-          if (resCategory.status === 200) {
+          if (resCategory && resCategory.status === 200) {
             category = resCategory.data
           }
-          return { id: doc.id, ...doc.data(), category }
+          let sub_category: ResCategory
+          if (resSubCategory && resSubCategory.status === 200) {
+            sub_category = resSubCategory.data
+          }
+
+          return { id: doc.id, ...doc.data(), category, sub_category }
         })
       )
       return { status: 200, data: resData }

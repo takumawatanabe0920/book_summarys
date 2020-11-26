@@ -28,9 +28,11 @@ const MediaCard: FC<Props> = props => {
     title,
     favorite_count,
     category,
+    sub_category,
     user_name,
     discription,
-    thumbnail
+    thumbnail,
+    update_date
   } = data
   //const { isHiddenContent } = setting
   const [summaryThumbnail, setSummaryThumbnail] = useState<string>("")
@@ -49,6 +51,17 @@ const MediaCard: FC<Props> = props => {
         return "magazin-tag"
       default:
         return "all-tag"
+    }
+  }
+
+  const formatTag = () => {
+    let now = new Date()
+    let nowTime = Math.floor(now.getTime() / 1000)
+    const diffTime = nowTime - update_date
+    if (favorite_count > 0) {
+      return <span className="main-tag recommned-tag">人気！</span>
+    } else if (diffTime > 3600) {
+      return <span className="main-tag new-tag">新着！</span>
     }
   }
 
@@ -99,6 +112,14 @@ const MediaCard: FC<Props> = props => {
                 >
                   {category && category.name}
                 </span>
+                {setting
+                  ? !setting.isHiddenCategory
+                  : true && (
+                      <span className="main-tag sub-tag">
+                        {sub_category && sub_category.name}
+                      </span>
+                    )}
+                {formatTag()}
               </div>
               <Typography
                 gutterBottom

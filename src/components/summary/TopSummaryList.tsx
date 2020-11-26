@@ -23,6 +23,7 @@ const TopSummaryList = () => {
 
   const settingsTopSlider = {
     isHiddenContent: true,
+    isHiddenCategory: true,
     topSlider: true
   }
 
