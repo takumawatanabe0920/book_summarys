@@ -3,15 +3,18 @@ import {
   SummaryBook,
   ResSummaryBook,
   ResultResponseList,
-  ResultResponse
+  ResultResponse,
+  ResCategory,
+  ResUser
 } from "../../types"
 import { firebase } from "../config"
 import dayjs from "dayjs"
+import { getCategory, getUser } from "./"
 const db = firebase.firestore()
 
 export const createSummary = (
   values: SummaryBook
-): Promise<ResultResponse<SummaryBook>> => {
+): Promise<ResultResponse<ResSummaryBook>> => {
   const { title, content, category, user_id } = values
   if (!title || !content || !category || !user_id) {
     return
@@ -24,7 +27,8 @@ export const createSummary = (
       ...values
     })
     .then(res => {
-      return { id: res.id, status: 200 }
+      const data = { id: res.id }
+      return { status: 200, data }
     })
     .catch(error => {
       return { status: 400, data: error }
@@ -89,6 +93,8 @@ export const getSummaries = async (
   limit?: number,
   page?: number
 ): Promise<ResultResponseList<ResSummaryBook>> => {
+  console.log("called")
+  const startTime = performance.now() // 開始時間
   if (!limit) return
   let data
   const skip = page - 1
@@ -112,15 +118,27 @@ export const getSummaries = async (
     .startAfter(data)
     .limit(limit)
     .get()
-    .then(res => {
-      let resData: ResSummaryBook[] = res.docs.map(doc => {
-        return { id: doc.id, ...doc.data() }
-      })
+    .then(async res => {
+      let resData: any = await Promise.all(
+        res.docs.map(async doc => {
+          const resCategory: ResultResponse<ResCategory> = await getCategory(
+            doc.data().category
+          )
+          let category: ResCategory
+          if (resCategory.status === 200) {
+            category = resCategory.data
+          }
+          return { id: doc.id, ...doc.data(), category }
+        })
+      )
       return { status: 200, data: resData }
     })
     .catch(function(error) {
       return { status: 400, error }
     })
+  const endTime = performance.now() // 終了時間
+  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
+  console.log(next)
   return next
 }
 
@@ -137,14 +155,15 @@ export const getSummariesCount = async (): Promise<number> => {
 
 export const getSummaryBook = (
   id: string
-): Promise<ResultResponse<SummaryBook>> => {
+): Promise<ResultResponse<ResSummaryBook>> => {
   const response = db
     .collection("summary")
     .doc(id)
     .get()
     .then(doc => {
       if (doc.exists) {
-        return { id: doc.id, status: 200, ...doc.data() }
+        const data = { id: doc.id, ...doc.data() }
+        return { status: 200, data }
       }
     })
     .catch(error => {

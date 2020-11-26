@@ -9,7 +9,7 @@ import {
   ResCategory,
   ResSubCategory
 } from "./summary"
-import { User, CurrentUser, Login } from "./user"
+import { User, CurrentUser, Login, ResUser } from "./user"
 import { ResBrowsing, Browsing } from "./browsing"
 import { SummaryComment, ResSummaryComment } from "./comment"
 import { Notification, ResNotification } from "./notification"
@@ -34,5 +34,6 @@ export {
   Notification,
   ResNotification,
   ResultResponse,
-  ResultResponseList
+  ResultResponseList,
+  ResUser
 }

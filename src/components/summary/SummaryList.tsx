@@ -10,13 +10,11 @@ const SummaryList: FC<Props> = props => {
   const { dataList } = props
   //console.log(dataList)
   return (
-    <>
-      <div className="data-list">
-        {dataList.map((data: ResSummaryBook) => {
-          return <SummaryItem key={data.id} data={data} />
-        })}
-      </div>
-    </>
+    <div className="data-list">
+      {dataList.map((data: ResSummaryBook) => {
+        return <SummaryItem key={data.id} data={data} />
+      })}
+    </div>
   )
 }
 

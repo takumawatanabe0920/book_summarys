@@ -3,9 +3,10 @@ import {
   Notification,
   SummaryComment,
   ResultResponse,
-  SummaryBook,
+  ResSummaryBook,
   ResNotification,
-  ResultResponseList
+  ResultResponseList,
+  ResSummaryComment
 } from "../../types"
 import { getSummaryBook, getIdComment } from "../functions"
 import { firebase } from "../config"
@@ -26,7 +27,8 @@ export const createNotification = (values: Notification) => {
       ...values
     })
     .then(res => {
-      return { id: res.id, status: 200 }
+      const data = { id: res.id }
+      return { status: 200, data }
     })
     .catch(error => {
       return { status: 400, error }
@@ -46,21 +48,31 @@ export const getMyNotifications = (user_id: string, type: string) => {
       async res =>
         await Promise.all(
           res.docs.map(async doc => {
-            const resSummary: ResultResponse<SummaryBook> = await getSummaryBook(
+            const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
               doc.data().target_id
             )
-            let resSummaryComment: ResultResponse<SummaryComment>
-            if (!resSummary) {
-              resSummaryComment = await getIdComment(doc.data().target_id)
+            let summary: ResSummaryBook
+            if (resSummary && resSummary.status === 200) {
+              summary = resSummary.data
+            }
+            let summaryComment: ResSummaryComment
+            if (!summary) {
+              const resSummaryComment: ResultResponse<ResSummaryComment> = await getIdComment(
+                doc.data().target_id
+              )
+              if (resSummaryComment && resSummaryComment.status === 200) {
+                summaryComment = resSummaryComment.data
+              }
             }
             return {
               id: doc.id,
               ...doc.data(),
-              target_id: resSummary
-                ? resSummary
-                : resSummaryComment
-                ? resSummaryComment
-                : ""
+              target_id:
+                summary && summary.id
+                  ? summary
+                  : summaryComment && summaryComment.id
+                  ? summaryComment
+                  : ""
             }
           })
         )

@@ -8,7 +8,11 @@ import {
   ResBrowsing,
   SummaryComment as SummaryCommentType,
   ResSummaryComment,
-  ResultResponseList
+  ResultResponseList,
+  ResultResponse,
+  ResCategory,
+  ResSubCategory,
+  SummaryBook
 } from "../../types"
 import {
   SummaryDetails,
@@ -41,18 +45,28 @@ const SummaryShowPage = () => {
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      const resSummaryBook: void | any = await getSummaryBook(slug.id)
-      const resCategory: void | any = await getCategory(resSummaryBook.category)
-      let resSubCategory: void | any = ""
-      if (resSummaryBook.sub_category) {
-        resSubCategory = await getSubCategory(resSummaryBook.sub_category)
+      const resSummaryBook: ResultResponse<ResSummaryBook> = await getSummaryBook(
+        slug.id
+      )
+      const resCategory: ResultResponse<ResCategory> = await getCategory(
+        resSummaryBook.data.category
+      )
+      let resSubCategory: ResultResponse<ResSubCategory>
+      if (resSummaryBook.data.sub_category) {
+        resSubCategory = await getSubCategory(resSummaryBook.data.sub_category)
       }
       const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComment(
         slug.id
       )
 
       if (slug && slug.id && currentUser) {
-        const browsing = { summary_id: slug.id, user_id: currentUser.uid }
+        const browsing = {
+          summary_id: slug.id,
+          user_id: currentUser.uid,
+          user_name: currentUser.displayName
+            ? currentUser.displayName
+            : currentUser.email
+        }
         let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
         if (
           !res ||
@@ -62,9 +76,15 @@ const SummaryShowPage = () => {
         }
       }
       if (!unmounted) {
-        setSummaryBook(resSummaryBook)
-        setCategory(resCategory)
-        setSubCategory(resSubCategory)
+        if (resSummaryBook && resSummaryBook.status === 200) {
+          setSummaryBook(resSummaryBook.data)
+        }
+        if (resCategory && resCategory.status === 200) {
+          setCategory(resCategory.data)
+        }
+        if (resSubCategory && resSubCategory.status === 200) {
+          setSubCategory(resSubCategory.data)
+        }
         if (resSummaryCommentList && resSummaryCommentList.status === 200) {
           setSummaryCommentList(resSummaryCommentList.data)
         }
@@ -83,6 +103,7 @@ const SummaryShowPage = () => {
             summaryBook={summarybook}
             category={category}
             subCategory={subCategory}
+            currentUser={currentUser}
           />
           <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
           {user.uid ? (

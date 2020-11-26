@@ -31,6 +31,7 @@
     "@types/query-string": "^6.3.0",
     "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.6",
+    "@types/react-slick": "^0.23.4",
     "@types/webpack-bundle-analyzer": "^3.9.0",
     "async": "^3.2.0",
     "axios": "^0.21.0",
@@ -51,9 +52,12 @@
     "react-hook-form": "^6.9.5",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "react-slick": "^0.27.13",
+    "slick-carousel": "^1.8.1",
     "url-loader": "^4.1.1",
     "use-react-router": "^1.0.7",
-    "webpack-node-externals": "^2.5.2"
+    "webpack-node-externals": "^2.5.2",
+    "why-did-you-update": "^0.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

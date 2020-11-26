@@ -51,14 +51,15 @@ export const getFavorites = (): Promise<ResultResponseList<ResFavorite>> => {
 
 export const getDonefavorite = (
   id: string
-): Promise<ResultResponse<Favorite>> => {
+): Promise<ResultResponse<ResFavorite>> => {
   const response = db
     .collection("favorite")
     .doc(id)
     .get()
     .then(doc => {
       if (doc.exists) {
-        return { id: doc.id, status: 200, ...doc.data() }
+        const data = { id: doc.id, ...doc.data() }
+        return { status: 200, data }
       }
     })
     .catch(error => {
@@ -84,7 +85,7 @@ export const getfavoriteNum = async (summaryId?: string): Promise<number> => {
 
 export const createFavorite = (
   values: Favorite
-): Promise<ResultResponse<Favorite>> => {
+): Promise<ResultResponse<ResFavorite>> => {
   const { user_id, summary_id } = values
   if (!user_id || !summary_id) {
     console.log("idがありません")
@@ -98,7 +99,8 @@ export const createFavorite = (
       ...values
     })
     .then(res => {
-      return { id: res.id, status: 200 }
+      const data: ResFavorite = { id: res.id }
+      return { status: 200, data }
     })
     .catch(error => {
       return { status: 400, data: error }
@@ -109,7 +111,7 @@ export const createFavorite = (
 
 export const deleteFavorite = (
   favoriteId: string
-): Promise<ResultResponse<Favorite>> => {
+): Promise<ResultResponse<ResFavorite>> => {
   if (!favoriteId) {
     console.log("idが存在しません。")
     return

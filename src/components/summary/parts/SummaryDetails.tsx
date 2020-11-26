@@ -1,24 +1,26 @@
-import React, { FC, useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import React, { FC } from "react"
 import { Link } from "react-router-dom"
-import { ResSummaryBook, Category, SubCategory } from "../../../types"
+import { useParams } from "react-router-dom"
+import {
+  ResSummaryBook,
+  Category,
+  SubCategory,
+  CurrentUser
+} from "../../../types"
+import { FavoriteButton } from "../../../components"
 import { ReadOnlyEditor } from "../../../utils/richtext"
+import { FavoriteIcon } from "../../../utils/material"
 
 type Props = {
   summaryBook: ResSummaryBook
   category: Category
   subCategory: SubCategory
+  currentUser: CurrentUser
 }
 
 const SummaryDetails: FC<Props> = props => {
-  const { summaryBook, category, subCategory } = props
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {})()
-    return () => {
-      unmounted = true
-    }
-  }, [])
+  const { summaryBook, category, subCategory, currentUser } = props
+  const url: { id: string } = useParams()
 
   return (
     <>
@@ -36,25 +38,23 @@ const SummaryDetails: FC<Props> = props => {
           <div className="tags">
             {/* TODO リンク：カテゴリー記事に飛ばす */}
             <span className="tag">{category.name}</span>
-            <span className="tag">{subCategory ? subCategory.name : ""}</span>
+            {subCategory.name && (
+              <span className="tag">{subCategory.name}</span>
+            )}
+          </div>
+          <div className="_icons">
+            <div className="favorite-area">
+              <FavoriteIcon className="favorite-button isClick" />
+              <p className="favoriteNum">
+                {summaryBook.favorite_count ? summaryBook.favorite_count : 0}
+              </p>
+            </div>
+            {/* TODO: snsボタンを設置 */}
           </div>
         </div>
         <div className="_body">
           <ReadOnlyEditor editorState={summaryBook.content} />
-        </div>
-        <div className="_footer">
-          <dl>
-            <dt>値段：</dt>
-            <dd>{summaryBook.price}円</dd>
-          </dl>
-          <dl>
-            <dt>著者：</dt>
-            <dd>{summaryBook.author}</dd>
-          </dl>
-          <dl>
-            <dt>商品リンク：</dt>
-            <dd>{summaryBook.product_links}</dd>
-          </dl>
+          <FavoriteButton user_id={currentUser.uid} summary_id={url.id} />
         </div>
       </div>
     </>

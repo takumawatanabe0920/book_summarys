@@ -31,8 +31,6 @@ const RichEditor: FC<Props> = props => {
     if (editor.current) editor.current.focus()
   }
 
-  console.log(iconUl)
-
   const handleKeyCommand = useCallback(
     (command, editorState) => {
       const newState = RichUtils.handleKeyCommand(editorState, command)

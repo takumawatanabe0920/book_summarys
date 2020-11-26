@@ -14,17 +14,19 @@ import {
   SignInPage,
   MypagePage,
   UserDetailPage,
-  NotificationPage
+  NotificationPage,
+  TopHeader
 } from "../components"
 // コンポーネント読み込み
 
 ReactDOM.render(
   <div>
     <Router>
+      <TopHeader />
       <Header />
-      <div className="wrapper">
+      <div className="wrapper pt0">
         <div className="main-contents">
-          <div className="l-container">
+          <div className="lg-container">
             <Switch>
               <Route exact path="/" component={HomePage} />
               <PrivateRoute

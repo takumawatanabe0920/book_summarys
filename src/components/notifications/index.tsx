@@ -21,6 +21,7 @@ const NotificationPage = () => {
       currentUser.uid,
       _tabType
     )
+    console.log(resMyNotifications)
     setNotificationList(resMyNotifications)
   }
 
@@ -31,6 +32,7 @@ const NotificationPage = () => {
         currentUser.uid,
         "favorite"
       )
+      console.log(resMyNotifications)
       if (!unmounted) {
         setNotificationList(resMyNotifications)
       }

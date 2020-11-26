@@ -74,9 +74,9 @@ module.exports = {
     react: "React",
     "react-dom": "ReactDOM",
     firebase: "firebase",
-    // "firebase/auth": "firebase/auth",
-    //"firebase/storage": "firebase/storage",
-    // "firebase/firestore": "firebase/firestore",
+    // "firebase/auth": "",
+    // "firebase/storage": "",
+    // "firebase/firestore": "",
     "@material-ui/core": "MaterialUI"
   }
 }

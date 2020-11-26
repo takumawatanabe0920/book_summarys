@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react"
 // components
-import { SummaryList, Pager, Sidebar } from "./../components"
+import { SummaryList, Pager, Sidebar, TopSummaryList } from "./../components"
 import { ResSummaryBook, ResultResponseList } from "./../types"
-import useReactRouter from "use-react-router"
 import {
   getSummaries,
   readQuery,
@@ -15,7 +14,6 @@ const HomePage = () => {
   const [summaries, setSummaries] = useState([])
   const [summariesNum, setSummariesNum] = useState(0)
   const [page, setPage] = useState(Number(readQuery("pages") || 1))
-  const { history } = useReactRouter()
 
   const fetchData = (num?: number) => {
     setPage(num)
@@ -42,6 +40,7 @@ const HomePage = () => {
   }, [page])
   return (
     <>
+      <TopSummaryList />
       <div className="l-main">
         <div className="main-block">
           <h2 className="main-title blue-main-title">新着要約記事</h2>

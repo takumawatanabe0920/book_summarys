@@ -1,10 +1,12 @@
 import React from "react"
 import axios from "axios"
-import { User, CurrentUser, Login, ResultResponse } from "../../types"
+import { User, CurrentUser, Login, ResultResponse, ResUser } from "../../types"
 import { firebase } from "../config"
 
 //api
-export const getUser = async (uid: string): Promise<any> => {
+export const getUser = async (
+  uid: string
+): Promise<ResultResponse<ResUser>> => {
   const data = {
     headers: {
       Authorization: "Bearer 8213f5cd-5fds2-4891-83d0-48d172ffab77"
@@ -14,11 +16,10 @@ export const getUser = async (uid: string): Promise<any> => {
   const response = await axios
     .get("http://localhost:3012/v1/users", data)
     .then(res => {
-      return res.data
+      return { status: 200, data: res.data }
     })
-    .catch(err => {
-      console.log(err)
-      return err.response.data
+    .catch(error => {
+      return { status: 400, error }
     })
   return response
 }
@@ -55,7 +56,7 @@ export const register = (
       return { status: 200 }
     })
     .catch(error => {
-      return { status: 200, error }
+      return { status: 400, error }
     })
   return response
 }

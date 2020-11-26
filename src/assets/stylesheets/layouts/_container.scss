@@ -1,15 +1,13 @@
 .lg-container {
   @include pc() {
-    display: flex;
-    max-width: 1240px;
+    max-width: 100vw;
     margin: auto;
   }
 }
 
 .l-container {
   @include pc() {
-    display: flex;
-    max-width: 1040px;
+    width: 1040px;
     margin: auto;
   }
 }
