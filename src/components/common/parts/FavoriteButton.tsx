@@ -102,7 +102,6 @@ const FavoliteButton: FC<Props> = props => {
       if (user_id && summary_id) {
         resfavoriteList = await getFavorite(user_id, summary_id)
       }
-      console.log(resfavoriteList)
       if (!unmounted) {
         if (
           resfavoriteList &&
@@ -118,19 +117,6 @@ const FavoliteButton: FC<Props> = props => {
     }
   }, [])
 
-  // useEffect(() => {
-  //   let unmounted = false
-  //   ;(async () => {
-  //     const count: number = await getfavoriteNum(summary_id)
-  //     if (!unmounted) {
-  //       setFavoritesNum(count)
-  //     }
-  //   })()
-  //   return () => {
-  //     unmounted = true
-  //   }
-  // }, [])
-
   return (
     <>
       <Alert
@@ -145,7 +131,6 @@ const FavoliteButton: FC<Props> = props => {
           <FavoriteIcon className="favorite-button" />
         )}
       </div>
-      {/* <div>{favoritesNum}</div> */}
     </>
   )
 }

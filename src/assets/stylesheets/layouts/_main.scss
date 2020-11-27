@@ -44,7 +44,8 @@ a {
   }
 
   &._block-list {
-    width: 85%;
+    max-width: 1180px;
+    width: 100%;
   }
 
   .article-block {
@@ -86,5 +87,35 @@ a {
     color: #fff;
     font-weight: bold;
     letter-spacing: 2.4px;
+  }
+}
+
+.pager {
+  display: flex;
+  justify-content: center;
+
+  .pager-num {
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 0.5rem;
+
+    &.active {
+      color: #000;
+      border: 1px solid #000;
+      background: #fff;
+    }
+
+    p {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+    }
   }
 }

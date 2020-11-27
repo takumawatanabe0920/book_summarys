@@ -1,31 +1,20 @@
 import React, { useState, useEffect, useMemo } from "react"
 // components
-import { SummaryList, Pager, Sidebar, TopSummaryList } from "./../components"
+import { SummaryList, Sidebar, TopSummaryList } from "./../components"
 import { ResSummaryBook, ResultResponseList } from "./../types"
-import {
-  getSummaries,
-  readQuery,
-  getSummariesCount
-} from "../firebase/functions"
+import { getSummaries, getSummariesCount } from "../firebase/functions"
 import { Link } from "react-router-dom"
-
-// sections
 
 const HomePage = () => {
   const [summaries, setSummaries] = useState([])
   const [summariesNum, setSummariesNum] = useState(0)
-  const [page, setPage] = useState(Number(readQuery("pages") || 1))
-
-  const fetchData = (num?: number) => {
-    setPage(num)
-  }
 
   useEffect(() => {
     let unmounted = false
     ;(async () => {
       let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
         6,
-        page
+        1
       )
       let count: number = await getSummariesCount()
       if (!unmounted) {
@@ -38,7 +27,7 @@ const HomePage = () => {
     return () => {
       unmounted = true
     }
-  }, [page])
+  }, [])
   return (
     <>
       <TopSummaryList />
@@ -53,7 +42,6 @@ const HomePage = () => {
               </Link>
             </div>
           </div>
-          <Pager fetchData={fetchData} dataNum={summariesNum} />
           <div className="article-block">
             <h2 className="main-title blue-main-title">おすすめ！</h2>
             <SummaryList dataList={summaries} />

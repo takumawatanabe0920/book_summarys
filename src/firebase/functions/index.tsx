@@ -13,6 +13,7 @@ import {
   getSelectCategorySummaries,
   createSummary,
   getSummariesCount,
+  getCategorySummariesCount,
   updateFavoriteSummaries,
   getRankingSummaries
 } from "./summary"
@@ -54,6 +55,7 @@ export {
   updateFavoriteSummaries,
   getRankingSummaries,
   getSummariesCount,
+  getCategorySummariesCount,
   getSelectCategorySummaries,
   getUser,
   getCurrentUser,

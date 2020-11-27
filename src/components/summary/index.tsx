@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react"
 // components
-import { SummaryList, SummaryCategories } from ".."
+import { SummaryList, SummaryCategories, Pager } from ".."
 import { ResSummaryBook, ResultResponseList } from "../../types"
 import {
   getSummaries,
   readQuery,
   getSummariesCount,
-  getSelectCategorySummaries
+  getSelectCategorySummaries,
+  getCategorySummariesCount
 } from "../../firebase/functions"
 import { Link } from "react-router-dom"
 
@@ -31,19 +32,28 @@ const SummaryIndexPage = () => {
     setUpdateData({ query: categoryId, name: categoryName })
   }
 
+  const fetchPager = (num: number) => {
+    setPage(num)
+  }
+
   useEffect(() => {
     let unmounted = false
+    console.log(page)
+    console.log(updateData.query)
     ;(async () => {
       let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
         6,
-        page
+        1
       )
       let resSelectSummariesDataList: ResultResponseList<ResSummaryBook> = await getSelectCategorySummaries(
         6,
         page,
         updateData.query
       )
-      let count: number = await getSummariesCount()
+      let count: number = 0
+      if (updateData && updateData.query) {
+        count = await getCategorySummariesCount(updateData.query)
+      }
       if (!unmounted) {
         if (resSummariesDataList && resSummariesDataList.status === 200) {
           setSummaries(resSummariesDataList.data)
@@ -77,11 +87,7 @@ const SummaryIndexPage = () => {
                     dataList={selectSummaries}
                     columnNum={"three-column"}
                   />
-                  <div className="btn-area">
-                    <Link to="/summary" className="_btn">
-                      もっと見る
-                    </Link>
-                  </div>
+                  <Pager fetchPager={fetchPager} dataNum={summariesNum} />
                 </>
               ) : (
                 <h3 className="not-find">記事が見当たりませんでした。</h3>
@@ -97,15 +103,6 @@ const SummaryIndexPage = () => {
               </Link>
             </div>
           </div>
-          {/* <div className="article-block">
-            <h2 className="main-title blue-main-title">おすすめ記事！</h2>
-            <SummaryList dataList={summaries} columnNum={"three-column"} />
-            <div className="btn-area">
-              <Link to="/summary" className="_btn">
-                もっと見る
-              </Link>
-            </div>
-          </div> */}
         </div>
       </div>
     </>

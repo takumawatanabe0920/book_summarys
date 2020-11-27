@@ -107,7 +107,6 @@ export const getSummaries = async (
   limit?: number,
   page?: number
 ): Promise<ResultResponseList<ResSummaryBook>> => {
-  console.log("called")
   const startTime = performance.now() // 開始時間
   if (!limit) return
   let data
@@ -158,7 +157,6 @@ export const getSummaries = async (
     })
   const endTime = performance.now() // 終了時間
   console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
-  console.log(next)
   return next
 }
 
@@ -167,7 +165,6 @@ export const getSelectCategorySummaries = async (
   page?: number,
   category_id?: string
 ): Promise<ResultResponseList<ResSummaryBook>> => {
-  console.log("called")
   const startTime = performance.now() // 開始時間
   if (!limit) return
   let data
@@ -185,6 +182,11 @@ export const getSelectCategorySummaries = async (
         documentresponses =>
           documentresponses.docs[documentresponses.docs.length - 1]
       )
+  }
+
+  console.log(data)
+  if (data === undefined) {
+    return { status: 400 }
   }
 
   const next = await db
@@ -220,13 +222,26 @@ export const getSelectCategorySummaries = async (
     })
   const endTime = performance.now() // 終了時間
   console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
-  console.log(next)
   return next
 }
 
 export const getSummariesCount = async (): Promise<number> => {
   let docNum = await db
     .collection("summary")
+    .get()
+    .then(snap => {
+      return snap.size // will return the collection size
+    })
+
+  return docNum
+}
+
+export const getCategorySummariesCount = async (
+  category_id?: string
+): Promise<number> => {
+  let docNum = await db
+    .collection("summary")
+    .where("category", "==", category_id)
     .get()
     .then(snap => {
       return snap.size // will return the collection size
