@@ -7,6 +7,7 @@ import {
   readQuery,
   getSummariesCount
 } from "../firebase/functions"
+import { Link } from "react-router-dom"
 
 // sections
 
@@ -43,11 +44,25 @@ const HomePage = () => {
       <TopSummaryList />
       <div className="l-main">
         <div className="main-block">
-          <h2 className="main-title blue-main-title">新着要約記事</h2>
-          <SummaryList dataList={summaries} />
+          <div className="article-block">
+            <h2 className="main-title blue-main-title">新着要約記事</h2>
+            <SummaryList dataList={summaries} />
+            <div className="btn-area">
+              <Link to="/summary" className="_btn">
+                もっと見る
+              </Link>
+            </div>
+          </div>
           <Pager fetchData={fetchData} dataNum={summariesNum} />
-          <h2 className="main-title blue-main-title">関連要約記事</h2>
-          <SummaryList dataList={summaries} />
+          <div className="article-block">
+            <h2 className="main-title blue-main-title">おすすめ！</h2>
+            <SummaryList dataList={summaries} />
+            <div className="btn-area">
+              <Link to="/summary" className="_btn">
+                もっと見る
+              </Link>
+            </div>
+          </div>
         </div>
         <Sidebar />
       </div>

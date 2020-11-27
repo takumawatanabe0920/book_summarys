@@ -15,6 +15,7 @@ import {
   MypagePage,
   UserDetailPage,
   NotificationPage,
+  SummaryPage,
   TopHeader
 } from "../components"
 // コンポーネント読み込み
@@ -37,6 +38,7 @@ ReactDOM.render(
               <PrivateRoute exact path="/mypage" component={MypagePage} />
               <Route exact path="/user/:id" component={UserDetailPage} />
               <Route exact path="/summary/:id" component={SummaryShowPage} />
+              <Route exact path="/summary" component={SummaryPage} />
               <Route exact path="/notification" component={NotificationPage} />
               <GuestRoute exact path="/sign_up" component={SignUpPage} />
               <GuestRoute exact path="/sign_in" component={SignInPage} />

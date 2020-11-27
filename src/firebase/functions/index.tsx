@@ -10,6 +10,7 @@ import {
 import {
   getSummaries,
   getSummaryBook,
+  getSelectCategorySummaries,
   createSummary,
   getSummariesCount,
   updateFavoriteSummaries,
@@ -53,6 +54,7 @@ export {
   updateFavoriteSummaries,
   getRankingSummaries,
   getSummariesCount,
+  getSelectCategorySummaries,
   getUser,
   getCurrentUser,
   emailAuthMixin_sendVerifyMail,

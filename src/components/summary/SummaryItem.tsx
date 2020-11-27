@@ -8,13 +8,14 @@ const user: CurrentUser = getCurrentUser()
 type Props = {
   data: ResSummaryBook
   setting?: any
+  columnNum?: string
 }
 
 const SummaryItem: FC<Props> = props => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
-  const { data, setting } = props
+  const { data, setting, columnNum } = props
 
-  return <MediaCard data={data} setting={setting} />
+  return <MediaCard data={data} setting={setting} columnNum={columnNum} />
 }
 
 export default SummaryItem

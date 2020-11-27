@@ -109,6 +109,15 @@
     margin-right: 0;
   }
 
+  &.three-column {
+    width: 32%;
+    margin-right: 1.85%;
+
+    &:nth-of-type(3n) {
+      margin-right: 0;
+    }
+  }
+
   ._summary-ttl {
     font-weight: bold;
     font-size: 1rem;
@@ -249,6 +258,99 @@
         z-index: -1;
       }
     }
+  }
+}
+
+.summary-category {
+  margin-bottom: 3rem;
+
+  ._ttl {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.35rem;
+    letter-spacing: 4px;
+  }
+
+  ._category-body {
+    display: flex;
+    justify-content: space-between;
+    width: 880px;
+    margin: auto;
+
+    ._data {
+      width: 150px;
+      height: 150px;
+      position: relative;
+
+      &:before {
+        /* 透過した黒を上から重ねるイメージ */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* 自由に位置指定 */
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        content: ' ';
+      }
+
+      &.sportImage {
+        background: url('../../static/images/sports.jpg') no-repeat center center;
+        background-size: cover;
+      }
+
+      &.businessImage {
+        background: url('../../static/images/business.jpg') no-repeat center center;
+        background-size: cover;
+      }
+
+      &.novelImage {
+        background: url('../../static/images/novel.jpg') no-repeat center center;
+        background-size: cover;
+      }
+
+      &.magazinImage {
+        background: url('../../static/images/magazin.jpg') no-repeat center center;
+        background-size: cover;
+      }
+
+      &.natureImage {
+        background: url('../../static/images/nature.jpg') no-repeat center center;
+        background-size: cover;
+      }
+
+      ._data-tag {
+        color: #fff;
+        font-weight: bold;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+}
+
+.summary-contents {
+  padding-top: 3rem;
+}
+
+.not-find {
+  padding: 1rem;
+}
+
+.btn-area {
+  width: 100%;
+  height: 40px;
+  text-align: center;
+
+  ._btn {
+    background: #000;
+    color: #fff;
+    padding: 0.75rem 2.6rem;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: bold;
   }
 }
 

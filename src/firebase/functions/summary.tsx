@@ -162,6 +162,68 @@ export const getSummaries = async (
   return next
 }
 
+export const getSelectCategorySummaries = async (
+  limit?: number,
+  page?: number,
+  category_id?: string
+): Promise<ResultResponseList<ResSummaryBook>> => {
+  console.log("called")
+  const startTime = performance.now() // 開始時間
+  if (!limit) return
+  let data
+  const skip = page - 1
+  if (skip === 0) {
+    data = skip
+  } else {
+    data = await db
+      .collection("summary")
+      .where("category", "==", category_id)
+      .orderBy("update_date")
+      .limit(limit * skip)
+      .get()
+      .then(
+        documentresponses =>
+          documentresponses.docs[documentresponses.docs.length - 1]
+      )
+  }
+
+  const next = await db
+    .collection("summary")
+    .where("category", "==", category_id)
+    .orderBy("update_date")
+    .startAfter(data)
+    .limit(limit)
+    .get()
+    .then(async res => {
+      let resData: ResSummaryBook[] = await Promise.all(
+        res.docs.map(async doc => {
+          const [resCategory, resSubCategory] = await Promise.all([
+            await getCategory(doc.data().category),
+            await getSubCategory(doc.data().sub_category)
+          ])
+          let category: ResCategory
+          if (resCategory && resCategory.status === 200) {
+            category = resCategory.data
+          }
+          let sub_category: ResCategory
+          if (resSubCategory && resSubCategory.status === 200) {
+            sub_category = resSubCategory.data
+          }
+
+          return { id: doc.id, ...doc.data(), category, sub_category }
+        })
+      )
+      return { status: 200, data: resData }
+    })
+    .catch(function(error) {
+      return { status: 400, error }
+    })
+  const endTime = performance.now() // 終了時間
+  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
+  console.log(next)
+  return next
+}
+
 export const getSummariesCount = async (): Promise<number> => {
   let docNum = await db
     .collection("summary")

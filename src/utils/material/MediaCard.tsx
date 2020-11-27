@@ -12,17 +12,17 @@ import {
   Typography,
   FavoriteIcon
 } from "."
-import { settings } from "cluster"
 const user: CurrentUser = getCurrentUser()
 
 type Props = {
   data: ResSummaryBook
   setting?: any
+  columnNum?: string
 }
 
 const MediaCard: FC<Props> = props => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
-  const { data, setting } = props
+  const { data, setting, columnNum } = props
   const {
     id,
     title,
@@ -83,7 +83,10 @@ const MediaCard: FC<Props> = props => {
   }, [])
 
   return (
-    <Link to={`/summary/${id}`} className="summary-data-item">
+    <Link
+      to={`/summary/${id}`}
+      className={clsx("summary-data-item", columnNum && columnNum)}
+    >
       <Card>
         <CardActionArea
           className={clsx(

@@ -4,6 +4,7 @@ import Textarea from "./common/form/parts/Textarea"
 import LoginForm from "./common/form/LoginForm"
 import RegisterForm from "./common/form/RegisterForm"
 import SummaryForm from "./common/form/SummaryForm"
+import SummaryPage from "./summary"
 import QuestionModal from "./common/parts/modal/QuestionModal"
 import DefaultModal from "./common/parts/modal/DefaultModal"
 import FavoriteButton from "./common/parts/FavoriteButton"
@@ -23,6 +24,8 @@ import SummaryItem from "./summary/SummaryItem"
 import SummaryList from "./summary/SummaryList"
 import TopSummaryList from "./summary/TopSummaryList"
 import SummaryShowPage from "./summary/Show"
+import CategoryItem from "./summary/CategoryItem"
+import SummaryCategories from "./summary/SummaryCategories"
 import MypagePage from "./user/Mypage"
 import UserDetailPage from "./user/UserDetail"
 import SummaryComment from "./coment/SummaryComment"
@@ -59,7 +62,10 @@ export {
   SummaryCreatePage,
   SummaryItem,
   SummaryList,
+  CategoryItem,
   SummaryShowPage,
+  SummaryPage,
+  SummaryCategories,
   TopSummaryList,
   MypagePage,
   UserDetailPage,

@@ -71,7 +71,6 @@ const SummaryForm = () => {
     const target = event.target
     const value = target.value
     const name = target.name
-    console.log({ ...values, [name]: value })
     setValues({ ...values, [name]: value })
   }
 
@@ -245,7 +244,7 @@ const SummaryForm = () => {
     let unmounted = false
     closeAlert()
     ;(async () => {
-      const resCategoryList: ResultResponseList<ResFavorite> = await getCategories()
+      const resCategoryList: ResultResponseList<ResCategory> = await getCategories()
       if (!unmounted) {
         if (resCategoryList && resCategoryList.status === 200) {
           setCategories(resCategoryList.data)

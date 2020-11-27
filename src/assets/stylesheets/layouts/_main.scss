@@ -39,10 +39,22 @@ a {
   padding: 2rem;
   background-color: #fff;
 
+  &._block-center {
+    margin: auto;
+  }
+
+  &._block-list {
+    width: 85%;
+  }
+
+  .article-block {
+    margin-bottom: 1rem;
+  }
+
   .data-list {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 5rem;
+    margin-bottom: 2rem;
   }
 }
 
