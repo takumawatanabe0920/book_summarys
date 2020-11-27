@@ -1,12 +1,10 @@
 import React, { useEffect, useState, FC } from "react"
-import { FontAwesomeIcon, faHeart } from "../../../utils/fontawesome"
 import {
   Favorite,
   ResFavorite,
   CurrentUser,
   ResultResponseList,
-  ResultResponse,
-  SummaryBook
+  ResultResponse
 } from "../../../types"
 import {
   getFavorite,
@@ -19,10 +17,15 @@ import {
 } from "../../../firebase/functions"
 import { Alert } from "../../../components"
 import useAlertState from "../../../assets/hooks/useAlertState"
-import { number } from "prop-types"
+import { FavoriteIcon } from "../../../utils/material"
 const user: CurrentUser = getCurrentUser()
 
-const FavoliteButton: FC<Favorite> = props => {
+type Props = {
+  summary_id: string
+  user_id: string
+}
+
+const FavoliteButton: FC<Props> = props => {
   const { user_id, summary_id } = props
   const [currentUserfavorites, setCurrentUserFavorites] = useState<ResFavorite>(
     {}
@@ -38,6 +41,9 @@ const FavoliteButton: FC<Favorite> = props => {
     closeAlert
   ] = useAlertState(false)
 
+  console.log(user_id)
+  console.log(summary_id)
+
   const handleFavorite = async (event: React.MouseEvent<HTMLElement>) => {
     event.persist()
     event.preventDefault()
@@ -49,7 +55,7 @@ const FavoliteButton: FC<Favorite> = props => {
     }
     //レンダリングさせる必要がある
     if (Object.keys(currentUserfavorites).length > 0) {
-      const resDeleteFavorite: ResultResponse<SummaryBook> = await deleteFavorite(
+      const resDeleteFavorite: ResultResponse<ResFavorite> = await deleteFavorite(
         currentUserfavorites.id
       )
       if (resDeleteFavorite && resDeleteFavorite.status === 200) {
@@ -61,15 +67,27 @@ const FavoliteButton: FC<Favorite> = props => {
         await throwAlert("danger", "いいねの解除に失敗しました。")
       }
     } else {
-      let newProps = { ...props }
-      const resFavorite: ResultResponse<SummaryBook> = await createFavorite(
+      let newProps = {
+        user_name: currentUser.displayName
+          ? currentUser.displayName
+          : currentUser.email,
+        ...props
+      }
+      const resFavorite: ResultResponse<ResFavorite> = await createFavorite(
         newProps
       )
       if (resFavorite && resFavorite.status === 200) {
-        updateFavoriteSummaries(resFavorite.id, summary_id)
-        setCurrentUserFavorites({ id: resFavorite.id, ...props })
+        updateFavoriteSummaries(resFavorite.data.id, summary_id)
+        setCurrentUserFavorites({ id: resFavorite.data.id, ...props })
         setFavoritesNum(favoritesNum + 1)
-        createNotification({ user_id, target_id: summary_id, type: "favorite" })
+        createNotification({
+          user_id,
+          user_name: currentUser.displayName
+            ? currentUser.displayName
+            : currentUser.email,
+          target_id: summary_id,
+          type: "favorite"
+        })
         await throwAlert("success", "いいねしました。")
       } else {
         await throwAlert("danger", "いいねに失敗しました。")
@@ -80,11 +98,10 @@ const FavoliteButton: FC<Favorite> = props => {
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      if (!currentUser) return
-      const resfavoriteList: ResultResponseList<ResFavorite> = await getFavorite(
-        currentUser.uid,
-        summary_id
-      )
+      let resfavoriteList: ResultResponseList<ResFavorite>
+      if (user_id && summary_id) {
+        resfavoriteList = await getFavorite(user_id, summary_id)
+      }
       if (!unmounted) {
         if (
           resfavoriteList &&
@@ -93,19 +110,6 @@ const FavoliteButton: FC<Favorite> = props => {
         ) {
           setCurrentUserFavorites(resfavoriteList.data[0])
         }
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      const count: number = await getfavoriteNum(summary_id)
-      if (!unmounted) {
-        setFavoritesNum(count)
       }
     })()
     return () => {
@@ -122,12 +126,11 @@ const FavoliteButton: FC<Favorite> = props => {
       />
       <div className="favolite-button" onClick={handleFavorite}>
         {Object.keys(currentUserfavorites).length > 0 ? (
-          <FontAwesomeIcon icon={faHeart} className="clicked" />
+          <FavoriteIcon className="favorite-button isClick" />
         ) : (
-          <FontAwesomeIcon icon={faHeart} />
+          <FavoriteIcon className="favorite-button" />
         )}
       </div>
-      {/* <div>{favoritesNum}</div> */}
     </>
   )
 }

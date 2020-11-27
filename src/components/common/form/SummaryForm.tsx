@@ -23,6 +23,7 @@ import { RichEditor, ReadOnlyEditor } from "./../../../utils/richtext"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryForm = () => {
+  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [values, setValues] = useState<SummaryBook>({})
   const [categories, setCategories] = useState<ResCategory[]>([])
   const [publishingSettings, setPublishingSettings] = useState([
@@ -70,8 +71,15 @@ const SummaryForm = () => {
     const target = event.target
     const value = target.value
     const name = target.name
-    console.log({ ...values, [name]: value })
     setValues({ ...values, [name]: value })
+  }
+
+  const handleSelectCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    event.persist()
+    const value = event.target.value
+    setValues({ ...values, category: value })
     setIsSelectCategory(true)
     subCategorySelect(value)
   }
@@ -181,7 +189,7 @@ const SummaryForm = () => {
           name="category"
           required={true}
           dataList={categories}
-          onChange={handleSelectChange}
+          onChange={handleSelectCategoryChange}
         />
         {isSelectCategory && (
           <Select
@@ -191,7 +199,7 @@ const SummaryForm = () => {
             dataList={subCategories}
           />
         )}
-        <Input
+        {/* <Input
           title="筆者"
           name="author"
           placeholder="要約太郎"
@@ -202,7 +210,7 @@ const SummaryForm = () => {
           name="price"
           placeholder="4000円"
           onChange={handleInputChange}
-        />
+        /> */}
         <Select
           title="公開設定"
           name="publishing_status"
@@ -210,7 +218,7 @@ const SummaryForm = () => {
           dataList={publishingSettings}
           onChange={handleSelectChange}
         />
-        <Input
+        {/* <Input
           title="評価(5段階)"
           name="review"
           placeholder="星４"
@@ -221,7 +229,7 @@ const SummaryForm = () => {
           name="product_links"
           placeholder="https://~"
           onChange={handleInputChange}
-        />
+        /> */}
       </>
     )
   }
@@ -236,12 +244,18 @@ const SummaryForm = () => {
     let unmounted = false
     closeAlert()
     ;(async () => {
-      const resCategoryList: ResultResponseList<ResFavorite> = await getCategories()
+      const resCategoryList: ResultResponseList<ResCategory> = await getCategories()
       if (!unmounted) {
         if (resCategoryList && resCategoryList.status === 200) {
           setCategories(resCategoryList.data)
         }
-        setValues({ ...values, ["user_id"]: user.uid })
+        setValues({
+          ...values,
+          ["user_id"]: currentUser.uid,
+          ["user_name"]: currentUser.displayName
+            ? currentUser.displayName
+            : currentUser.email
+        })
       }
     })()
     return () => {

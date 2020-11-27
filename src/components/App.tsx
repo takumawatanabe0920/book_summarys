@@ -1,32 +1,20 @@
 import React, { useState, useEffect, useMemo } from "react"
 // components
-import { SummaryList, Pager, Sidebar } from "./../components"
+import { SummaryList, Sidebar, TopSummaryList } from "./../components"
 import { ResSummaryBook, ResultResponseList } from "./../types"
-import useReactRouter from "use-react-router"
-import {
-  getSummaries,
-  readQuery,
-  getSummariesCount
-} from "../firebase/functions"
-
-// sections
+import { getSummaries, getSummariesCount } from "../firebase/functions"
+import { Link } from "react-router-dom"
 
 const HomePage = () => {
   const [summaries, setSummaries] = useState([])
   const [summariesNum, setSummariesNum] = useState(0)
-  const [page, setPage] = useState(Number(readQuery("pages") || 1))
-  const { history } = useReactRouter()
-
-  const fetchData = (num?: number) => {
-    setPage(num)
-  }
 
   useEffect(() => {
     let unmounted = false
     ;(async () => {
       let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
         6,
-        page
+        1
       )
       let count: number = await getSummariesCount()
       if (!unmounted) {
@@ -39,16 +27,30 @@ const HomePage = () => {
     return () => {
       unmounted = true
     }
-  }, [page])
+  }, [])
   return (
     <>
+      <TopSummaryList />
       <div className="l-main">
         <div className="main-block">
-          <h2 className="main-title blue-main-title">新着要約記事</h2>
-          <SummaryList dataList={summaries} />
-          <Pager fetchData={fetchData} dataNum={summariesNum} />
-          <h2 className="main-title blue-main-title">関連要約記事</h2>
-          <SummaryList dataList={summaries} />
+          <div className="article-block">
+            <h2 className="main-title blue-main-title">新着要約記事</h2>
+            <SummaryList dataList={summaries} />
+            <div className="btn-area">
+              <Link to="/summary" className="_btn">
+                もっと見る
+              </Link>
+            </div>
+          </div>
+          <div className="article-block">
+            <h2 className="main-title blue-main-title">おすすめ！</h2>
+            <SummaryList dataList={summaries} />
+            <div className="btn-area">
+              <Link to="/summary" className="_btn">
+                もっと見る
+              </Link>
+            </div>
+          </div>
         </div>
         <Sidebar />
       </div>

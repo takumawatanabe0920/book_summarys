@@ -10,8 +10,10 @@ import {
 import {
   getSummaries,
   getSummaryBook,
+  getSelectCategorySummaries,
   createSummary,
   getSummariesCount,
+  getCategorySummariesCount,
   updateFavoriteSummaries,
   getRankingSummaries
 } from "./summary"
@@ -31,7 +33,7 @@ import {
   getDonefavorite,
   getfavoriteNum
 } from "./favorite"
-import { readQuery, formatDateHour, uploadImage } from "./defalt"
+import { readQuery, formatDateHour, uploadImage, getImage } from "./defalt"
 import { createBrowsing, getMyBrowsings } from "./browsing"
 import {
   createSummaryComment,
@@ -53,6 +55,8 @@ export {
   updateFavoriteSummaries,
   getRankingSummaries,
   getSummariesCount,
+  getCategorySummariesCount,
+  getSelectCategorySummaries,
   getUser,
   getCurrentUser,
   emailAuthMixin_sendVerifyMail,
@@ -75,5 +79,6 @@ export {
   getIdComment,
   createNotification,
   getMyNotifications,
-  uploadImage
+  uploadImage,
+  getImage
 }

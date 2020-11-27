@@ -9,11 +9,11 @@ import {
 import { Map } from "immutable"
 import Editor from "draft-js-plugins-editor"
 import createImagePlugin from "draft-js-image-plugin"
-import { FontAwesomeIcon, faListUl, faListOl } from "./../../utils/fontawesome"
+import { iconUl, iconOl } from "../icons"
 const imagePlugin = createImagePlugin()
 const plugins = [imagePlugin]
 import "draft-js/dist/Draft.css"
-import "draft-js-image-plugin/lib/plugin.css"
+// import "draft-js-image-plugin/lib/plugin.css"
 
 const { useState, useRef, useCallback } = React
 
@@ -177,7 +177,7 @@ const StyleButton = (props: any) => {
           onToggle(style)
         }}
       >
-        <FontAwesomeIcon icon={label} />
+        <img src={label} />
       </span>
     )
   }
@@ -193,11 +193,11 @@ const BLOCK_TYPES = [
     iconType: "text"
   },
   {
-    label: faListUl,
+    label: iconUl,
     style: "unordered-list-item",
     iconType: "icon"
   },
-  { label: faListOl, style: "ordered-list-item", iconType: "icon" }
+  { label: iconOl, style: "ordered-list-item", iconType: "icon" }
 ]
 
 const BlockStyleControls = (props: any) => {

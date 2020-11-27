@@ -25,14 +25,17 @@ export const getCategories = (): Promise<ResultResponseList<ResCategory>> => {
   return response
 }
 
-export const getCategory = (id: string): Promise<ResultResponse<Category>> => {
+export const getCategory = (
+  id: string
+): Promise<ResultResponse<ResCategory>> => {
   const response = db
     .collection("category")
     .doc(id)
     .get()
     .then(doc => {
       if (doc.exists) {
-        return { id: doc.id, status: 200, ...doc.data() }
+        const data = { id: doc.id, ...doc.data() }
+        return { status: 200, data }
       }
     })
     .catch(error => {
@@ -63,14 +66,15 @@ export const getSubCategories = (): Promise<ResultResponseList<
 
 export const getSubCategory = (
   id: string
-): Promise<ResultResponse<Category>> => {
+): Promise<ResultResponse<ResCategory>> => {
   const response = db
     .collection("sub_category")
     .doc(id)
     .get()
     .then(doc => {
       if (doc.exists) {
-        return { id: doc.id, status: 200, ...doc.data() }
+        const data = { id: doc.id, ...doc.data() }
+        return { status: 200, data }
       }
     })
     .catch(error => {

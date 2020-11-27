@@ -8,9 +8,7 @@ import { getSummaryBook } from "../functions"
 export const createBrowsing = (values: Browsing) => {
   const { summary_id, user_id } = values
   if (!summary_id || !user_id) {
-    if (!summary_id || !user_id) {
-      return { status: 400, error: "summary_idかuser_idがありません。" }
-    }
+    return { status: 400, error: "summary_idかuser_idがありません。" }
   }
   values.create_date = dayjs().unix()
   values.update_date = dayjs().unix()
@@ -20,7 +18,8 @@ export const createBrowsing = (values: Browsing) => {
       ...values
     })
     .then(res => {
-      return { id: res.id, status: 200 }
+      const data = { id: res.id }
+      return { status: 200, data }
     })
     .catch(error => {
       console.log(error)

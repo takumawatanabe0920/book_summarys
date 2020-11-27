@@ -26,6 +26,7 @@
 
     h3 {
       margin: 2rem 0;
+
       span {
         font-size: 1.25rem;
         font-weight: bold;
@@ -44,6 +45,7 @@
       font-size: 0.93rem;
       padding-bottom: 1rem;
       margin: 0 0 0 1.5rem;
+
       span {
         margin: initial;
       }
@@ -280,6 +282,10 @@
       margin-right: 16px;
       padding: 2px 0;
       display: inline-block;
+    }
+
+    img {
+      width: 1.25rem;
     }
 
     .RichEditor-activeButton {

@@ -11,7 +11,7 @@ const db = firebase.firestore()
 
 export const createSummaryComment = (
   values: SummaryComment
-): Promise<ResultResponse<SummaryComment>> => {
+): Promise<ResultResponse<ResSummaryComment>> => {
   values.create_date = dayjs().unix()
   values.update_date = dayjs().unix()
 
@@ -21,7 +21,8 @@ export const createSummaryComment = (
       ...values
     })
     .then(res => {
-      return { id: res.id, status: 200 }
+      const data = { id: res.id }
+      return { status: 200, data }
     })
     .catch(error => {
       return { status: 400, error }
@@ -74,7 +75,7 @@ export const getMyComment = (
 
 export const getIdComment = (
   id?: string
-): Promise<ResultResponse<SummaryComment>> => {
+): Promise<ResultResponse<ResSummaryComment>> => {
   const response = db
     .collection("summaryComment")
     .doc(id)
@@ -82,7 +83,8 @@ export const getIdComment = (
     .get()
     .then(doc => {
       if (doc.exists) {
-        return { id: doc.id, status: 200, ...doc.data() }
+        const data = { id: doc.id, ...doc.data() }
+        return { status: 200, data }
       }
     })
     .catch(error => {

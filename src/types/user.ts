@@ -17,3 +17,7 @@ export type Login = Partial<{
   email: string
   password: string
 }>
+
+export type ResUser = User & {
+  uid?: string
+}

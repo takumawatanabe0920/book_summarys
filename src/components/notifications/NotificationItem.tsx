@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { getUser } from "../../firebase/functions"
-import { User } from "./../../types"
+import { FavoriteIcon, Avatar } from "../../utils/material"
+import { comments } from "../../utils/icons"
+import { formatUpdateDate } from "../../utils/function"
 
 interface Props<T> {
   data: T
@@ -10,13 +11,13 @@ interface Props<T> {
 interface PropsData {
   id?: string
   type?: string
+  user_name?: string
   target_id?: any
   update_date?: number
 }
 
 function NotificationItem<T extends PropsData>(props: Props<T>): JSX.Element {
-  const [User, setUser] = useState<User>({})
-  const { data } = props
+  const { id, type, user_name, target_id, update_date } = props.data
 
   const notificationType = (_type: string): string => {
     switch (_type) {
@@ -27,52 +28,28 @@ function NotificationItem<T extends PropsData>(props: Props<T>): JSX.Element {
     }
   }
 
-  const notificationLink = () => {
-    if (data.type === "favorite") {
+  const notificationTypeLogo = (_type: string) => {
+    if (_type === "favorite") {
+      return <FavoriteIcon className="favorite-button isClick" />
+    } else if (_type === "summary_comment") {
       return (
-        <Link to={`/summary/${data.target_id.id}`} className="data-item">
-          <span className="tag">{notificationType(data.type)}</span>
-          <div className="_txt-box">
-            <h3 className="_summary-ttl">
-              {User.displayName ? User.displayName : User.email}
-              さんがあなたの記事を
-              {notificationType(data.type)}しました。
-            </h3>
-            <p className="_summary-txt">{data.target_id.title}</p>
-            <p className="_summary-txt">{data.update_date}</p>
-          </div>
-        </Link>
+        <div className="_logo">
+          <img src={comments} alt="コメント" />
+        </div>
       )
-    } else if (data.type === "summary_comment") {
-      return (
-        <Link to={`/summary/${data.target_id.id}`} className="data-item">
-          <span className="tag">{notificationType(data.type)}</span>
-          <div className="_txt-box">
-            <h3 className="_summary-ttl">
-              {User.displayName ? User.displayName : User.email}
-              さんがあなたの記事に
-              {notificationType(data.type)}しました。
-            </h3>
-            <p className="_summary-txt">{data.target_id.title}</p>
-            <p className="_summary-txt">{data.update_date}</p>
-          </div>
-        </Link>
-      )
+    }
+  }
+
+  const notificationComment = (_type: string) => {
+    if (_type === "summary_comment") {
+      return <div className="_comment">{target_id.comment}</div>
     }
   }
 
   useEffect(() => {
     let unmounted = false
     ;(async () => {
-      let resUser = await getUser(data.target_id.user_id)
-      let user: User = {}
-      if (resUser && resUser.status === 200) {
-        const { displayName, photoURL, email, password } = resUser.data
-        user = { displayName, photoURL, email, password }
-      }
-
       if (!unmounted) {
-        setUser(user)
       }
     })()
     return () => {
@@ -80,7 +57,24 @@ function NotificationItem<T extends PropsData>(props: Props<T>): JSX.Element {
     }
   }, [])
 
-  return <>{notificationLink()}</>
+  return (
+    <>
+      <Link to={`/summary/${target_id.id}`} className="data-item">
+        <div className="left-block">{notificationTypeLogo(type)}</div>
+        <div className="right-block">
+          <p className="_notification-txt">
+            <span className="_notification-txt bold">
+              {user_name ? user_name : "名無"}
+            </span>
+            さんがあなたの記事を
+            {notificationType(type)}しました。
+          </p>
+          {notificationComment(type)}
+          <p className="_date-time">{formatUpdateDate(update_date)}</p>
+        </div>
+      </Link>
+    </>
+  )
 }
 
 export default NotificationItem

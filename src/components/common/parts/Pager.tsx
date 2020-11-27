@@ -3,24 +3,29 @@ import { useLocation, useHistory } from "react-router-dom"
 import queryString from "query-string"
 
 type props = {
-  fetchData: any
+  fetchPager: any
   dataNum: number
 }
 
 const Pager: FC<props> = props => {
   const [page, setPage] = useState(1)
 
-  const { fetchData, dataNum } = props
+  const { fetchPager, dataNum } = props
   const history = useHistory()
   let path = useLocation().pathname
+  const location = useLocation()
 
   const updateData = (num?: number) => {
     setPage(num)
     let searchParams: { pages?: number } = {}
     searchParams.pages = num
     let searchQuery = queryString.stringify(searchParams)
-    history.push(`${path}?${searchQuery}`)
-    fetchData(num)
+    if (location && location.search) {
+      history.push(`${path}${location.search}&${searchQuery}`)
+    } else {
+      history.push(`${path}?${searchQuery}`)
+    }
+    fetchPager(num)
   }
 
   const prevNum = () => {
@@ -29,22 +34,22 @@ const Pager: FC<props> = props => {
       return ""
     } else {
       return (
-        <a className="prev" onClick={() => updateData(prevNum)}>
-          {prevNum}
-        </a>
+        <div className="pager-num" onClick={() => updateData(prevNum)}>
+          <p>{prevNum}</p>
+        </div>
       )
     }
   }
 
   const nextNum = () => {
     let nextNum = page + 1
-    if (nextNum >= Math.ceil(dataNum / 6)) {
+    if (nextNum > Math.ceil(dataNum / 6)) {
       return ""
     } else {
       return (
-        <a className="next" onClick={() => updateData(nextNum)}>
-          {nextNum}
-        </a>
+        <div className="pager-num" onClick={() => updateData(nextNum)}>
+          <p>{nextNum}</p>
+        </div>
       )
     }
   }
@@ -62,9 +67,11 @@ const Pager: FC<props> = props => {
 
   return (
     <>
-      <div>
+      <div className="pager">
         {prevNum()}
-        <p className="num">{page}</p>
+        <div className="pager-num active">
+          <p>{page}</p>
+        </div>
         {nextNum()}
       </div>
     </>

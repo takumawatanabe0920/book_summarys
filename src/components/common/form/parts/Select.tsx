@@ -27,6 +27,9 @@ const Select: FC<Props> = props => {
         </dt>
         <dd>
           <select value={value} name={name} onChange={onChange}>
+            <option value="" selected>
+              未選択
+            </option>
             {dataList &&
               dataList.map(data => {
                 return (

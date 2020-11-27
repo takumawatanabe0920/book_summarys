@@ -1,5 +1,7 @@
 // pathモジュールの読み込み
 const path = require("path")
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin
 
 module.exports = {
   // モードを開発モードにする
@@ -47,16 +49,17 @@ module.exports = {
           }
         }
       },
-      { test: /\.(gif|png|jpg|)$/, use: "url-loader" }
+      { test: /\.(gif|png|jpg|svg|)$/, use: "url-loader" }
     ]
   },
-
   // モジュール解決
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
     alias: {}
   },
   plugins: [],
+  //plugins: [new BundleAnalyzerPlugin()],
+  // new BundleAnalyzerPlugin()
 
   // 開発モード設定
   devtool: "source-map",
@@ -65,5 +68,15 @@ module.exports = {
     contentBase: "./dist",
     host: "0.0.0.0",
     port: 3016
+  },
+
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM",
+    firebase: "firebase",
+    // "firebase/auth": "",
+    // "firebase/storage": "",
+    // "firebase/firestore": "",
+    "@material-ui/core": "MaterialUI"
   }
 }

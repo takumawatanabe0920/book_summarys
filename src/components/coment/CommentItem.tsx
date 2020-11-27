@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react"
-import { getUser, formatDateHour } from "../../firebase/functions"
-import { User } from "./../../types"
+import React, { useState } from "react"
+import { formatDateHour } from "../../firebase/functions"
 import Avatar from "@material-ui/core/Avatar"
 
 type Props<T> = {
@@ -10,32 +9,13 @@ type Props<T> = {
 interface PropsData {
   id?: string
   user_id?: string
+  user_name?: string
   comment?: string
   update_date?: number
 }
 
 function CommentItem<T extends PropsData>(props: Props<T>): JSX.Element {
-  const [User, setUser] = useState<User>({})
-  const { data } = props
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      let resUser = await getUser(data.user_id)
-      let user: User = {}
-      if (resUser && resUser.status === 200) {
-        const { displayName, photoURL, email, password } = resUser.data
-        user = { displayName, photoURL, email, password }
-      }
-
-      if (!unmounted) {
-        setUser(user)
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
+  const { id, user_id, user_name, comment, update_date } = props.data
 
   return (
     <>
@@ -43,16 +23,14 @@ function CommentItem<T extends PropsData>(props: Props<T>): JSX.Element {
         <div className="comment-header">
           <div className="_header-left">
             <Avatar />
-            <p className="user-name">
-              {User.displayName ? User.displayName : User.email}
-            </p>
+            <p className="user-name">{user_name ? user_name : "名無"}</p>
           </div>
           <div className="_header-right">
-            <time className="_date">{formatDateHour(data.update_date)}</time>
+            <time className="_date">{formatDateHour(update_date)}</time>
           </div>
         </div>
         <div className="comment-body">
-          <p className="_comment-txt">{data.comment}</p>
+          <p className="_comment-txt">{comment}</p>
         </div>
       </div>
     </>

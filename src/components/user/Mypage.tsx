@@ -14,7 +14,7 @@ import useAlertState from "./../../assets/hooks/useAlertState"
 const user: CurrentUser = getCurrentUser()
 
 const Mypage = () => {
-  const [CurrentUser, setCurrentUser] = useState<CurrentUser>({})
+  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [myBrowings, setMyBrowings] = useState<ResBrowsing[]>([])
   const [
     isShowAlert,
@@ -47,7 +47,6 @@ const Mypage = () => {
       }
       if (!unmounted) {
         setMyBrowings(resBrowing)
-        setCurrentUser(user)
       }
     })()
     return () => {
@@ -66,8 +65,8 @@ const Mypage = () => {
         <div className="md-container">
           <div className="user-mypage">
             <h1 className="main-title blue-main-title">MY PAGE</h1>
-            <p>{CurrentUser.displayName}</p>
-            <p>{CurrentUser.email}</p>
+            <p>{currentUser.displayName}</p>
+            <p>{currentUser.email}</p>
             <button onClick={handleLogout}>ログアウト</button>
 
             <h3>最近見た記事</h3>
