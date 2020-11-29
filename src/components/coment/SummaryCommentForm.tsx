@@ -25,7 +25,7 @@ const SummaryCommentForm: FC<Props> = props => {
   const { slug, user_id, summary_id } = props
   const initialState = {
     user_id,
-    user_name: user.displayName ? user.displayName : user.email,
+    user_name: user.displayName ? user.displayName : "",
     summary_id,
     comment: ""
   }
@@ -72,7 +72,7 @@ const SummaryCommentForm: FC<Props> = props => {
       if (resCommnet && resCommnet.status === 200) {
         createNotification({
           user_id,
-          user_name: user.displayName ? user.displayName : user.email,
+          user_name: user.displayName ? user.displayName : "",
           target_id: resCommnet.data.id,
           type: "summary_comment"
         })

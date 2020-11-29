@@ -11,13 +11,16 @@ interface PropsData {
 
 function NotificationList<T extends PropsData>(props: Props<T>): JSX.Element {
   const { dataList } = props
-  console.log(dataList)
   return (
     <>
       <div className="notification-list">
-        {dataList.map((data: T) => {
-          return <NotificationItem<T> key={data.id} data={data} />
-        })}
+        {dataList.length > 0 ? (
+          dataList.map((data: T) => {
+            return <NotificationItem<T> key={data.id} data={data} />
+          })
+        ) : (
+          <div className="_txt">通知は届いておりません。</div>
+        )}
         {/* {dataList.map((data: T) => {
           return <NotificationItem<T> key={data.id} data={data} />
         })} */}

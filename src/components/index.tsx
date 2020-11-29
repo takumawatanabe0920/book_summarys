@@ -26,7 +26,13 @@ import TopSummaryList from "./summary/TopSummaryList"
 import SummaryShowPage from "./summary/Show"
 import CategoryItem from "./summary/CategoryItem"
 import SummaryCategories from "./summary/SummaryCategories"
-import MypagePage from "./user/Mypage"
+import MypagePage from "./user/mypage"
+import MypageSummaries from "./user/mypage/MypageSummaries"
+import MypageBrowsings from "./user/mypage/MypageBrowsings"
+import MypageComments from "./user/mypage/MypageComments"
+import MypageEdit from "./user/mypage/MypageEdit"
+import MypageFavorites from "./user/mypage/MypageFavorites"
+import MypageSidebar from "./user/mypage/parts/MypageSidebar"
 import UserDetailPage from "./user/UserDetail"
 import SummaryComment from "./coment/SummaryComment"
 import SummaryCommentForm from "./coment/SummaryCommentForm"
@@ -68,6 +74,12 @@ export {
   SummaryCategories,
   TopSummaryList,
   MypagePage,
+  MypageSummaries,
+  MypageBrowsings,
+  MypageComments,
+  MypageEdit,
+  MypageFavorites,
+  MypageSidebar,
   UserDetailPage,
   SummaryComment,
   HomePage,

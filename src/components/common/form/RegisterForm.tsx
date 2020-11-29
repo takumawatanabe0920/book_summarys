@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { Input, Alert } from "../../../components"
-import { User, ResultResponse } from "../../../types"
+import { RegisterUser, ResultResponse } from "../../../types"
 import useAlertState from "../../../assets/hooks/useAlertState"
 import { register } from "../../../firebase/functions"
 
 const RegisterForm = () => {
-  const [values, setValues] = useState<User>({})
+  const [values, setValues] = useState<RegisterUser>({})
   const [
     isShowAlert,
     alertStatus,
@@ -33,7 +33,7 @@ const RegisterForm = () => {
       )
     }
     if (window.confirm("会員登録しますか？")) {
-      const resRegister: ResultResponse<User> = await register(
+      const resRegister: ResultResponse<RegisterUser> = await register(
         email,
         password,
         displayName,

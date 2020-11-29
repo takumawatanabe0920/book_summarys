@@ -7,7 +7,7 @@ export type Notification = Partial<{
   target_id: string
   create_date: number
   update_date: number
-  isRead: boolean
+  is_read: boolean
 }>
 
 export type ResNotification = Notification & {

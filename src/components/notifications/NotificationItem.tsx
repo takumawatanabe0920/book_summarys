@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
+import clsx from "clsx"
 import { FavoriteIcon, Avatar } from "../../utils/material"
 import { comments } from "../../utils/icons"
 import { formatUpdateDate } from "../../utils/function"
@@ -12,12 +13,13 @@ interface PropsData {
   id?: string
   type?: string
   user_name?: string
+  is_read?: boolean
   target_id?: any
   update_date?: number
 }
 
 function NotificationItem<T extends PropsData>(props: Props<T>): JSX.Element {
-  const { id, type, user_name, target_id, update_date } = props.data
+  const { id, type, user_name, is_read, target_id, update_date } = props.data
 
   const notificationType = (_type: string): string => {
     switch (_type) {
@@ -59,7 +61,10 @@ function NotificationItem<T extends PropsData>(props: Props<T>): JSX.Element {
 
   return (
     <>
-      <Link to={`/summary/${target_id.id}`} className="data-item">
+      <Link
+        to={`/summary/${target_id.id}`}
+        className={clsx("data-item", is_read ? "read" : "")}
+      >
         <div className="left-block">{notificationTypeLogo(type)}</div>
         <div className="right-block">
           <p className="_notification-txt">

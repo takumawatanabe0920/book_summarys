@@ -10,7 +10,6 @@ import {
   getFavorite,
   createFavorite,
   deleteFavorite,
-  getfavoriteNum,
   getCurrentUser,
   updateFavoriteSummaries,
   createNotification
@@ -41,9 +40,6 @@ const FavoliteButton: FC<Props> = props => {
     closeAlert
   ] = useAlertState(false)
 
-  console.log(user_id)
-  console.log(summary_id)
-
   const handleFavorite = async (event: React.MouseEvent<HTMLElement>) => {
     event.persist()
     event.preventDefault()
@@ -68,9 +64,7 @@ const FavoliteButton: FC<Props> = props => {
       }
     } else {
       let newProps = {
-        user_name: currentUser.displayName
-          ? currentUser.displayName
-          : currentUser.email,
+        user_name: currentUser.displayName ? currentUser.displayName : "",
         ...props
       }
       const resFavorite: ResultResponse<ResFavorite> = await createFavorite(
@@ -82,9 +76,7 @@ const FavoliteButton: FC<Props> = props => {
         setFavoritesNum(favoritesNum + 1)
         createNotification({
           user_id,
-          user_name: currentUser.displayName
-            ? currentUser.displayName
-            : currentUser.email,
+          user_name: currentUser.displayName ? currentUser.displayName : "",
           target_id: summary_id,
           type: "favorite"
         })

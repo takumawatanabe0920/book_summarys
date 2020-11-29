@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { Link } from "react-router-dom"
 import { ResSummaryBook, ResultResponseList } from "../../types"
+import clsx from "clsx"
 import { getSummaries, getRankingSummaries } from "../../firebase/functions"
 
 const Sidebar = () => {
@@ -39,35 +40,77 @@ const Sidebar = () => {
 
   return (
     <div className="side-bar">
-      <h3>総合ランキング</h3>
+      <h3 className="border-orange">週間ランキング</h3>
       <div className="article-box">
         {allRankingSummaries &&
           allRankingSummaries.map((summary: ResSummaryBook, _index: number) => {
             return (
-              <Link
-                to={`/summary/${summary.id}`}
-                className="article-item"
-                key={summary.id}
-              >
-                {_index + 1}位: {summary.title}
-              </Link>
+              <dl>
+                <dt>
+                  <span className={clsx("ranking", `ranking${_index + 1}`)}>
+                    {_index + 1}
+                  </span>
+                </dt>
+                <dd>
+                  <Link
+                    to={`/summary/${summary.id}`}
+                    className="article-item"
+                    key={summary.id}
+                  >
+                    {summary.title}
+                  </Link>
+                </dd>
+              </dl>
             )
           })}
-        {/* <div className="article-item">1位: 死ぬこと以外かすり傷 画像</div>
-        <div className="article-item">2位: 強者の流儀 画像</div>
-        <div className="article-item">3位: GACKTの勝ち方 画像</div> */}
       </div>
-      <h3>週間ランキング</h3>
+      <h3 className="border-green">月刊ランキング</h3>
       <div className="article-box">
-        <div className="article-item">1位: 死ぬこと以外かすり傷 画像</div>
-        <div className="article-item">2位: 強者の流儀 画像</div>
-        <div className="article-item">3位: GACKTの勝ち方 画像</div>
+        {allRankingSummaries &&
+          allRankingSummaries.map((summary: ResSummaryBook, _index: number) => {
+            return (
+              <dl>
+                <dt>
+                  <span className={clsx("ranking", `ranking${_index + 1}`)}>
+                    {_index + 1}
+                  </span>
+                </dt>
+                <dd>
+                  <Link
+                    to={`/summary/${summary.id}`}
+                    className="article-item"
+                    key={summary.id}
+                  >
+                    {summary.title}
+                  </Link>
+                </dd>
+              </dl>
+            )
+          })}
       </div>
-      <h3>月刊ランキング</h3>
+      <h3 className="border-blue">総合ランキング</h3>
       <div className="article-box">
-        <div className="article-item">1位: 死ぬこと以外かすり傷 画像</div>
-        <div className="article-item">2位: 強者の流儀 画像</div>
-        <div className="article-item">3位: GACKTの勝ち方 画像</div>
+        {allRankingSummaries &&
+          allRankingSummaries.map((summary: ResSummaryBook, _index: number) => {
+            return (
+              <dl>
+                <dt>
+                  <span className={clsx("ranking", `ranking${_index + 1}`)}>
+                    {_index + 1}
+                  </span>
+                </dt>
+                <dd>
+                  <Link
+                    to={`/summary/${summary.id}`}
+                    className="article-item"
+                    key={summary.id}
+                  >
+                    {summary.title}
+                  </Link>
+                </dd>
+              </dl>
+            )
+          })}
       </div>
     </div>
   )

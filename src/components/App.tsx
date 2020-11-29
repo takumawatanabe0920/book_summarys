@@ -34,7 +34,7 @@ const HomePage = () => {
       <div className="l-main">
         <div className="main-block">
           <div className="article-block">
-            <h2 className="main-title blue-main-title">新着要約記事</h2>
+            <h2 className="main-title blue-main-title blue-back">新着記事</h2>
             <SummaryList dataList={summaries} />
             <div className="btn-area">
               <Link to="/summary" className="_btn">
@@ -43,7 +43,9 @@ const HomePage = () => {
             </div>
           </div>
           <div className="article-block">
-            <h2 className="main-title blue-main-title">おすすめ！</h2>
+            <h2 className="main-title blue-main-title blue-back">
+              おすすめ記事！
+            </h2>
             <SummaryList dataList={summaries} />
             <div className="btn-area">
               <Link to="/summary" className="_btn">

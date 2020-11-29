@@ -1,10 +1,15 @@
 .main-title {
   padding: 0.2rem 1rem;
   font-size: $fz_md;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  letter-spacing: 4px;
 
   &.blue-main-title {
     border-left: 4px solid #00A4BB;
+  }
+
+  &.blue-back {
+    background: #f2fafb;
   }
 }
 
