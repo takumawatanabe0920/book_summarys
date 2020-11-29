@@ -1,3 +1,32 @@
-.c-register {
-  width: 100%;
+.mypage_main {
+  padding: 4rem 0 5rem;
+
+  .mypage-content {
+    display: flex;
+    margin-top: 4rem;
+
+    ._side-block {
+      width: 20%;
+      border: 1px solid #e4e4e4;
+
+      ._side-item {
+        padding: 0.5rem;
+        padding: 0.75rem;
+        border-bottom: 1px solid #e4e4e4;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        display: block;
+
+        &.active {
+          border-left: 4px solid #00A4BB;
+          background: #edfbff;
+          font-weight: bold;
+        }
+      }
+    }
+
+    ._main-block {
+      width: 80%;
+    }
+  }
 }

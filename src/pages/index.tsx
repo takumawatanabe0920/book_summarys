@@ -14,6 +14,11 @@ import {
   SignUpPage,
   SignInPage,
   MypagePage,
+  MypageFavorites,
+  MypageSummaries,
+  MypageBrowsings,
+  MypageComments,
+  MypageEdit,
   UserDetailPage,
   NotificationPage,
   SummaryPage,
@@ -37,7 +42,32 @@ ReactDOM.render(
                   path="/summary/create"
                   component={SummaryCreatePage}
                 />
-                <PrivateRoute exact path="/mypage" component={MypagePage} />
+                <PrivateRoute exact path="/mypage/:id" component={MypagePage} />
+                <PrivateRoute
+                  exact
+                  path="/mypage/:id/edit"
+                  component={MypageEdit}
+                />
+                <PrivateRoute
+                  exact
+                  path="/mypage/:id/favorites"
+                  component={MypageFavorites}
+                />
+                <PrivateRoute
+                  exact
+                  path="/mypage/:id/browsings"
+                  component={MypageBrowsings}
+                />
+                <PrivateRoute
+                  exact
+                  path="/mypage/:id/comments"
+                  component={MypageComments}
+                />
+                <PrivateRoute
+                  exact
+                  path="/mypage/:id/summaries"
+                  component={MypageSummaries}
+                />
                 <Route exact path="/user/:id" component={UserDetailPage} />
                 <Route exact path="/summary/:id" component={SummaryShowPage} />
                 <Route exact path="/summary" component={SummaryPage} />

@@ -200,18 +200,6 @@ const SummaryForm = () => {
             dataList={subCategories}
           />
         )}
-        {/* <Input
-          title="筆者"
-          name="author"
-          placeholder="要約太郎"
-          onChange={handleInputChange}
-        />
-        <Input
-          title="値段"
-          name="price"
-          placeholder="4000円"
-          onChange={handleInputChange}
-        /> */}
         <Select
           title="公開設定"
           name="publishing_status"
@@ -219,18 +207,6 @@ const SummaryForm = () => {
           dataList={publishingSettings}
           onChange={handleSelectChange}
         />
-        {/* <Input
-          title="評価(5段階)"
-          name="review"
-          placeholder="星４"
-          onChange={handleInputChange}
-        />
-        <Input
-          title="商品リンク"
-          name="product_links"
-          placeholder="https://~"
-          onChange={handleInputChange}
-        /> */}
       </>
     )
   }
