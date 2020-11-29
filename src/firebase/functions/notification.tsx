@@ -1,11 +1,8 @@
 import React from "react"
 import {
   Notification,
-  SummaryComment,
   ResultResponse,
   ResSummaryBook,
-  ResNotification,
-  ResultResponseList,
   ResSummaryComment
 } from "../../types"
 import { getSummaryBook, getIdComment } from "../functions"
@@ -19,6 +16,7 @@ export const createNotification = (values: Notification) => {
     console.log("not good")
     return
   }
+  values.is_read = false
   values.create_date = dayjs().unix()
   values.update_date = dayjs().unix()
   const response = db
@@ -42,7 +40,7 @@ export const getMyNotifications = (user_id: string, type: string) => {
     .collection("notification")
     .where("user_id", "==", user_id)
     .where("type", "==", type)
-    //.orderBy("update_date")
+    .orderBy("update_date", "desc")
     .get()
     .then(
       async res =>
@@ -79,4 +77,44 @@ export const getMyNotifications = (user_id: string, type: string) => {
     )
 
   return response
+}
+
+export const getMyNotReadNotificationsCount = (
+  user_id: string
+): Promise<number> => {
+  const response = db
+    .collection("notification")
+    .where("user_id", "==", user_id)
+    .where("is_read", "==", false)
+    .get()
+    .then(snap => {
+      return snap.size
+    })
+
+  return response
+}
+
+export const updateReadNotifications = (
+  user_id: string,
+  type: string
+): void => {
+  const batch = db.batch()
+  db.collection("notification")
+    .where("user_id", "==", user_id)
+    .where("type", "==", type)
+    .where("is_read", "==", false)
+    .get()
+    .then(async res => {
+      await Promise.all(
+        res.docs.map(async (doc: any) => {
+          let notificationRef = await db.collection("notification").doc(doc.id)
+          console.log(notificationRef)
+          console.log(doc)
+
+          batch.update(notificationRef, { is_read: true })
+        })
+      )
+      await batch.commit()
+    })
+    .catch(error => {})
 }

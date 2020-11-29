@@ -62,10 +62,8 @@ const SummaryShowPage = () => {
       if (slug && slug.id && currentUser) {
         const browsing = {
           summary_id: slug.id,
-          user_id: currentUser.uid,
-          user_name: currentUser.displayName
-            ? currentUser.displayName
-            : currentUser.email
+          user_id: currentUser.id,
+          user_name: currentUser.displayName ? currentUser.displayName : ""
         }
         let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
         if (
@@ -106,10 +104,10 @@ const SummaryShowPage = () => {
             currentUser={currentUser}
           />
           <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
-          {user.uid ? (
+          {user.id ? (
             <SummaryCommentForm
               slug={slug}
-              user_id={user.uid}
+              user_id={user.id}
               summary_id={slug.id}
             />
           ) : (

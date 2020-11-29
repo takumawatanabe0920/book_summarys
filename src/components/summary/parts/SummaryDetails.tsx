@@ -29,7 +29,7 @@ const SummaryDetails: FC<Props> = props => {
           <img src="" alt="" />
         </div>
         <Link to={`/user/${summaryBook.user_id}`} className="_icon">
-          渡辺拓馬
+          {summaryBook.user_name}
         </Link>
       </div>
       <div className="summary-show">
@@ -54,7 +54,7 @@ const SummaryDetails: FC<Props> = props => {
         </div>
         <div className="_body">
           <ReadOnlyEditor editorState={summaryBook.content} />
-          <FavoriteButton user_id={currentUser.uid} summary_id={url.id} />
+          <FavoriteButton user_id={currentUser.id} summary_id={url.id} />
         </div>
       </div>
     </>

@@ -1,5 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import { Provider } from "../assets/hooks/context/Global"
 import "../assets/stylesheets/main.scss"
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom"
 import {
@@ -22,34 +23,40 @@ import {
 
 ReactDOM.render(
   <div>
-    <Router>
-      <TopHeader />
-      <Header />
-      <div className="wrapper pt0">
-        <div className="main-contents">
-          <div className="lg-container">
-            <Switch>
-              <Route exact path="/" component={HomePage} />
-              <PrivateRoute
-                exact
-                path="/summary/create"
-                component={SummaryCreatePage}
-              />
-              <PrivateRoute exact path="/mypage" component={MypagePage} />
-              <Route exact path="/user/:id" component={UserDetailPage} />
-              <Route exact path="/summary/:id" component={SummaryShowPage} />
-              <Route exact path="/summary" component={SummaryPage} />
-              <Route exact path="/notification" component={NotificationPage} />
-              <GuestRoute exact path="/sign_up" component={SignUpPage} />
-              <GuestRoute exact path="/sign_in" component={SignInPage} />
-            </Switch>
+    <Provider>
+      <Router>
+        <TopHeader />
+        <Header />
+        <div className="wrapper pt0">
+          <div className="main-contents">
+            <div className="lg-container">
+              <Switch>
+                <Route exact path="/" component={HomePage} />
+                <PrivateRoute
+                  exact
+                  path="/summary/create"
+                  component={SummaryCreatePage}
+                />
+                <PrivateRoute exact path="/mypage" component={MypagePage} />
+                <Route exact path="/user/:id" component={UserDetailPage} />
+                <Route exact path="/summary/:id" component={SummaryShowPage} />
+                <Route exact path="/summary" component={SummaryPage} />
+                <Route
+                  exact
+                  path="/notification"
+                  component={NotificationPage}
+                />
+                <GuestRoute exact path="/sign_up" component={SignUpPage} />
+                <GuestRoute exact path="/sign_in" component={SignInPage} />
+              </Switch>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="extendedFooter">
-        <Footer />
-      </div>
-    </Router>
+        <div className="extendedFooter">
+          <Footer />
+        </div>
+      </Router>
+    </Provider>
   </div>,
   document.getElementById("root")
 )

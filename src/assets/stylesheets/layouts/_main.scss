@@ -19,6 +19,7 @@ a {
   justify-content: space-between;
   width: 1040px;
   margin: 0 auto;
+  padding: 2rem 0 5rem;
 
   ._txt-box {
     padding: 0.2rem 0.75rem 0.5rem;
@@ -34,10 +35,17 @@ a {
   }
 }
 
+.summary_main {
+  padding: 4rem 0 5rem;
+}
+
 .main-block {
-  width: 68%;
-  padding: 2rem;
+  width: 70%;
+  padding: 3.5rem 3rem;
   background-color: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 5px;
+  box-shadow: 0 0 3px #d6d3d3;
 
   &._block-center {
     margin: auto;
@@ -49,7 +57,7 @@ a {
   }
 
   .article-block {
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
   }
 
   .data-list {

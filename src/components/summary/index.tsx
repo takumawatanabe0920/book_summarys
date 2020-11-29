@@ -30,6 +30,8 @@ const SummaryIndexPage = () => {
 
   const fetchData = (categoryId?: string, categoryName?: string) => {
     setUpdateData({ query: categoryId, name: categoryName })
+    const resetPage = 1
+    setPage(resetPage)
   }
 
   const fetchPager = (num: number) => {
@@ -38,8 +40,6 @@ const SummaryIndexPage = () => {
 
   useEffect(() => {
     let unmounted = false
-    console.log(page)
-    console.log(updateData.query)
     ;(async () => {
       let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
         6,

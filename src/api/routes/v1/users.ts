@@ -13,14 +13,20 @@ admin.initializeApp({
 })
 
 router.get("/", async (req: any, res: any) => {
-  const { uid } = req.query
+  const { email } = req.query
   try {
-    const user: Promise<any> = await admin.auth().getUser(uid)
+    console.log(email)
+    let user: any = []
+    user = await admin
+      .auth()
+      .getUserByEmail(email)
+      .catch(() => {
+        return ""
+      })
 
     res.status(200)
     return res.json({
       status: 200,
-      msg: "success",
       data: user
     })
   } catch (e) {
@@ -28,7 +34,6 @@ router.get("/", async (req: any, res: any) => {
     res.status(400)
     return res.json({
       status: 400,
-      msg: e.message,
       data: []
     })
   }

@@ -28,7 +28,6 @@ const TopSummaryList = () => {
   }
 
   useEffect(() => {
-    console.log(allRankingSummaries)
     let unmounted = false
     ;(async () => {
       let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(

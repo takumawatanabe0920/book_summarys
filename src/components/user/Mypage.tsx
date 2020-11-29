@@ -43,7 +43,7 @@ const Mypage = () => {
     ;(async () => {
       let resBrowing: ResBrowsing[]
       if (user) {
-        resBrowing = await getMyBrowsings(user.uid)
+        resBrowing = await getMyBrowsings(user.id)
       }
       if (!unmounted) {
         setMyBrowings(resBrowing)
@@ -66,7 +66,7 @@ const Mypage = () => {
           <div className="user-mypage">
             <h1 className="main-title blue-main-title">MY PAGE</h1>
             <p>{currentUser.displayName}</p>
-            <p>{currentUser.email}</p>
+            {/* <p>{currentUser.email}</p> */}
             <button onClick={handleLogout}>ログアウト</button>
 
             <h3>最近見た記事</h3>

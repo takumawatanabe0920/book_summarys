@@ -3,8 +3,7 @@ import {
   EditorState,
   RichUtils,
   getDefaultKeyBinding,
-  convertToRaw,
-  convertFromRaw
+  convertToRaw
 } from "draft-js"
 import { Map } from "immutable"
 import Editor from "draft-js-plugins-editor"

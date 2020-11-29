@@ -184,7 +184,6 @@ export const getSelectCategorySummaries = async (
       )
   }
 
-  console.log(data)
   if (data === undefined) {
     return { status: 400 }
   }

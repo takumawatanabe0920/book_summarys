@@ -160,6 +160,7 @@ const SummaryForm = () => {
   const editForm = () => {
     return (
       <>
+        <h2 className="main-title blue-main-title blue-back">記事編集画面</h2>
         <Input
           title="本のタイトル"
           name="title"
@@ -236,7 +237,10 @@ const SummaryForm = () => {
 
   const preview = () => {
     return (
-      <>{values.content && <ReadOnlyEditor editorState={values.content} />}</>
+      <>
+        <h2 className="main-title blue-main-title blue-back">プレビュー画面</h2>
+        {values.content && <ReadOnlyEditor editorState={values.content} />}
+      </>
     )
   }
 
@@ -251,10 +255,8 @@ const SummaryForm = () => {
         }
         setValues({
           ...values,
-          ["user_id"]: currentUser.uid,
-          ["user_name"]: currentUser.displayName
-            ? currentUser.displayName
-            : currentUser.email
+          ["user_id"]: currentUser.id,
+          ["user_name"]: currentUser.displayName ? currentUser.displayName : ""
         })
       }
     })()

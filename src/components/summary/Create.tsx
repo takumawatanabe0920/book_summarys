@@ -1,16 +1,14 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { SummaryForm, Sidebar } from "./../../components"
+import { SummaryForm } from "./../../components"
 
 const SummaryCreatePage = () => {
   return (
     <>
       <div className="summary_main">
-        <div className="main-block">
+        <div className="main-block _block-center">
           <SummaryForm />
-          <Link to="/">一覧へ戻る</Link>
         </div>
-        <Sidebar />
       </div>
     </>
   )
