@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from "react"
+import React, { useState, FC } from "react"
 import { useLocation, useHistory } from "react-router-dom"
 import queryString from "query-string"
 
@@ -53,17 +53,6 @@ const Pager: FC<props> = props => {
       )
     }
   }
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
 
   return (
     <>

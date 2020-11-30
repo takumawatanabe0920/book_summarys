@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { ResSummaryBook, ResultResponseList } from "../../types"
 import clsx from "clsx"
@@ -16,26 +16,21 @@ const Sidebar = () => {
   >([])
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
-        3
-      )
-      // let count: number = await getSummariesCount()
-      if (!unmounted) {
+    const loadData = async () => {
+      try {
+        let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
+          3
+        )
         if (
           resSummariesRankingDataList &&
           resSummariesRankingDataList.status === 200
         ) {
           setAllRankingSummaries(resSummariesRankingDataList.data)
         }
-        // setRankingThisWeekSummaries(summariesDataList)
-        // setThisMonthSummaries()
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
 
   return (

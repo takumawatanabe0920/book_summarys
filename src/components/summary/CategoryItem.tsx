@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, FC } from "react"
 // components
 import { ResCategory } from "../../types"
 import { Link } from "react-router-dom"
@@ -14,18 +14,6 @@ const CategoryItem: FC<Props> = props => {
   const { data, fetchData } = props
   const { id, name, slug } = data
 
-  const updataLink = () => {}
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
   return (
     <>
       <Link to={`/summary?category=${slug}`}>{name}</Link>

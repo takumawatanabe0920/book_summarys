@@ -26,6 +26,7 @@ const SummaryForm = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [values, setValues] = useState<SummaryBook>({})
   const [categories, setCategories] = useState<ResCategory[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
   const [publishingSettings, setPublishingSettings] = useState([
     { id: "public", name: "公開" },
     { id: "private", name: "非公開" }
@@ -221,11 +222,10 @@ const SummaryForm = () => {
   }
 
   useEffect(() => {
-    let unmounted = false
-    closeAlert()
-    ;(async () => {
-      const resCategoryList: ResultResponseList<ResCategory> = await getCategories()
-      if (!unmounted) {
+    const loadData = async () => {
+      setLoading(true)
+      try {
+        const resCategoryList: ResultResponseList<ResCategory> = await getCategories()
         if (resCategoryList && resCategoryList.status === 200) {
           setCategories(resCategoryList.data)
         }
@@ -234,42 +234,45 @@ const SummaryForm = () => {
           ["user_id"]: currentUser.id,
           ["user_name"]: currentUser.displayName ? currentUser.displayName : ""
         })
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
 
   return (
     <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
-      {isPreview && preview()}
-      <form className="form-table">
-        {!isPreview && editForm()}
-        <div className="btn-area mgt-2 inline">
-          <button className="_btn submit" type="submit" onClick={onSubmit}>
-            作成する
-          </button>
-          {/* <button className="_btn submit" type="submit">
+      {loading && (
+        <>
+          <Alert
+            is_show_alert={isShowAlert}
+            alert_status={alertStatus}
+            alert_text={alertText}
+          />
+          {isPreview && preview()}
+          <form className="form-table">
+            {!isPreview && editForm()}
+            <div className="btn-area mgt-2 inline">
+              <button className="_btn submit" type="submit" onClick={onSubmit}>
+                作成する
+              </button>
+              {/* <button className="_btn submit" type="submit">
             編集する
           </button> */}
-          <button
-            className="_btn preview"
-            type="button"
-            onClick={onTogglePreview}
-          >
-            {isPreview ? "編集する" : "プレビュー"}
-          </button>
-          <button className="_btn remove" type="button">
-            削除する
-          </button>
-        </div>
-      </form>
+              <button
+                className="_btn preview"
+                type="button"
+                onClick={onTogglePreview}
+              >
+                {isPreview ? "編集する" : "プレビュー"}
+              </button>
+              <button className="_btn remove" type="button">
+                削除する
+              </button>
+            </div>
+          </form>
+        </>
+      )}
     </>
   )
 }

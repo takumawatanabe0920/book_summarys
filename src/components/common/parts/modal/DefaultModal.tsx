@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from "react"
+import React, { FC } from "react"
 
 type props = {
   modalInfo?: { title?: string; content?: string }
@@ -12,17 +12,6 @@ const DefaltModal: FC<props> = props => {
   const handleClose = () => {
     closeModal()
   }
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
 
   return (
     <>

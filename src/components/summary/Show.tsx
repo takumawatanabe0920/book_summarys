@@ -39,41 +39,45 @@ const SummaryShowPage = () => {
   const [summaryCommentList, setSummaryCommentList] = useState<
     ResSummaryComment[]
   >([])
+  const [loading, setLoading] = useState<boolean>(false)
 
   const slug: { id: string } = useParams()
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      const resSummaryBook: ResultResponse<ResSummaryBook> = await getSummaryBook(
-        slug.id
-      )
-      const resCategory: ResultResponse<ResCategory> = await getCategory(
-        resSummaryBook.data.category
-      )
-      let resSubCategory: ResultResponse<ResSubCategory>
-      if (resSummaryBook.data.sub_category) {
-        resSubCategory = await getSubCategory(resSummaryBook.data.sub_category)
-      }
-      const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComment(
-        slug.id
-      )
+    const loadData = async () => {
+      setLoading(true)
+      try {
+        const resSummaryBook: ResultResponse<ResSummaryBook> = await getSummaryBook(
+          slug.id
+        )
+        const resCategory: ResultResponse<ResCategory> = await getCategory(
+          resSummaryBook.data.category
+        )
+        let resSubCategory: ResultResponse<ResSubCategory>
+        if (resSummaryBook.data.sub_category) {
+          resSubCategory = await getSubCategory(
+            resSummaryBook.data.sub_category
+          )
+        }
+        const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComment(
+          slug.id
+        )
 
-      if (slug && slug.id && currentUser) {
-        const browsing = {
-          summary_id: slug.id,
-          user_id: currentUser.id,
-          user_name: currentUser.displayName ? currentUser.displayName : ""
+        if (slug && slug.id && currentUser) {
+          const browsing = {
+            summary_id: slug.id,
+            user_id: currentUser.id,
+            user_name: currentUser.displayName ? currentUser.displayName : ""
+          }
+          let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
+          if (
+            !res ||
+            (res && res.summary_id && res.summary_id.id !== browsing.summary_id)
+          ) {
+            createBrowsing(browsing)
+          }
         }
-        let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
-        if (
-          !res ||
-          (res && res.summary_id && res.summary_id.id !== browsing.summary_id)
-        ) {
-          createBrowsing(browsing)
-        }
-      }
-      if (!unmounted) {
+
         if (resSummaryBook && resSummaryBook.status === 200) {
           setSummaryBook(resSummaryBook.data)
         }
@@ -86,36 +90,37 @@ const SummaryShowPage = () => {
         if (resSummaryCommentList && resSummaryCommentList.status === 200) {
           setSummaryCommentList(resSummaryCommentList.data)
         }
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
 
   return (
     <>
-      <div className="summary_main">
-        <div className="main-block">
-          <SummaryDetails
-            summaryBook={summarybook}
-            category={category}
-            subCategory={subCategory}
-            currentUser={currentUser}
-          />
-          <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
-          {user.id ? (
-            <SummaryCommentForm
-              slug={slug}
-              user_id={user.id}
-              summary_id={slug.id}
+      {loading && (
+        <div className="summary_main">
+          <div className="main-block">
+            <SummaryDetails
+              summaryBook={summarybook}
+              category={category}
+              subCategory={subCategory}
+              currentUser={currentUser}
             />
-          ) : (
-            <p>ログインをしてからコメントをしよう</p>
-          )}
+            <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
+            {user.id ? (
+              <SummaryCommentForm
+                slug={slug}
+                user_id={user.id}
+                summary_id={slug.id}
+              />
+            ) : (
+              <p>ログインをしてからコメントをしよう</p>
+            )}
+          </div>
+          <Sidebar />
         </div>
-        <Sidebar />
-      </div>
+      )}
     </>
   )
 }

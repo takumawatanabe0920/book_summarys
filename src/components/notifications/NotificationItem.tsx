@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { Link } from "react-router-dom"
 import clsx from "clsx"
-import { FavoriteIcon, Avatar } from "../../utils/material"
+import { FavoriteIcon } from "../../utils/material"
 import { comments } from "../../utils/icons"
 import { formatUpdateDate } from "../../utils/function"
 
@@ -47,17 +47,6 @@ function NotificationItem<T extends PropsData>(props: Props<T>): JSX.Element {
       return <div className="_comment">{target_id.comment}</div>
     }
   }
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
 
   return (
     <>

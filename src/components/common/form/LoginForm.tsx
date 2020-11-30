@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Input, Alert } from "../../../components"
 import { Login, ResultResponse } from "../../../types"
 import { login } from "../../../firebase/functions"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from "react"
+import React, { FC } from "react"
 
 type props = {
   is_show_alert: boolean
@@ -8,17 +8,6 @@ type props = {
 
 const Alert: FC<props> = props => {
   const { is_show_alert, alert_status, alert_text } = props
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
 
   return (
     <>

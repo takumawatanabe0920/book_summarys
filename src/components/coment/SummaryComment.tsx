@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react"
-import { ResSummaryComment } from "../../types"
+import React from "react"
 import { CommentList } from "./../../components"
 
 interface Props<T> {
@@ -8,17 +7,6 @@ interface Props<T> {
 
 function SummaryComment<T>(props: Props<T>): JSX.Element {
   const { dataList } = props
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
 
   return (
     <>

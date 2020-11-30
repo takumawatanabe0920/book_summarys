@@ -16,18 +16,16 @@ const Header = () => {
   >(0)
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      const notificationCount: number = await getMyNotReadNotificationsCount(
-        currentUser.id
-      )
-      if (!unmounted) {
+    const loadData = async () => {
+      try {
+        const notificationCount: number = await getMyNotReadNotificationsCount(
+          currentUser.id
+        )
         setNotReadNotificationCount(notificationCount)
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
 
   return (

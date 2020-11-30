@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from "react"
+import React, { useState, FC } from "react"
 import { Textarea, Select } from "../../../../components"
 
 type props = {
@@ -41,17 +41,6 @@ const QuestionModal: FC<props> = props => {
     const name = target.name
     setValues({ ...values, [name]: value })
   }
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
 
   return (
     <>

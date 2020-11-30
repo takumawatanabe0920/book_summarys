@@ -85,15 +85,7 @@ const SummaryCommentForm: FC<Props> = props => {
   }
 
   useEffect(() => {
-    let unmounted = false
     closeAlert()
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
   }, [])
 
   return (

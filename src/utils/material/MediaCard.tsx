@@ -66,20 +66,18 @@ const MediaCard: FC<Props> = props => {
   }
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      const resThumnail: ResultResponse<string> | void = await getImage(
-        thumbnail
-      )
-      if (!unmounted) {
+    const loadData = async () => {
+      try {
+        const resThumnail: ResultResponse<string> | void = await getImage(
+          thumbnail
+        )
         if (resThumnail && resThumnail.status === 200) {
           setSummaryThumbnail(resThumnail.data)
         }
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
 
   return (

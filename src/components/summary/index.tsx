@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
 // components
 import { SummaryList, SummaryCategories, Pager } from ".."
 import { ResSummaryBook, ResultResponseList } from "../../types"
 import {
   getSummaries,
   readQuery,
-  getSummariesCount,
   getSelectCategorySummaries,
   getCategorySummariesCount
 } from "../../firebase/functions"
@@ -22,6 +21,7 @@ const SummaryIndexPage = () => {
   const [summaries, setSummaries] = useState<ResSummaryBook[]>([])
   const [selectSummaries, setSelectSummaries] = useState<ResSummaryBook[]>([])
   const [summariesNum, setSummariesNum] = useState(0)
+  const [loading, setLoading] = useState<boolean>(false)
   const [page, setPage] = useState(Number(readQuery("pages") || 1))
   const [updateData, setUpdateData] = useState<UpdateData>({
     query: readQuery("category"),
@@ -39,22 +39,22 @@ const SummaryIndexPage = () => {
   }
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
-        6,
-        1
-      )
-      let resSelectSummariesDataList: ResultResponseList<ResSummaryBook> = await getSelectCategorySummaries(
-        6,
-        page,
-        updateData.query
-      )
-      let count: number = 0
-      if (updateData && updateData.query) {
-        count = await getCategorySummariesCount(updateData.query)
-      }
-      if (!unmounted) {
+    const loadData = async () => {
+      setLoading(true)
+      try {
+        let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
+          6,
+          1
+        )
+        let resSelectSummariesDataList: ResultResponseList<ResSummaryBook> = await getSelectCategorySummaries(
+          6,
+          page,
+          updateData.query
+        )
+        let count: number = 0
+        if (updateData && updateData.query) {
+          count = await getCategorySummariesCount(updateData.query)
+        }
         if (resSummariesDataList && resSummariesDataList.status === 200) {
           setSummaries(resSummariesDataList.data)
         }
@@ -65,46 +65,48 @@ const SummaryIndexPage = () => {
           setSelectSummaries(resSelectSummariesDataList.data)
         }
         setSummariesNum(count)
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [page, updateData])
+
   return (
     <>
-      <div className="summary-contents">
-        <SummaryCategories fetchData={fetchData} />
-        <div className="main-block _block-center _block-list">
-          {updateData && updateData.query && (
+      {loading && (
+        <div className="summary-contents">
+          <SummaryCategories fetchData={fetchData} />
+          <div className="main-block _block-center _block-list">
+            {updateData && updateData.query && (
+              <div className="article-block">
+                <h2 className="main-title blue-main-title">
+                  {updateData && updateData.name}記事
+                </h2>
+                {selectSummaries.length > 0 ? (
+                  <>
+                    <SummaryList
+                      dataList={selectSummaries}
+                      columnNum={"three-column"}
+                    />
+                    <Pager fetchPager={fetchPager} dataNum={summariesNum} />
+                  </>
+                ) : (
+                  <h3 className="not-find">記事が見当たりませんでした。</h3>
+                )}
+              </div>
+            )}
             <div className="article-block">
-              <h2 className="main-title blue-main-title">
-                {updateData && updateData.name}記事
-              </h2>
-              {selectSummaries.length > 0 ? (
-                <>
-                  <SummaryList
-                    dataList={selectSummaries}
-                    columnNum={"three-column"}
-                  />
-                  <Pager fetchPager={fetchPager} dataNum={summariesNum} />
-                </>
-              ) : (
-                <h3 className="not-find">記事が見当たりませんでした。</h3>
-              )}
-            </div>
-          )}
-          <div className="article-block">
-            <h2 className="main-title blue-main-title">おすすめ記事！</h2>
-            <SummaryList dataList={summaries} columnNum={"three-column"} />
-            <div className="btn-area">
-              <Link to="/summary" className="_btn">
-                もっと見る
-              </Link>
+              <h2 className="main-title blue-main-title">おすすめ記事！</h2>
+              <SummaryList dataList={summaries} columnNum={"three-column"} />
+              <div className="btn-area">
+                <Link to="/summary" className="_btn">
+                  もっと見る
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

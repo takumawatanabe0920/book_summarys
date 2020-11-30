@@ -88,13 +88,12 @@ const FavoliteButton: FC<Props> = props => {
   }
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      let resfavoriteList: ResultResponseList<ResFavorite>
-      if (user_id && summary_id) {
-        resfavoriteList = await getFavorite(user_id, summary_id)
-      }
-      if (!unmounted) {
+    const loadData = async () => {
+      try {
+        let resfavoriteList: ResultResponseList<ResFavorite>
+        if (user_id && summary_id) {
+          resfavoriteList = await getFavorite(user_id, summary_id)
+        }
         if (
           resfavoriteList &&
           resfavoriteList.status === 200 &&
@@ -102,11 +101,10 @@ const FavoliteButton: FC<Props> = props => {
         ) {
           setCurrentUserFavorites(resfavoriteList.data[0])
         }
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
 
   return (

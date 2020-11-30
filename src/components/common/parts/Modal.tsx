@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from "react"
+import React, { FC } from "react"
 import { QuestionModal, DefaultModal } from "../../../components"
 
 type props = {
@@ -23,17 +23,6 @@ const Modal: FC<props> = props => {
       return ""
     }
   }
-
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
 
   return <>{modal}</>
 }
