@@ -175,7 +175,7 @@ export const getMySummaries = async (
     data = await db
       .collection("summary")
       .where("user_id", "==", user_id)
-      .orderBy("update_date", "desc")
+      .orderBy("update_date")
       .limit(limit * skip)
       .get()
       .then(

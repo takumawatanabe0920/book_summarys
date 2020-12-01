@@ -22,6 +22,7 @@ import SummaryDetails from "./summary/parts/SummaryDetails"
 import SummaryCreatePage from "./summary/Create"
 import SummaryItem from "./summary/SummaryItem"
 import SummaryList from "./summary/SummaryList"
+import SummaryStackItem from "./summary/parts/SummaryStackItem"
 import TopSummaryList from "./summary/TopSummaryList"
 import SummaryShowPage from "./summary/Show"
 import CategoryItem from "./summary/CategoryItem"
@@ -73,6 +74,7 @@ export {
   SummaryPage,
   SummaryCategories,
   TopSummaryList,
+  SummaryStackItem,
   MypagePage,
   MypageSummaries,
   MypageBrowsings,

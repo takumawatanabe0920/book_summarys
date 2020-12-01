@@ -31,9 +31,59 @@
       margin-bottom: 2rem;
     }
 
-    ._mypage-form {
+    ._mypage {
       width: calc(100% - 12rem - 6%);
       margin-left: 6%;
+    }
+
+    .summaries-stack {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+
+      .left-box {
+        width: 30%;
+        padding: 0.25rem;
+
+        img {
+          height: 95px;
+          object-fit: cover;
+        }
+      }
+
+      .right-box {
+        width: 68%;
+        padding: 0.25rem;
+        position: relative;
+
+        ._title {
+          font-size: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        ._description {
+          font-size: 0.8rem;
+        }
+
+        ._date {
+          display: flex;
+          align-items: baseline;
+          position: absolute;
+          bottom: 0.625rem;
+          right: 1rem;
+          height: 1.25rem;
+          color: #676262;
+
+          dt {
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+
+    ._update-date {
+      font-size: 0.7rem;
     }
   }
 }

@@ -1,6 +1,6 @@
 import React from "react"
 import dayjs from "dayjs"
-import { Browsing } from "../../types"
+import { Browsing, ResultResponse, ResSummaryBook } from "../../types"
 import { firebase } from "../config"
 const db = firebase.firestore()
 import { getSummaryBook } from "../functions"
@@ -33,13 +33,19 @@ export const getMyBrowsings = (userId?: string) => {
   const snapShot = db
     .collection("browsing")
     .where("user_id", "==", userId)
-    //.orderBy("update_date")
+    .orderBy("update_date", "desc")
     .get()
     .then(
       async res =>
         await Promise.all(
           res.docs.map(async doc => {
-            let summary: any = await getSummaryBook(doc.data().summary_id)
+            const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
+              doc.data().summary_id
+            )
+            let summary: ResSummaryBook
+            if (resSummary && resSummary.status === 200) {
+              summary = resSummary.data
+            }
             return { id: doc.id, ...doc.data(), summary_id: summary }
           })
         )
