@@ -52,13 +52,13 @@ export const getSummaryComment = (
   return response
 }
 
-export const getMyComment = (
-  userId?: string
+export const getMyComments = (
+  user_id?: string
 ): Promise<ResultResponseList<ResSummaryComment>> => {
   const response = db
     .collection("summaryComment")
-    .where("user_id", "==", userId)
-    //.orderBy("update_date")
+    .where("user_id", "==", user_id)
+    .orderBy("update_date", "desc")
     .get()
     .then(res => {
       let resData: ResSummaryComment[] = res.docs.map(doc => {

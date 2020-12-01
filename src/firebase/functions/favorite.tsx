@@ -49,6 +49,27 @@ export const getFavorites = (): Promise<ResultResponseList<ResFavorite>> => {
   return response
 }
 
+export const getMyFavorites = (
+  user_id: string
+): Promise<ResultResponseList<ResFavorite>> => {
+  const response = db
+    .collection("favorite")
+    .where("user_id", "==", user_id)
+    .orderBy("update_date", "desc")
+    .get()
+    .then(res => {
+      let resData: ResFavorite[] = res.docs.map(doc => {
+        return { id: doc.id, ...doc.data() }
+      })
+      return { status: 200, data: resData }
+    })
+    .catch(error => {
+      return { status: 400, error }
+    })
+
+  return response
+}
+
 export const getDonefavorite = (
   id: string
 ): Promise<ResultResponse<ResFavorite>> => {

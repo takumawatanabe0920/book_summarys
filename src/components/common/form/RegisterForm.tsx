@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, FC } from "react"
 import { Input, Alert } from "../../../components"
-import { RegisterUser, ResultResponse } from "../../../types"
+import { RegisterUser, ResultResponse, CurrentUser } from "../../../types"
 import useAlertState from "../../../assets/hooks/useAlertState"
 import { register } from "../../../firebase/functions"
 
-const RegisterForm = () => {
+type Props = {
+  isEdit?: boolean
+  userData?: CurrentUser
+}
+
+const RegisterForm: FC<Props> = props => {
+  const { isEdit, userData } = props
   const [values, setValues] = useState<RegisterUser>({})
   const [
     isShowAlert,
@@ -48,6 +54,11 @@ const RegisterForm = () => {
   }
 
   useEffect(() => {
+    if (isEdit) {
+      const { displayName, login_id, photoURL } = userData
+      const { email } = login_id
+      setValues({ displayName, email, photoURL })
+    }
     closeAlert()
   }, [])
 
@@ -62,6 +73,7 @@ const RegisterForm = () => {
         <Input
           title="名前"
           name="displayName"
+          value={values && values.displayName ? values.displayName : ""}
           placeholder="要約太郎"
           required={true}
           onChange={handleInputChange}
@@ -69,22 +81,26 @@ const RegisterForm = () => {
         <Input
           title="ユーザーアイコン"
           name="photoURL"
+          value={values && values.photoURL ? values.photoURL : ""}
           onChange={handleInputChange}
         />
         <Input
           title="メールアドレス"
           name="email"
+          value={values && values.email ? values.email : ""}
           placeholder="example@gmail.com"
           required={true}
           onChange={handleInputChange}
         />
-        <Input
-          title="パスワード"
-          name="password"
-          type="password"
-          required={true}
-          onChange={handleInputChange}
-        />
+        {!isEdit && (
+          <Input
+            title="パスワード"
+            name="password"
+            type="password"
+            required={true}
+            onChange={handleInputChange}
+          />
+        )}
         <div className="btn-area mgt-2 inline">
           <button className="_btn submit" type="submit" onClick={onSubmit}>
             登録する

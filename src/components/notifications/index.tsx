@@ -48,33 +48,35 @@ const NotificationPage = () => {
     <>
       {loading && (
         <div className="notification-content">
-          <div className="main-block _block-center">
-            <h2 className="main-title blue-main-title">通知一覧</h2>
-            <Paper className="tab-block">
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                centered
-                className="tab-header"
-              >
-                <Tab
-                  label="お気に入り"
-                  onClick={() => handleChangeTab("favorite")}
-                />
-                <Tab
-                  label="コメント"
-                  onClick={() => handleChangeTab("summary_comment")}
-                />
-                <Tab
-                  label="運営会社から"
-                  onClick={() => handleChangeTab("company")}
-                />
-              </Tabs>
-            </Paper>
+          <div className="md-container">
+            <div className="main-block _block-center">
+              <h2 className="main-title blue-main-title">通知一覧</h2>
+              <Paper className="tab-block">
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  centered
+                  className="tab-header"
+                >
+                  <Tab
+                    label="お気に入り"
+                    onClick={() => handleChangeTab("favorite")}
+                  />
+                  <Tab
+                    label="コメント"
+                    onClick={() => handleChangeTab("summary_comment")}
+                  />
+                  <Tab
+                    label="運営会社から"
+                    onClick={() => handleChangeTab("company")}
+                  />
+                </Tabs>
+              </Paper>
 
-            <NotificationList<ResNotification> dataList={notificationList} />
+              <NotificationList<ResNotification> dataList={notificationList} />
+            </div>
           </div>
         </div>
       )}

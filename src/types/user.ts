@@ -12,7 +12,7 @@ export type RegisterUser = Partial<{
 export type User = Partial<{
   displayName: string
   photoURL: string
-  login_id: string | ResLogin
+  login_id: any
 }>
 
 export type CurrentUser = User & {

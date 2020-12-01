@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FC } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import useReactRouter from "use-react-router"
 import clsx from "clsx"
 import { ResUser, ResultResponse, Login } from "../../../../types"
@@ -22,6 +22,7 @@ const MypageSidebar: FC<Props> = props => {
     throwAlert,
     closeAlert
   ] = useAlertState(false)
+  const location = useLocation()
 
   const handleLogout = async () => {
     if (window.confirm("ログアウトしますか？")) {
@@ -40,7 +41,7 @@ const MypageSidebar: FC<Props> = props => {
   }
 
   const isActive = (_tabType: string) => {
-    if (currentTab === _tabType) {
+    if (location.pathname.indexOf(_tabType) !== -1) {
       return "active"
     }
   }
@@ -60,10 +61,10 @@ const MypageSidebar: FC<Props> = props => {
         {user && user.id && (
           <Link
             to={`/mypage/${user.id}/edit`}
-            className={clsx("_side-item", isActive("user_edit"))}
+            className={clsx("_side-item", isActive("edit"))}
             onClick={() => handleChangeTab("user_edit")}
           >
-            ユーザー情報を編集
+            会員情報を編集
           </Link>
         )}
         <Link

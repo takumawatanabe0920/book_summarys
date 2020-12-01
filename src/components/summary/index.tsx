@@ -76,32 +76,34 @@ const SummaryIndexPage = () => {
       {loading && (
         <div className="summary-contents">
           <SummaryCategories fetchData={fetchData} />
-          <div className="main-block _block-center _block-list">
-            {updateData && updateData.query && (
+          <div className="l-container">
+            <div className="main-block _block-center">
+              {updateData && updateData.query && (
+                <div className="article-block">
+                  <h2 className="main-title blue-main-title">
+                    {updateData && updateData.name}記事
+                  </h2>
+                  {selectSummaries.length > 0 ? (
+                    <>
+                      <SummaryList
+                        dataList={selectSummaries}
+                        columnNum={"three-column"}
+                      />
+                      <Pager fetchPager={fetchPager} dataNum={summariesNum} />
+                    </>
+                  ) : (
+                    <h3 className="not-find">記事が見当たりませんでした。</h3>
+                  )}
+                </div>
+              )}
               <div className="article-block">
-                <h2 className="main-title blue-main-title">
-                  {updateData && updateData.name}記事
-                </h2>
-                {selectSummaries.length > 0 ? (
-                  <>
-                    <SummaryList
-                      dataList={selectSummaries}
-                      columnNum={"three-column"}
-                    />
-                    <Pager fetchPager={fetchPager} dataNum={summariesNum} />
-                  </>
-                ) : (
-                  <h3 className="not-find">記事が見当たりませんでした。</h3>
-                )}
-              </div>
-            )}
-            <div className="article-block">
-              <h2 className="main-title blue-main-title">おすすめ記事！</h2>
-              <SummaryList dataList={summaries} columnNum={"three-column"} />
-              <div className="btn-area">
-                <Link to="/summary" className="_btn">
-                  もっと見る
-                </Link>
+                <h2 className="main-title blue-main-title">おすすめ記事！</h2>
+                <SummaryList dataList={summaries} columnNum={"three-column"} />
+                <div className="btn-area">
+                  <Link to="/summary" className="_btn">
+                    もっと見る
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

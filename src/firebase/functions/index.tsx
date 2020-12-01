@@ -15,7 +15,8 @@ import {
   getSummariesCount,
   getCategorySummariesCount,
   updateFavoriteSummaries,
-  getRankingSummaries
+  getRankingSummaries,
+  getMySummaries
 } from "./summary"
 import {
   getUser,
@@ -31,13 +32,14 @@ import {
   createFavorite,
   deleteFavorite,
   getDonefavorite,
-  getfavoriteNum
+  getfavoriteNum,
+  getMyFavorites
 } from "./favorite"
 import { readQuery, formatDateHour, uploadImage, getImage } from "./defalt"
 import { createBrowsing, getMyBrowsings } from "./browsing"
 import {
   createSummaryComment,
-  getMyComment,
+  getMyComments,
   getSummaryComment,
   getIdComment
 } from "./comment"
@@ -56,8 +58,10 @@ export {
   categoryLinkingSubCategory,
   getSummaries,
   getSummaryBook,
+  getMySummaries,
   createSummary,
   updateFavoriteSummaries,
+  getMyFavorites,
   getRankingSummaries,
   getSummariesCount,
   getCategorySummariesCount,
@@ -78,7 +82,7 @@ export {
   createBrowsing,
   getMyBrowsings,
   formatDateHour,
-  getMyComment,
+  getMyComments,
   createSummaryComment,
   getSummaryComment,
   getIdComment,
