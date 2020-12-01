@@ -24,7 +24,8 @@ import {
   register,
   login,
   logout,
-  getCurrentUser
+  getCurrentUser,
+  getIdUser
 } from "./user"
 import {
   getFavorite,
@@ -67,6 +68,7 @@ export {
   getCategorySummariesCount,
   getSelectCategorySummaries,
   getUser,
+  getIdUser,
   getCurrentUser,
   emailAuthMixin_sendVerifyMail,
   register,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import clsx from "clsx"
-import { CurrentUser, ResultResponse, ResBrowsing } from "../../../types"
+import useReactRouter from "use-react-router"
+import { useParams } from "react-router-dom"
+import { CurrentUser } from "../../../types"
 import { MypageSidebar, RegisterForm } from "../.."
 import { getCurrentUser } from "../../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
@@ -9,10 +9,15 @@ const user: CurrentUser = getCurrentUser()
 const MypageEdit = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [loading, setLoading] = useState<boolean>(false)
+  const { history } = useReactRouter()
+  const url: { id: string } = useParams()
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
+      if (url.id !== currentUser.id) {
+        history.push(`/mypage/${url.id}`)
+      }
     }
 
     loadData()

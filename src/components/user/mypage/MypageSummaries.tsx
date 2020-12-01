@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import clsx from "clsx"
-import { CurrentUser, ResultResponseList, ResSummaryBook } from "../../../types"
+import { useParams } from "react-router-dom"
+import {
+  ResultResponseList,
+  ResultResponse,
+  ResSummaryBook,
+  ResUser
+} from "../../../types"
 import { MypageSidebar, SummaryStackItem } from "../.."
-import { getCurrentUser, getMySummaries } from "../../../firebase/functions"
-const user: CurrentUser = getCurrentUser()
+import { getMySummaries, getIdUser } from "../../../firebase/functions"
 
 const MypageSummaries = () => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
+  const [user, setUser] = useState<ResUser>({})
   const [summaries, setSummaries] = useState<ResSummaryBook[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const url: { id: string } = useParams()
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
       try {
+        const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
         const resMySummariesDataList: ResultResponseList<ResSummaryBook> = await getMySummaries(
           6,
           1,
-          currentUser.id
+          url.id
         )
+        if (resUser && resUser.status === 200) {
+          setUser(resUser.data)
+        }
         if (resMySummariesDataList && resMySummariesDataList.status === 200) {
           setSummaries(resMySummariesDataList.data)
         }
@@ -38,7 +46,7 @@ const MypageSummaries = () => {
               <div className="user-mypage">
                 <h1 className="main-title blue-main-title">MY PAGE</h1>
                 <div className="mypage-content">
-                  <MypageSidebar user={currentUser} />
+                  <MypageSidebar user={user} />
                   <div className="_mypage">
                     <h2 className="sub-ttl">投稿記事一覧</h2>
                     {summaries &&

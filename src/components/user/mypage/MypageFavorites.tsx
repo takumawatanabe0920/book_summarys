@@ -1,26 +1,32 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import clsx from "clsx"
-import { CurrentUser, ResultResponseList, ResFavorite } from "../../../types"
+import { useParams } from "react-router-dom"
+import {
+  ResultResponseList,
+  ResFavorite,
+  ResultResponse,
+  ResUser
+} from "../../../types"
 import { MypageSidebar, SummaryStackItem } from "../.."
-import { getCurrentUser, getMyFavorites } from "../../../firebase/functions"
-const user: CurrentUser = getCurrentUser()
+import { getMyFavorites, getIdUser } from "../../../firebase/functions"
 
 const MypageFavorites = () => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
+  const [user, setUser] = useState<ResUser>({})
   const [favorites, setFavorites] = useState<ResFavorite[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const url: { id: string } = useParams()
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
       try {
+        const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
         const resMyFavoritesDataList: ResultResponseList<ResFavorite> = await getMyFavorites(
-          currentUser.id
+          url.id
         )
-        console.log(resMyFavoritesDataList)
+        if (resUser && resUser.status === 200) {
+          setUser(resUser.data)
+        }
         if (resMyFavoritesDataList && resMyFavoritesDataList.status === 200) {
-          console.log(resMyFavoritesDataList)
           setFavorites(resMyFavoritesDataList.data)
         }
       } catch (e) {}
@@ -38,7 +44,7 @@ const MypageFavorites = () => {
               <div className="user-mypage">
                 <h1 className="main-title blue-main-title">MY PAGE</h1>
                 <div className="mypage-content">
-                  <MypageSidebar user={currentUser} />
+                  <MypageSidebar user={user} />
                   <div className="_mypage">
                     <h2 className="sub-ttl">いいねした記事一覧</h2>
                     {favorites &&

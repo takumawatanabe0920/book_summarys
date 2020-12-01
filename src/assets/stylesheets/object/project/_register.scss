@@ -8,6 +8,7 @@
     ._side-block {
       width: 12rem;
       border: 1px solid #e4e4e4;
+      height: 100%;
 
       ._side-item {
         padding: 0.5rem;
@@ -16,6 +17,10 @@
         font-size: 0.9rem;
         letter-spacing: 2px;
         display: block;
+
+        &:last-of-type {
+          border-bottom: none;
+        }
 
         &.active {
           border-left: 4px solid #00A4BB;

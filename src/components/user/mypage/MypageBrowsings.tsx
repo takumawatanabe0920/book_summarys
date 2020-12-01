@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import clsx from "clsx"
+import useReactRouter from "use-react-router"
+import { useParams } from "react-router-dom"
 import { CurrentUser, ResultResponse, ResBrowsing } from "../../../types"
 import { MypageSidebar, SummaryStackItem } from "../.."
 import {
@@ -14,11 +14,19 @@ const MypageBrowsings = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [myBrowings, setMyBrowings] = useState<ResBrowsing[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const { history } = useReactRouter()
+  const url: { id: string } = useParams()
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
+      if (url.id !== currentUser.id) {
+        history.push(`/mypage/${url.id}`)
+      }
       try {
+        if (url.id !== currentUser.id) {
+          history.push(`/mypage/${url.id}`)
+        }
         let resBrowing: ResBrowsing[]
         if (user) {
           resBrowing = await getMyBrowsings(user.id)

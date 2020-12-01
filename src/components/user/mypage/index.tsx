@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import clsx from "clsx"
 import { CurrentUser, ResultResponse, ResBrowsing } from "../../../types"
 import { MypageSidebar } from "../.."
-import {
-  getCurrentUser,
-  getMyBrowsings,
-  formatDateHour
-} from "../../../firebase/functions"
+import { getCurrentUser, getMyBrowsings } from "../../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const Mypage = () => {
@@ -42,27 +36,6 @@ const Mypage = () => {
                   <MypageSidebar user={currentUser} />
                   <div className="_main-block"></div>
                 </div>
-
-                <p>{currentUser.displayName}</p>
-
-                <h3>最近見た記事</h3>
-                {myBrowings &&
-                  myBrowings.map((browing: ResBrowsing) => {
-                    return (
-                      <div key={browing.id}>
-                        <dl>
-                          <dt>記事</dt>
-                          <dd>
-                            {browing.summary_id && browing.summary_id.title}
-                          </dd>
-                        </dl>
-                        <dl>
-                          <dt>閲覧日時</dt>
-                          <dd>{formatDateHour(browing.update_date)}</dd>
-                        </dl>
-                      </div>
-                    )
-                  })}
               </div>
             </div>
           </div>

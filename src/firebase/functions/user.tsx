@@ -107,7 +107,7 @@ export const logout = (): Promise<ResultResponse<Login>> => {
   return response
 }
 
-const getIdUser = (id: string): Promise<ResultResponse<ResUser>> => {
+export const getIdUser = (id: string): Promise<ResultResponse<ResUser>> => {
   const response = db
     .collection("user")
     .doc(id)
