@@ -28,7 +28,7 @@ const SummaryDetails: FC<Props> = props => {
         <div className="_icon">
           <img src="" alt="" />
         </div>
-        <Link to={`/user/${summaryBook.user_id}`} className="_icon">
+        <Link to={`/mypage/${summaryBook.user_id}/home`} className="_icon">
           {summaryBook.user_name}
         </Link>
       </div>

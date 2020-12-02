@@ -18,10 +18,6 @@
         letter-spacing: 2px;
         display: block;
 
-        &:last-of-type {
-          border-bottom: none;
-        }
-
         &.active {
           border-left: 4px solid #00A4BB;
           background: #edfbff;

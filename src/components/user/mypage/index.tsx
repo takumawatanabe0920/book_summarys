@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react"
-import { CurrentUser, ResultResponse, ResBrowsing } from "../../../types"
+import { ResUser, ResultResponse } from "../../../types"
+import { useParams } from "react-router-dom"
 import { MypageSidebar } from "../.."
-import { getCurrentUser, getMyBrowsings } from "../../../firebase/functions"
-const user: CurrentUser = getCurrentUser()
+import { getIdUser } from "../../../firebase/functions"
 
 const Mypage = () => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
-  const [myBrowings, setMyBrowings] = useState<ResBrowsing[]>([])
+  const [user, setUser] = useState<ResUser>({})
   const [loading, setLoading] = useState<boolean>(false)
+  const url: { id: string } = useParams()
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
       try {
-        let resBrowing: ResBrowsing[]
-        if (user) {
-          resBrowing = await getMyBrowsings(user.id)
+        const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
+        if (resUser && resUser.status === 200) {
+          setUser(resUser.data)
         }
-        setMyBrowings(resBrowing)
       } catch (e) {}
     }
 
@@ -33,7 +32,7 @@ const Mypage = () => {
               <div className="user-mypage">
                 <h1 className="main-title blue-main-title">MY PAGE</h1>
                 <div className="mypage-content">
-                  <MypageSidebar user={currentUser} />
+                  <MypageSidebar user={user} />
                   <div className="_main-block"></div>
                 </div>
               </div>

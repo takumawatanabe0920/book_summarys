@@ -13,14 +13,14 @@ type Props = {
 const MypageSummaries: FC<Props> = props => {
   const [summaryThumbnail, setSummaryThumbnail] = useState<string>("")
   const { data, time } = props
-  const { title, thumbnail, update_date } = data
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const loadData = async () => {
+      if (Object.keys(data).length < 0) return
       try {
         const resThumnail: ResultResponse<string> | void = await getImage(
-          thumbnail
+          data.thumbnail
         )
         if (resThumnail && resThumnail.status === 200) {
           setSummaryThumbnail(resThumnail.data)
@@ -43,15 +43,17 @@ const MypageSummaries: FC<Props> = props => {
       <div className="summaries-stack">
         <div className="left-box">
           {loading && summaryThumbnail && (
-            <img src={summaryThumbnail} alt={title} />
+            <img src={summaryThumbnail} alt={data.title} />
           )}
         </div>
         <div className="right-box">
-          <h3 className="_title">{title}</h3>
+          <h3 className="_title">{data.title}</h3>
           <dl className="_date">
             <dt>投稿日時</dt>
             <dd>
-              <p className="_description">{formatUpdateDate(update_date)}</p>
+              <p className="_description">
+                {formatUpdateDate(data.update_date)}
+              </p>
             </dd>
           </dl>
         </div>

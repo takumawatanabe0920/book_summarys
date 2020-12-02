@@ -19,7 +19,9 @@ const MypageSidebar: FC<Props> = props => {
   const { history } = useReactRouter()
   const [currentTab, setCurrentTab] = useState<string>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [isMyAccount, setIsMyAccount] = useState<boolean>(false)
+  const [isMyAccount, setIsMyAccount] = useState<boolean>(() => {
+    return url.id === currentUser.id
+  })
   const [
     isShowAlert,
     alertStatus,
@@ -41,10 +43,6 @@ const MypageSidebar: FC<Props> = props => {
     }
   }
 
-  const handleChangeTab = (_tabType: string): void => {
-    setCurrentTab(_tabType)
-  }
-
   const isActive = (_tabType: string) => {
     if (location.pathname.indexOf(_tabType) !== -1) {
       return "active"
@@ -53,7 +51,6 @@ const MypageSidebar: FC<Props> = props => {
 
   useEffect(() => {
     closeAlert()
-    setIsMyAccount(url.id === currentUser.id)
     setLoading(true)
   }, [])
 
@@ -67,11 +64,16 @@ const MypageSidebar: FC<Props> = props => {
             alert_text={alertText}
           />
           <div className="_side-block">
+            <Link
+              to={`/mypage/${user.id ? user.id : url.id}/home`}
+              className={clsx("_side-item", isActive("home"))}
+            >
+              ユーザー情報
+            </Link>
             {isMyAccount ? (
               <Link
                 to={`/mypage/${user.id ? user.id : url.id}/edit`}
                 className={clsx("_side-item", isActive("edit"))}
-                onClick={() => handleChangeTab("user_edit")}
               >
                 会員情報を編集
               </Link>
@@ -81,7 +83,6 @@ const MypageSidebar: FC<Props> = props => {
             <Link
               to={`/mypage/${user.id ? user.id : url.id}/summaries`}
               className={clsx("_side-item", isActive("summaries"))}
-              onClick={() => handleChangeTab("summaries")}
             >
               投稿記事
             </Link>
@@ -89,7 +90,6 @@ const MypageSidebar: FC<Props> = props => {
               <Link
                 to={`/mypage/${user.id ? user.id : url.id}/browsings`}
                 className={clsx("_side-item", isActive("browsings"))}
-                onClick={() => handleChangeTab("browsings")}
               >
                 閲覧履歴
               </Link>
@@ -99,14 +99,12 @@ const MypageSidebar: FC<Props> = props => {
             <Link
               to={`/mypage/${user.id ? user.id : url.id}/favorites`}
               className={clsx("_side-item", isActive("favorites"))}
-              onClick={() => handleChangeTab("favorites")}
             >
               いいね
             </Link>
             <Link
               to={`/mypage/${user.id ? user.id : url.id}/comments`}
               className={clsx("_side-item", isActive("comments"))}
-              onClick={() => handleChangeTab("comments")}
             >
               コメント
             </Link>
@@ -114,7 +112,6 @@ const MypageSidebar: FC<Props> = props => {
               <div
                 className={clsx("_side-item", isActive("logout"))}
                 onClick={() => {
-                  handleChangeTab("logout")
                   handleLogout()
                 }}
               >

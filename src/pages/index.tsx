@@ -42,7 +42,11 @@ ReactDOM.render(
                   path="/summary/create"
                   component={SummaryCreatePage}
                 />
-                <PrivateRoute exact path="/mypage/:id" component={MypagePage} />
+                <PrivateRoute
+                  exact
+                  path="/mypage/:id/home"
+                  component={MypagePage}
+                />
                 <PrivateRoute
                   exact
                   path="/mypage/:id/edit"

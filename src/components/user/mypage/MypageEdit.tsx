@@ -16,7 +16,7 @@ const MypageEdit = () => {
     const loadData = async () => {
       setLoading(true)
       if (url.id !== currentUser.id) {
-        history.push(`/mypage/${url.id}`)
+        history.push(`/mypage/${url.id}/home`)
       }
     }
 

@@ -52,7 +52,7 @@ const Header = () => {
           )}
           {currentUser && (
             <Link
-              to={`/mypage/${currentUser.id}`}
+              to={`/mypage/${currentUser.id}/home`}
               className="l-header__sub-logo"
             >
               <img src={userCircleIcon} alt="ロゴ" />

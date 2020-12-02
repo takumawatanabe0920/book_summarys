@@ -2,12 +2,11 @@ import React, { useState, useEffect, useMemo } from "react"
 // components
 import { SummaryList, Sidebar, TopSummaryList } from "./../components"
 import { ResSummaryBook, ResultResponseList } from "./../types"
-import { getSummaries, getSummariesCount } from "../firebase/functions"
+import { getSummaries } from "../firebase/functions"
 import { Link } from "react-router-dom"
 
 const HomePage = () => {
-  const [summaries, setSummaries] = useState([])
-  const [summariesNum, setSummariesNum] = useState(0)
+  const [summaries, setSummaries] = useState<ResSummaryBook[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
@@ -18,11 +17,9 @@ const HomePage = () => {
           6,
           1
         )
-        let count: number = await getSummariesCount()
         if (resSummariesDataList && resSummariesDataList.status === 200) {
           setSummaries(resSummariesDataList.data)
         }
-        setSummariesNum(count)
       } catch (e) {}
     }
 

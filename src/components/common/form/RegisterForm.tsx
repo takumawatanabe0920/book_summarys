@@ -45,8 +45,14 @@ const RegisterForm: FC<Props> = props => {
         displayName,
         photoURL
       )
+      console.log(resRegister)
       if (resRegister && resRegister.status === 200) {
         await throwAlert("success", "会員登録に成功しました。")
+      } else if (
+        resRegister.status === 400 &&
+        resRegister.error === "user is exist"
+      ) {
+        await throwAlert("danger", "メールアドレスがすでに登録されています。")
       } else {
         await throwAlert("danger", "会員登録に失敗しました。")
       }
@@ -55,8 +61,7 @@ const RegisterForm: FC<Props> = props => {
 
   useEffect(() => {
     if (isEdit) {
-      const { displayName, login_id, photoURL } = userData
-      const { email } = login_id
+      const { displayName, login_id, photoURL, email } = userData
       setValues({ displayName, email, photoURL })
     }
     closeAlert()

@@ -10,9 +10,6 @@
     "dev": "NODE_ENV=development concurrently \"npm run client\" \"npm run server\"",
     "start": "NODE_ENV=production npm run build && npm run server",
     "build": "webpack -p",
-    "file": "webpack -p --json --progress --profile",
-    "test2": "webpack -p --json --progress --profile > webpack-build-log.json",
-    "test": "webpack-bundle-analyzer",
     "build-prod": "webpack --mode=production",
     "tsc": "tsc",
     "ts-node": "ts-node"

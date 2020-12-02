@@ -6,6 +6,7 @@ import {
   CurrentUser,
   Login,
   ResultResponse,
+  ResultResponseList,
   ResUser
 } from "../../types"
 import { firebase } from "../config"
@@ -45,8 +46,8 @@ export const register = async (
   displayName: string,
   photoURL: string
 ): Promise<ResultResponse<RegisterUser>> => {
-  const resUser: ResultResponse<ResUser> = await getUser(email)
-  if (resUser && resUser.data) {
+  const resUser: ResultResponseList<ResUser> = await checkAlreadyEmail(email)
+  if (resUser && resUser.status === 200 && resUser.data.length > 0) {
     return { status: 400, error: "user is exist" }
   }
   const response = firebase
@@ -58,7 +59,8 @@ export const register = async (
         .add({
           displayName,
           photoURL,
-          login_id: result.user.uid
+          login_id: result.user.uid,
+          email: result.user.email
         })
         .then(async res => {
           await setUser(res.id, "register")
@@ -143,6 +145,26 @@ const getUidUser = (uid: string): Promise<ResultResponse<ResUser[]>> => {
   return response
 }
 
+const checkAlreadyEmail = (
+  email: string
+): Promise<ResultResponse<ResUser[]>> => {
+  const response = db
+    .collection("user")
+    .where("email", "==", email)
+    .get()
+    .then(res => {
+      let resData: ResUser[] = res.docs.map(doc => {
+        return { id: doc.id, ...doc.data() }
+      })
+      return { status: 200, data: resData }
+    })
+    .catch(error => {
+      return { status: 400, error }
+    })
+
+  return response
+}
+
 //private
 const setLocalStrage = (user: CurrentUser): void => {
   localStorage.setItem("user", JSON.stringify(user))
@@ -177,10 +199,8 @@ const setUser = async (
         id,
         displayName,
         photoURL,
-        login_id: {
-          uid,
-          email
-        }
+        login_id: uid,
+        email
       }
       setLocalStrage(currentUser)
     } else {
@@ -198,8 +218,6 @@ export const emailAuthMixin_sendVerifyMail = () => {
       .then(() => {
         console.log("送信しました！")
       })
-      .catch(error => {
-        // 失敗した際の処理
-      })
+      .catch(error => {})
   }
 }

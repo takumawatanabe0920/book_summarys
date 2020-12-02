@@ -27,6 +27,7 @@ const MypageFavorites = () => {
           setUser(resUser.data)
         }
         if (resMyFavoritesDataList && resMyFavoritesDataList.status === 200) {
+          console.log(resMyFavoritesDataList.data)
           setFavorites(resMyFavoritesDataList.data)
         }
       } catch (e) {}
@@ -48,6 +49,7 @@ const MypageFavorites = () => {
                   <div className="_mypage">
                     <h2 className="sub-ttl">いいねした記事一覧</h2>
                     {favorites &&
+                      favorites.length > 0 &&
                       favorites.map((favorite: ResFavorite) => {
                         return <SummaryStackItem data={favorite.summary_id} />
                       })}
