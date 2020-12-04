@@ -16,7 +16,7 @@ import {
   Sidebar
 } from "./../../components"
 import {
-  getSummaryBook,
+  getSummaryBookPopulate,
   createBrowsing,
   getCurrentUser,
   getMyBrowsings,
@@ -37,7 +37,7 @@ const SummaryShowPage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const resSummaryBook: ResultResponse<ResSummaryBook> = await getSummaryBook(
+        const resSummaryBook: ResultResponse<ResSummaryBook> = await getSummaryBookPopulate(
           slug.id
         )
         if (resSummaryBook && resSummaryBook.status === 200) {

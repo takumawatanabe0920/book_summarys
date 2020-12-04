@@ -10,6 +10,7 @@ import {
 import {
   getSummaries,
   getSummaryBook,
+  getSummaryBookPopulate,
   getSelectCategorySummaries,
   createSummary,
   getSummariesCount,
@@ -93,6 +94,7 @@ export {
   getMyComments,
   createSummaryComment,
   getSummaryComment,
+  getSummaryBookPopulate,
   getIdComment,
   createNotification,
   getMyNotifications,

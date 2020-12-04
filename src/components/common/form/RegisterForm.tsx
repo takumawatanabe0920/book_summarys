@@ -1,9 +1,15 @@
 import React, { useState, useEffect, FC } from "react"
+import { Link } from "react-router-dom"
 import { Input, Alert, Trimming } from "../../../components"
 import { RegisterUser, ResultResponse, CurrentUser } from "../../../types"
 import { stateFile } from "../../../components/common/form/Trimming"
 import useAlertState from "../../../assets/hooks/useAlertState"
-import { register, updateUser, uploadImage } from "../../../firebase/functions"
+import {
+  register,
+  updateUser,
+  uploadImage,
+  formatUserIcon
+} from "../../../firebase/functions"
 
 type Props = {
   isEdit?: boolean
@@ -13,6 +19,7 @@ type Props = {
 const RegisterForm: FC<Props> = props => {
   const { isEdit, userData } = props
   const [values, setValues] = useState<RegisterUser>({})
+  const [userIcon, setUserIcon] = useState<string>("")
   const [state, setState] = useState<stateFile>({
     src: null,
     crop: {
@@ -47,9 +54,14 @@ const RegisterForm: FC<Props> = props => {
       )
     } else {
       return (
-        <button className="_btn submit" type="submit" onClick={onSubmit}>
-          登録する
-        </button>
+        <div className="_btns">
+          <button className="_btn submit" type="submit" onClick={onSubmit}>
+            登録する
+          </button>
+          <Link to="/sign_in" className="_btn _sub-btn">
+            ログインページへ
+          </Link>
+        </div>
       )
     }
   }
@@ -57,7 +69,7 @@ const RegisterForm: FC<Props> = props => {
   const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
-    const { displayName, email, password, photoURL } = values
+    const { displayName, email, password } = values
     if (!isEdit && (!displayName || !email || !password)) {
       return await throwAlert(
         "success",
@@ -65,12 +77,10 @@ const RegisterForm: FC<Props> = props => {
       )
     }
     if (window.confirm("会員登録しますか？")) {
-      console.log(state)
       const resUpload: ResultResponse<any> = await uploadImage(
         state.blobFile,
         "user"
       )
-      console.log(resUpload)
       if (resUpload.status === 200) {
         values.photoURL = resUpload.data
       } else {
@@ -82,14 +92,14 @@ const RegisterForm: FC<Props> = props => {
           userData.id,
           userData.login_id,
           displayName,
-          photoURL
+          values.photoURL
         )
       } else {
         resCreateOrUpdate = await register(
           email,
           password,
           displayName,
-          photoURL
+          values.photoURL
         )
       }
       if (isEdit) {
@@ -114,11 +124,20 @@ const RegisterForm: FC<Props> = props => {
   }
 
   useEffect(() => {
-    if (isEdit) {
-      const { displayName, photoURL } = userData
-      setValues({ displayName, photoURL })
+    const loadData = async () => {
+      closeAlert()
+      try {
+        if (isEdit) {
+          const { displayName, photoURL } = userData
+          const resUserIcon: string = await formatUserIcon(photoURL)
+          setUserIcon(resUserIcon)
+          setValues({ displayName, photoURL })
+          console.log(photoURL)
+        }
+      } catch (e) {}
     }
-    closeAlert()
+
+    loadData()
   }, [])
 
   return (
@@ -142,6 +161,7 @@ const RegisterForm: FC<Props> = props => {
           title="ユーザーアイコン"
           required={true}
         />
+        {/* {isEdit && userIcon && <img src={userIcon} alt="ユーザー画像" />} */}
         {!isEdit && (
           <Input
             title="メールアドレス"

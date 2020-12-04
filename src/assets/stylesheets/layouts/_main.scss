@@ -39,6 +39,10 @@ a {
   padding: 4rem 0 5rem;
 }
 
+.c-register {
+  padding: 4rem 0 5rem;
+}
+
 .main-block {
   width: 70%;
   padding: 3.5rem 3rem;
@@ -126,7 +130,7 @@ a {
 
 .form-table {
   .form-group {
-    margin-bottom: 1.25rem;
+    margin: 2rem 0;
 
     dt {
       margin-bottom: 0.75rem;
@@ -137,7 +141,7 @@ a {
 
         .req {
           background: #d44950;
-          padding: 0 0.35rem 0.1rem;
+          padding: 0.2rem 0.35rem 0.1rem;
           font-size: 0.8rem;
           border-radius: 2px;
           line-height: 0;

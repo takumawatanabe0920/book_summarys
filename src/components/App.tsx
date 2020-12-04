@@ -38,8 +38,8 @@ const HomePage = () => {
                   新着記事
                 </h2>
                 <SummaryList dataList={summaries} />
-                <div className="btn-area center-area">
-                  <Link to="/summary" className="_btn">
+                <div className="btn-area">
+                  <Link to="/summary" className="_btn center-btn">
                     もっと見る
                   </Link>
                 </div>
@@ -49,8 +49,8 @@ const HomePage = () => {
                   おすすめ記事！
                 </h2>
                 <SummaryList dataList={summaries} />
-                <div className="btn-area center-area">
-                  <Link to="/summary" className="_btn">
+                <div className="btn-area">
+                  <Link to="/summary" className="_btn center-btn">
                     もっと見る
                   </Link>
                 </div>

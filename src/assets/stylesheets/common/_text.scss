@@ -5,11 +5,15 @@
   letter-spacing: 4px;
 
   &.blue-main-title {
-    border-left: 4px solid #00A4BB;
+    border-left: 4px solid #00a4bb;
   }
 
   &.blue-back {
     background: #f2fafb;
+  }
+
+  &.mb3 {
+    margin-bottom: 3rem;
   }
 }
 

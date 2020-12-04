@@ -99,8 +99,8 @@ const SummaryIndexPage = () => {
               <div className="article-block">
                 <h2 className="main-title blue-main-title">おすすめ記事！</h2>
                 <SummaryList dataList={summaries} columnNum={"three-column"} />
-                <div className="btn-area center-area">
-                  <Link to="/summary" className="_btn">
+                <div className="btn-area">
+                  <Link to="/summary" className="_btn center-btn">
                     もっと見る
                   </Link>
                 </div>

@@ -7,9 +7,10 @@ const SignInPage = () => {
     <>
       <div className="c-register">
         <div className="md-container">
-          <h1 className="main-title blue-main-title">ログイン</h1>
-          <LoginForm />
-          <Link to="/sign_up">会員登録</Link>
+          <div className="main-block _block-center mb3">
+            <h1 className="main-title blue-main-title">ログイン</h1>
+            <LoginForm />
+          </div>
         </div>
       </div>
     </>

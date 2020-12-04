@@ -319,6 +319,26 @@ export const getSummaryBook = (
     .get()
     .then(async doc => {
       if (doc.exists) {
+        const data = { id: doc.id, ...doc.data() }
+        return { status: 200, data }
+      }
+    })
+    .catch(error => {
+      return { status: 400, error }
+    })
+
+  return response
+}
+
+export const getSummaryBookPopulate = (
+  id: string
+): Promise<ResultResponse<ResSummaryBook>> => {
+  const response = db
+    .collection("summary")
+    .doc(id)
+    .get()
+    .then(async doc => {
+      if (doc.exists) {
         const [resUser, resCategory, resSubCategory] = await Promise.all([
           await getIdUser(doc.data().user_id),
           await getCategory(doc.data().category),

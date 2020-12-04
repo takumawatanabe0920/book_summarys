@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { Link } from "react-router-dom"
 import { Input, Alert } from "../../../components"
 import { Login, ResultResponse } from "../../../types"
 import { login } from "../../../firebase/functions"
@@ -65,10 +66,13 @@ const LoginForm = () => {
           required={true}
           onChange={handleInputChange}
         />
-        <div className="btn-area mgt-2 inline">
+        <div className="_btns">
           <button className="_btn submit" type="submit" onClick={onSubmit}>
             ログインする
           </button>
+          <Link to="/sign_up" className="_btn _sub-btn">
+            会員登録ページへ
+          </Link>
         </div>
       </form>
     </>
