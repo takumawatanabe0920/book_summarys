@@ -1,8 +1,9 @@
 import React, { useState, useEffect, FC } from "react"
-import { Input, Alert } from "../../../components"
+import { Input, Alert, Trimming } from "../../../components"
 import { RegisterUser, ResultResponse, CurrentUser } from "../../../types"
+import { stateFile } from "../../../components/common/form/Trimming"
 import useAlertState from "../../../assets/hooks/useAlertState"
-import { register } from "../../../firebase/functions"
+import { register, updateUser, uploadImage } from "../../../firebase/functions"
 
 type Props = {
   isEdit?: boolean
@@ -12,6 +13,15 @@ type Props = {
 const RegisterForm: FC<Props> = props => {
   const { isEdit, userData } = props
   const [values, setValues] = useState<RegisterUser>({})
+  const [state, setState] = useState<stateFile>({
+    src: null,
+    crop: {
+      unit: "%",
+      width: 50,
+      height: 50,
+      aspect: 1
+    }
+  })
   const [
     isShowAlert,
     alertStatus,
@@ -28,41 +38,85 @@ const RegisterForm: FC<Props> = props => {
     setValues({ ...values, [name]: value })
   }
 
+  const formatButton = () => {
+    if (isEdit) {
+      return (
+        <button className="_btn submit" type="submit" onClick={onSubmit}>
+          更新する
+        </button>
+      )
+    } else {
+      return (
+        <button className="_btn submit" type="submit" onClick={onSubmit}>
+          登録する
+        </button>
+      )
+    }
+  }
+
   const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
     const { displayName, email, password, photoURL } = values
-    if (!displayName || !email || !password) {
+    if (!isEdit && (!displayName || !email || !password)) {
       return await throwAlert(
         "success",
         "名前とパスワードとメールを入力してください"
       )
     }
     if (window.confirm("会員登録しますか？")) {
-      const resRegister: ResultResponse<RegisterUser> = await register(
-        email,
-        password,
-        displayName,
-        photoURL
+      console.log(state)
+      const resUpload: ResultResponse<any> = await uploadImage(
+        state.blobFile,
+        "user"
       )
-      console.log(resRegister)
-      if (resRegister && resRegister.status === 200) {
-        await throwAlert("success", "会員登録に成功しました。")
-      } else if (
-        resRegister.status === 400 &&
-        resRegister.error === "user is exist"
-      ) {
-        await throwAlert("danger", "メールアドレスがすでに登録されています。")
+      console.log(resUpload)
+      if (resUpload.status === 200) {
+        values.photoURL = resUpload.data
       } else {
-        await throwAlert("danger", "会員登録に失敗しました。")
+        return await throwAlert("danger", "画像のアップロードに失敗しました。")
+      }
+      let resCreateOrUpdate: ResultResponse<RegisterUser>
+      if (isEdit) {
+        resCreateOrUpdate = await updateUser(
+          userData.id,
+          userData.login_id,
+          displayName,
+          photoURL
+        )
+      } else {
+        resCreateOrUpdate = await register(
+          email,
+          password,
+          displayName,
+          photoURL
+        )
+      }
+      if (isEdit) {
+        if (resCreateOrUpdate && resCreateOrUpdate.status === 200) {
+          await throwAlert("success", "会員情報を更新しました。")
+        } else if (resCreateOrUpdate.status === 400) {
+          await throwAlert("danger", "会員情報の更新に失敗しました。")
+        }
+      } else if (!isEdit) {
+        if (resCreateOrUpdate && resCreateOrUpdate.status === 200) {
+          await throwAlert("success", "会員情報に成功しました。")
+        } else if (
+          resCreateOrUpdate.status === 400 &&
+          resCreateOrUpdate.error === "user is exist"
+        ) {
+          await throwAlert("danger", "メールアドレスがすでに登録されています。")
+        } else {
+          await throwAlert("danger", "会員登録に失敗しました。")
+        }
       }
     }
   }
 
   useEffect(() => {
     if (isEdit) {
-      const { displayName, login_id, photoURL, email } = userData
-      setValues({ displayName, email, photoURL })
+      const { displayName, photoURL } = userData
+      setValues({ displayName, photoURL })
     }
     closeAlert()
   }, [])
@@ -83,20 +137,21 @@ const RegisterForm: FC<Props> = props => {
           required={true}
           onChange={handleInputChange}
         />
-        <Input
+        <Trimming
+          setState={setState}
           title="ユーザーアイコン"
-          name="photoURL"
-          value={values && values.photoURL ? values.photoURL : ""}
-          onChange={handleInputChange}
-        />
-        <Input
-          title="メールアドレス"
-          name="email"
-          value={values && values.email ? values.email : ""}
-          placeholder="example@gmail.com"
           required={true}
-          onChange={handleInputChange}
         />
+        {!isEdit && (
+          <Input
+            title="メールアドレス"
+            name="email"
+            value={values && values.email ? values.email : ""}
+            placeholder="example@gmail.com"
+            required={true}
+            onChange={handleInputChange}
+          />
+        )}
         {!isEdit && (
           <Input
             title="パスワード"
@@ -106,11 +161,7 @@ const RegisterForm: FC<Props> = props => {
             onChange={handleInputChange}
           />
         )}
-        <div className="btn-area mgt-2 inline">
-          <button className="_btn submit" type="submit" onClick={onSubmit}>
-            登録する
-          </button>
-        </div>
+        <div className="btn-area mgt-2 inline">{formatButton()}</div>
       </form>
     </>
   )

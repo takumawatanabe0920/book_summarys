@@ -4,9 +4,6 @@ import Slider from "react-slick"
 import { SummaryItem } from "../../components"
 import { ResultResponseList, ResSummaryBook } from "../../types"
 
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-
 const TopSummaryList = () => {
   const [allRankingSummaries, setAllRankingSummaries] = useState<
     ResSummaryBook[]

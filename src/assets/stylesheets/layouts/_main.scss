@@ -148,7 +148,7 @@ a {
       }
     }
 
-    input {
+    .form-control {
       width: 70%;
       height: 2.5rem;
       font-size: 1rem;
@@ -157,6 +157,41 @@ a {
       border: 1px solid #cacaca;
       outline: none;
       padding: 8px 16px;
+    }
+  }
+}
+
+.image-circle {
+  border-radius: 50%;
+}
+
+.prof-area {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  ._icon-area {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    ._icon {
+      width: 2.5rem;
+      margin-right: 1rem;
+      img {
+        border-radius: 50%;
+      }
+    }
+    ._user-txt {
+      font-size: 1.1rem;
+      border-bottom: 1px solid;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+  }
+  ._update-date {
+    margin-bottom: 0.75rem;
+    p {
+      font-size: 0.9rem;
+      color: #999;
     }
   }
 }

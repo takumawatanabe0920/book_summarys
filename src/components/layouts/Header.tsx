@@ -3,7 +3,8 @@ import { Link } from "react-router-dom"
 import { CurrentUser } from "../../types"
 import {
   getCurrentUser,
-  getMyNotReadNotificationsCount
+  getMyNotReadNotificationsCount,
+  formatUserIcon
 } from "../../firebase/functions"
 import { logoIcon, editIcon, userCircleIcon, bellIcon } from "../../utils/icons"
 
@@ -14,6 +15,7 @@ const Header = () => {
   const [notReadNotificationCount, setNotReadNotificationCount] = useState<
     number
   >(0)
+  const [userIcon, setUserIcon] = useState<string>("")
 
   useEffect(() => {
     const loadData = async () => {
@@ -21,6 +23,8 @@ const Header = () => {
         const notificationCount: number = await getMyNotReadNotificationsCount(
           currentUser.id
         )
+        const resUserIcon: string = await formatUserIcon(currentUser.photoURL)
+        setUserIcon(resUserIcon)
         setNotReadNotificationCount(notificationCount)
       } catch (e) {}
     }
@@ -53,9 +57,9 @@ const Header = () => {
           {currentUser && (
             <Link
               to={`/mypage/${currentUser.id}/home`}
-              className="l-header__sub-logo"
+              className="l-header__sub-logo _userIcon"
             >
-              <img src={userCircleIcon} alt="ロゴ" />
+              <img src={userIcon ? userIcon : userCircleIcon} alt="ロゴ" />
             </Link>
           )}
           {!currentUser && (

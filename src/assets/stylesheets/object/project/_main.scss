@@ -5,7 +5,7 @@
   margin: auto;
   border: 1px solid #e3e3e3;
 
-  >._txt {
+  > ._txt {
     padding: 0 1rem 1rem;
   }
 
@@ -306,31 +306,35 @@
         right: 0;
         bottom: 0;
         left: 0;
-        content: ' ';
+        content: " ";
       }
 
       &.sportImage {
-        background: url('../../static/images/sports.jpg') no-repeat center center;
+        background: url("../../static/images/sports.jpg") no-repeat center
+          center;
         background-size: cover;
       }
 
       &.businessImage {
-        background: url('../../static/images/business.jpg') no-repeat center center;
+        background: url("../../static/images/business.jpg") no-repeat center
+          center;
         background-size: cover;
       }
 
       &.novelImage {
-        background: url('../../static/images/novel.jpg') no-repeat center center;
+        background: url("../../static/images/novel.jpg") no-repeat center center;
         background-size: cover;
       }
 
       &.magazinImage {
-        background: url('../../static/images/magazin.jpg') no-repeat center center;
+        background: url("../../static/images/magazin.jpg") no-repeat center
+          center;
         background-size: cover;
       }
 
       &.natureImage {
-        background: url('../../static/images/nature.jpg') no-repeat center center;
+        background: url("../../static/images/nature.jpg") no-repeat center
+          center;
         background-size: cover;
       }
 
@@ -361,7 +365,11 @@
 .btn-area {
   width: 100%;
   height: 40px;
-  text-align: center;
+  margin-top: 2.5rem;
+
+  &.center-area {
+    text-align: center;
+  }
 
   ._btn {
     background: #000;

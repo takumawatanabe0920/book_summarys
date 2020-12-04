@@ -37,6 +37,7 @@ import MypageSidebar from "./user/mypage/parts/MypageSidebar"
 import UserDetailPage from "./user/UserDetail"
 import SummaryComment from "./coment/SummaryComment"
 import SummaryCommentForm from "./coment/SummaryCommentForm"
+import Trimming from "./common/form/Trimming"
 import CommentList from "./coment/CommentList"
 import CommentItem from "./coment/CommentItem"
 import NotificationPage from "./notifications"
@@ -91,5 +92,6 @@ export {
   NotificationPage,
   NotificationList,
   NotificationItem,
-  Alert
+  Alert,
+  Trimming
 }

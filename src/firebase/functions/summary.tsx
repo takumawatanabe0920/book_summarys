@@ -4,11 +4,12 @@ import {
   ResSummaryBook,
   ResultResponseList,
   ResultResponse,
-  ResCategory
+  ResCategory,
+  ResUser
 } from "../../types"
 import { firebase } from "../config"
 import dayjs from "dayjs"
-import { getCategory, getSubCategory } from "./"
+import { getCategory, getSubCategory, getIdUser } from "./"
 const db = firebase.firestore()
 
 export const createSummary = (
@@ -316,9 +317,32 @@ export const getSummaryBook = (
     .collection("summary")
     .doc(id)
     .get()
-    .then(doc => {
+    .then(async doc => {
       if (doc.exists) {
-        const data = { id: doc.id, ...doc.data() }
+        const [resUser, resCategory, resSubCategory] = await Promise.all([
+          await getIdUser(doc.data().user_id),
+          await getCategory(doc.data().category),
+          await getSubCategory(doc.data().sub_category)
+        ])
+        let user: ResUser
+        if (resUser && resUser.status === 200) {
+          user = resUser.data
+        }
+        let category: ResCategory
+        if (resCategory && resCategory.status === 200) {
+          category = resCategory.data
+        }
+        let sub_category: ResCategory
+        if (resSubCategory && resSubCategory.status === 200) {
+          sub_category = resSubCategory.data
+        }
+        const data = {
+          id: doc.id,
+          ...doc.data(),
+          user_id: user ? user : doc.data().user_id,
+          category,
+          sub_category
+        }
         return { status: 200, data }
       }
     })

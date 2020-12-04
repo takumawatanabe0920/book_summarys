@@ -19,13 +19,13 @@ import {
   getMySummaries
 } from "./summary"
 import {
-  getUser,
   emailAuthMixin_sendVerifyMail,
   register,
   login,
   logout,
   getCurrentUser,
-  getIdUser
+  getIdUser,
+  updateUser
 } from "./user"
 import {
   getFavorite,
@@ -36,7 +36,13 @@ import {
   getfavoriteNum,
   getMyFavorites
 } from "./favorite"
-import { readQuery, formatDateHour, uploadImage, getImage } from "./defalt"
+import {
+  readQuery,
+  formatDateHour,
+  uploadImage,
+  getImage,
+  formatUserIcon
+} from "./defalt"
 import { createBrowsing, getMyBrowsings } from "./browsing"
 import {
   createSummaryComment,
@@ -67,8 +73,8 @@ export {
   getSummariesCount,
   getCategorySummariesCount,
   getSelectCategorySummaries,
-  getUser,
   getIdUser,
+  updateUser,
   getCurrentUser,
   emailAuthMixin_sendVerifyMail,
   register,
@@ -93,5 +99,6 @@ export {
   getMyNotReadNotificationsCount,
   updateReadNotifications,
   uploadImage,
-  getImage
+  getImage,
+  formatUserIcon
 }

@@ -7,12 +7,8 @@ import {
 } from "draft-js"
 import { Map } from "immutable"
 import Editor from "draft-js-plugins-editor"
-import createImagePlugin from "draft-js-image-plugin"
 import { iconUl, iconOl } from "../icons"
-const imagePlugin = createImagePlugin()
-const plugins = [imagePlugin]
 import "draft-js/dist/Draft.css"
-// import "draft-js-image-plugin/lib/plugin.css"
 
 const { useState, useRef, useCallback } = React
 
@@ -117,7 +113,6 @@ const RichEditor: FC<Props> = props => {
             blockStyleFn={getBlockStyle}
             customStyleMap={styleMap}
             editorState={editorState}
-            plugins={plugins}
             handleKeyCommand={handleKeyCommand}
             keyBindingFn={mapKeyToEditorCommand}
             onChange={onChangeState}

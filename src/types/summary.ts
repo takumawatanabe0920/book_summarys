@@ -9,7 +9,7 @@ export type SummaryBook = Partial<{
   category: any
   sub_category: any
   review: string
-  user_id: string
+  user_id: any
   user_name: string
   thumbnail: string
   favorite_id: []

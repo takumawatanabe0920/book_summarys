@@ -1,6 +1,5 @@
 import React from "react"
 const db = firebase.firestore()
-import axios from "axios"
 import {
   RegisterUser,
   CurrentUser,
@@ -10,27 +9,6 @@ import {
   ResUser
 } from "../../types"
 import { firebase } from "../config"
-
-//api
-export const getUser = async (
-  email: string
-): Promise<ResultResponse<ResUser>> => {
-  const data = {
-    headers: {
-      Authorization: "Bearer 8213f5cd-5fds2-4891-83d0-48d172ffab77"
-    },
-    params: { email }
-  }
-  const response = await axios
-    .get("http://localhost:3012/v1/users", data)
-    .then(res => {
-      return { ...res.data }
-    })
-    .catch(error => {
-      return { error }
-    })
-  return response
-}
 
 export const getCurrentUser = (): CurrentUser => {
   const currentUserData = localStorage.getItem("user")
@@ -72,6 +50,30 @@ export const register = async (
     })
     .catch(error => {
       return { status: 400, error }
+    })
+  return response
+}
+
+export const updateUser = async (
+  id: string,
+  uid: string,
+  displayName: string,
+  photoURL: string
+): Promise<ResultResponse<RegisterUser>> => {
+  const response = db
+    .collection("user")
+    .doc(id)
+    .update({
+      displayName,
+      photoURL
+    })
+    .then(async res => {
+      await setUser(uid, "login")
+      return { status: 200 }
+    })
+    .catch(error => {
+      console.log(error)
+      return { status: 400 }
     })
   return response
 }

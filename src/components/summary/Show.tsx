@@ -2,17 +2,12 @@ import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import {
   ResSummaryBook,
-  Category,
-  SubCategory,
   CurrentUser,
   ResBrowsing,
   SummaryComment as SummaryCommentType,
   ResSummaryComment,
   ResultResponseList,
-  ResultResponse,
-  ResCategory,
-  ResSubCategory,
-  SummaryBook
+  ResultResponse
 } from "../../types"
 import {
   SummaryDetails,
@@ -22,8 +17,6 @@ import {
 } from "./../../components"
 import {
   getSummaryBook,
-  getCategory,
-  getSubCategory,
   createBrowsing,
   getCurrentUser,
   getMyBrowsings,
@@ -34,8 +27,6 @@ const user: CurrentUser = getCurrentUser()
 const SummaryShowPage = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
-  const [category, setCategory] = useState<Category>({})
-  const [subCategory, setSubCategory] = useState<SubCategory>({})
   const [summaryCommentList, setSummaryCommentList] = useState<
     ResSummaryComment[]
   >([])
@@ -45,24 +36,22 @@ const SummaryShowPage = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true)
       try {
         const resSummaryBook: ResultResponse<ResSummaryBook> = await getSummaryBook(
           slug.id
         )
-        const resCategory: ResultResponse<ResCategory> = await getCategory(
-          resSummaryBook.data.category
-        )
-        let resSubCategory: ResultResponse<ResSubCategory>
-        if (resSummaryBook.data.sub_category) {
-          resSubCategory = await getSubCategory(
-            resSummaryBook.data.sub_category
-          )
+        if (resSummaryBook && resSummaryBook.status === 200) {
+          setSummaryBook(resSummaryBook.data)
         }
-        const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComment(
-          slug.id
-        )
+        setLoading(true)
+      } catch (e) {}
+    }
+    loadData()
+  }, [])
 
+  useEffect(() => {
+    const loadData = async () => {
+      try {
         if (slug && slug.id && currentUser) {
           const browsing = {
             summary_id: slug.id,
@@ -78,23 +67,16 @@ const SummaryShowPage = () => {
           }
         }
 
-        if (resSummaryBook && resSummaryBook.status === 200) {
-          setSummaryBook(resSummaryBook.data)
-        }
-        if (resCategory && resCategory.status === 200) {
-          setCategory(resCategory.data)
-        }
-        if (resSubCategory && resSubCategory.status === 200) {
-          setSubCategory(resSubCategory.data)
-        }
+        const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComment(
+          slug.id
+        )
         if (resSummaryCommentList && resSummaryCommentList.status === 200) {
           setSummaryCommentList(resSummaryCommentList.data)
         }
       } catch (e) {}
     }
-
     loadData()
-  }, [])
+  }, [summaryCommentList])
 
   return (
     <>
@@ -103,8 +85,6 @@ const SummaryShowPage = () => {
           <div className="main-block">
             <SummaryDetails
               summaryBook={summarybook}
-              category={category}
-              subCategory={subCategory}
               currentUser={currentUser}
             />
             <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
