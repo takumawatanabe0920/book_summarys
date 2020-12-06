@@ -4,12 +4,20 @@ import {
   ResultResponseList,
   ResultResponse,
   ResSummaryBook,
-  ResUser
+  ResUser,
+  ResUser as CurrentUser
 } from "../../../types"
 import { MypageSidebar, SummaryStackItem } from "../.."
-import { getMySummaries, getIdUser } from "../../../firebase/functions"
+import {
+  getMySummaries,
+  getMyPublicSummaries,
+  getIdUser,
+  getCurrentUser
+} from "../../../firebase/functions"
+const resCurrentUser: CurrentUser = getCurrentUser()
 
 const MypageSummaries = () => {
+  const [currentUser, setCurrentUser] = useState<CurrentUser>(resCurrentUser)
   const [user, setUser] = useState<ResUser>({})
   const [summaries, setSummaries] = useState<ResSummaryBook[]>([])
   const [loading, setLoading] = useState<boolean>(false)
@@ -20,11 +28,18 @@ const MypageSummaries = () => {
       setLoading(true)
       try {
         const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
-        const resMySummariesDataList: ResultResponseList<ResSummaryBook> = await getMySummaries(
-          6,
-          1,
-          url.id
-        )
+        let resMySummariesDataList: ResultResponseList<ResSummaryBook>
+        if (currentUser.id === url.id) {
+          resMySummariesDataList = await getMySummaries(6, 1, url.id)
+        } else {
+          resMySummariesDataList = await getMyPublicSummaries(
+            6,
+            1,
+            url.id,
+            "public"
+          )
+          console.log(resMySummariesDataList)
+        }
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)
         }

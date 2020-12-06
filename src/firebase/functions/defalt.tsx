@@ -47,10 +47,12 @@ export const getImage = (_imgPath: string): Promise<ResultResponse<string>> => {
   return response
 }
 
-export const formatUserIcon = async (_photoUrl: string): Promise<string> => {
+export const responseUploadImage = async (
+  _photoUrl: string
+): Promise<string> => {
   if (!_photoUrl) return
-  const resUserIcon = await getImage(_photoUrl)
-  if (resUserIcon && resUserIcon.status === 200) {
-    return resUserIcon.data ? resUserIcon.data : ""
+  const resUploadImage = await getImage(_photoUrl)
+  if (resUploadImage && resUploadImage.status === 200) {
+    return resUploadImage.data ? resUploadImage.data : ""
   }
 }

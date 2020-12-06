@@ -13,10 +13,12 @@ type Props = {
   title: string
   setState: React.Dispatch<React.SetStateAction<stateFile>>
   required?: boolean
+  userIcon?: string
+  isEdit?: boolean
 }
 
 const Trimming: FC<Props> = props => {
-  const { setState, required, title } = props
+  const { setState, required, title, userIcon, isEdit } = props
   const [childState, setChildState] = useState<stateFile>({
     src: null,
     crop: {
@@ -104,20 +106,31 @@ const Trimming: FC<Props> = props => {
         <Input
           type="file"
           title={title}
-          placeholder="要約太郎"
           required={required}
           accept="image/*"
           onChange={onSelectFile}
         />
       </div>
-      {previewImage && (
-        <img
-          alt="Crop"
-          style={{ maxWidth: "30%" }}
-          src={previewImage}
-          className="image-circle"
-        />
-      )}
+      <div className="_icon-area">
+        {userIcon && (
+          <dl>
+            <dt>登録ユーザーアイコン</dt>
+            <dd>
+              <img src={userIcon} alt="アイコン" className="image-circle" />
+            </dd>
+          </dl>
+        )}
+        {previewImage && (
+          <dl>
+            <dt>
+              {isEdit ? "変更後ユーザーアイコン" : "登録ユーザーアイコン"}
+            </dt>
+            <dd>
+              <img alt="Crop" src={previewImage} className="image-circle" />
+            </dd>
+          </dl>
+        )}
+      </div>
       {childState.src && (
         <ReactCrop
           src={childState.src}

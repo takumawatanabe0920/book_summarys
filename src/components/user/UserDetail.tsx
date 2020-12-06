@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useParams } from "react-router-dom"
-import { CurrentUser } from "./../../types"
+import { ResUser as CurrentUser } from "./../../types"
 
 const UserDetailPage = () => {
   const [User, setUser] = useState<CurrentUser>()

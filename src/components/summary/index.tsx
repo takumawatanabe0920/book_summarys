@@ -44,16 +44,18 @@ const SummaryIndexPage = () => {
       try {
         let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
           6,
-          1
+          1,
+          "public"
         )
         let resSelectSummariesDataList: ResultResponseList<ResSummaryBook> = await getSelectCategorySummaries(
           6,
           page,
+          "public",
           updateData.query
         )
         let count: number = 0
         if (updateData && updateData.query) {
-          count = await getCategorySummariesCount(updateData.query)
+          count = await getCategorySummariesCount(updateData.query, "public")
         }
         if (resSummariesDataList && resSummariesDataList.status === 200) {
           setSummaries(resSummariesDataList.data)

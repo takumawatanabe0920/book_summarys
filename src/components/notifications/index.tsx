@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { CurrentUser, ResNotification } from "../../types"
+import { ResUser as CurrentUser, ResNotification } from "../../types"
 import {
   getCurrentUser,
   getMyNotifications,

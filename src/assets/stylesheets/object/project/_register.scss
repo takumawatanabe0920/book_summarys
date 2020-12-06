@@ -19,7 +19,7 @@
         display: block;
 
         &.active {
-          border-left: 4px solid #00A4BB;
+          border-left: 4px solid #00a4bb;
           background: #edfbff;
           font-weight: bold;
         }
@@ -79,6 +79,10 @@
             font-size: 0.8rem;
             margin-right: 0.5rem;
           }
+        }
+
+        ._summary-edit-btn {
+          height: 1.75rem;
         }
       }
     }

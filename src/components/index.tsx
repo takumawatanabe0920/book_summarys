@@ -20,6 +20,7 @@ import SignUpPage from "./sign_up"
 import SignInPage from "./sign_in"
 import SummaryDetails from "./summary/parts/SummaryDetails"
 import SummaryCreatePage from "./summary/Create"
+import SummaryEditPage from "./summary/Edit"
 import SummaryItem from "./summary/SummaryItem"
 import SummaryList from "./summary/SummaryList"
 import SummaryStackItem from "./summary/parts/SummaryStackItem"
@@ -68,6 +69,7 @@ export {
   SignInPage,
   SummaryDetails,
   SummaryCreatePage,
+  SummaryEditPage,
   SummaryItem,
   SummaryList,
   CategoryItem,

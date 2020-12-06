@@ -51,7 +51,9 @@ function NotificationItem<T extends PropsData>(props: Props<T>): JSX.Element {
   return (
     <>
       <Link
-        to={`/summary/${target_id.id}`}
+        to={`/summary/${
+          type === "favorite" ? target_id.id : target_id.summary_id.id
+        }`}
         className={clsx("data-item", is_read ? "read" : "")}
       >
         <div className="left-block">{notificationTypeLogo(type)}</div>

@@ -109,6 +109,24 @@
   }
 }
 
+.label {
+  width: 3.5rem;
+  text-align: center;
+  display: block;
+  padding: 0.1rem 0 0.2rem;
+  font-size: 0.75rem;
+  border-radius: 0.35rem;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 0.35rem;
+  &.green {
+    background: #61bd4f;
+  }
+  &.red {
+    background: #eb5a46;
+  }
+}
+
 .slick-slider {
   margin-bottom: 3rem;
 }
@@ -382,7 +400,7 @@
 ._btn {
   background: #000;
   color: #fff;
-  padding: 0.75rem 2.6rem;
+  padding: 0.75rem 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -390,14 +408,27 @@
   font-weight: bold;
   width: 14rem;
   height: 100%;
+  border-radius: 2px;
 
   &.center-btn {
     margin: 0 auto;
+  }
+
+  &._wd-6-btn {
+    width: 6rem;
+  }
+
+  &._sm-btn {
+    width: 10rem;
   }
 
   &._sub-btn {
     color: #000;
     border: 1px solid;
     background: #fff;
+  }
+
+  &._edit {
+    background: #ff9f1a;
   }
 }

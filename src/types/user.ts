@@ -16,10 +16,6 @@ export type User = Partial<{
   email: string
 }>
 
-export type CurrentUser = User & {
-  id?: string
-}
-
 export type Login = Partial<{
   email: string
   password: string

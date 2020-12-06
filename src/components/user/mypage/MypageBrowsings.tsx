@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react"
 import useReactRouter from "use-react-router"
 import { useParams } from "react-router-dom"
-import { CurrentUser, ResultResponse, ResBrowsing } from "../../../types"
+import { ResUser as CurrentUser, ResBrowsing } from "../../../types"
 import { MypageSidebar, SummaryStackItem } from "../.."
-import {
-  getCurrentUser,
-  getMyBrowsings,
-  formatDateHour
-} from "../../../firebase/functions"
+import { getCurrentUser, getMyBrowsings } from "../../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const MypageBrowsings = () => {

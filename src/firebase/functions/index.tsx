@@ -9,15 +9,18 @@ import {
 } from "./category"
 import {
   getSummaries,
+  getMyPublicSummaries,
   getSummaryBook,
   getSummaryBookPopulate,
   getSelectCategorySummaries,
   createSummary,
+  updateSummary,
   getSummariesCount,
   getCategorySummariesCount,
   updateFavoriteSummaries,
   getRankingSummaries,
-  getMySummaries
+  getMySummaries,
+  getNewSummaries
 } from "./summary"
 import {
   emailAuthMixin_sendVerifyMail,
@@ -42,13 +45,13 @@ import {
   formatDateHour,
   uploadImage,
   getImage,
-  formatUserIcon
+  responseUploadImage
 } from "./defalt"
 import { createBrowsing, getMyBrowsings } from "./browsing"
 import {
   createSummaryComment,
   getMyComments,
-  getSummaryComment,
+  getSummaryComments,
   getIdComment
 } from "./comment"
 import {
@@ -67,7 +70,9 @@ export {
   getSummaries,
   getSummaryBook,
   getMySummaries,
+  getMyPublicSummaries,
   createSummary,
+  updateSummary,
   updateFavoriteSummaries,
   getMyFavorites,
   getRankingSummaries,
@@ -93,7 +98,8 @@ export {
   formatDateHour,
   getMyComments,
   createSummaryComment,
-  getSummaryComment,
+  getSummaryComments,
+  getNewSummaries,
   getSummaryBookPopulate,
   getIdComment,
   createNotification,
@@ -102,5 +108,5 @@ export {
   updateReadNotifications,
   uploadImage,
   getImage,
-  formatUserIcon
+  responseUploadImage
 }

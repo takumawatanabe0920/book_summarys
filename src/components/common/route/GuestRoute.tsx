@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Route, Redirect, RouteProps } from "react-router-dom"
-import { CurrentUser } from "../../../types"
+import { ResUser as CurrentUser } from "../../../types"
 import { getCurrentUser } from "../../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 

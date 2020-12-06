@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import {
   ResSummaryBook,
-  CurrentUser,
   ResBrowsing,
+  ResUser as CurrentUser,
   SummaryComment as SummaryCommentType,
   ResSummaryComment,
   ResultResponseList,
@@ -20,7 +20,7 @@ import {
   createBrowsing,
   getCurrentUser,
   getMyBrowsings,
-  getSummaryComment
+  getSummaryComments
 } from "../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
@@ -33,6 +33,48 @@ const SummaryShowPage = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const slug: { id: string } = useParams()
+
+  const publicSummary = (_type: string, user_id: string) => {
+    if (_type === "public" || currentUser.id === user_id) {
+      return (
+        <div className="main-block">
+          <SummaryDetails summaryBook={summarybook} currentUser={currentUser} />
+          <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
+          {user.id ? (
+            <SummaryCommentForm
+              slug={slug}
+              user_id={currentUser.id}
+              summary_id={slug.id}
+            />
+          ) : (
+            <p>ログインをしてからコメントをしよう</p>
+          )}
+        </div>
+      )
+    } else if (_type === "private") {
+      return (
+        <div className="main-block">
+          <p className="publishing-text">この記事は非公開です。</p>
+          <div className="mosaic">
+            <SummaryDetails
+              summaryBook={summarybook}
+              currentUser={currentUser}
+            />
+            <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
+            {user.id ? (
+              <SummaryCommentForm
+                slug={slug}
+                user_id={user.id}
+                summary_id={slug.id}
+              />
+            ) : (
+              <p>ログインをしてからコメントをしよう</p>
+            )}
+          </div>
+        </div>
+      )
+    }
+  }
 
   useEffect(() => {
     const loadData = async () => {
@@ -67,7 +109,7 @@ const SummaryShowPage = () => {
           }
         }
 
-        const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComment(
+        const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComments(
           slug.id
         )
         if (resSummaryCommentList && resSummaryCommentList.status === 200) {
@@ -76,28 +118,13 @@ const SummaryShowPage = () => {
       } catch (e) {}
     }
     loadData()
-  }, [summaryCommentList])
+  }, [])
 
   return (
     <>
       {loading && (
         <div className="summary_main">
-          <div className="main-block">
-            <SummaryDetails
-              summaryBook={summarybook}
-              currentUser={currentUser}
-            />
-            <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
-            {user.id ? (
-              <SummaryCommentForm
-                slug={slug}
-                user_id={user.id}
-                summary_id={slug.id}
-              />
-            ) : (
-              <p>ログインをしてからコメントをしよう</p>
-            )}
-          </div>
+          {publicSummary(summarybook.publishing_status, summarybook.user_id.id)}
           <Sidebar />
         </div>
       )}

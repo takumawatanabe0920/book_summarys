@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, FC } from "react"
 import { useForm } from "react-hook-form"
 import useReactRouter from "use-react-router"
 import { Input, Textarea, Select, Alert } from "../../../components"
@@ -6,27 +6,35 @@ import {
   SummaryBook,
   ResCategory,
   ResSubCategory,
-  CurrentUser,
+  ResUser as CurrentUser,
   ResultResponse,
   ResultResponseList,
-  ResFavorite
+  ResFavorite,
+  ResSummaryBook
 } from "../../../types"
 import {
   getCategories,
   categoryLinkingSubCategory,
   createSummary,
+  updateSummary,
   getCurrentUser,
-  uploadImage
+  uploadImage,
+  responseUploadImage
 } from "../../../firebase/functions"
 import useAlertState from "../../../assets/hooks/useAlertState"
 import { RichEditor, ReadOnlyEditor } from "./../../../utils/richtext"
 const user: CurrentUser = getCurrentUser()
 
-const SummaryForm = () => {
+type Props = {
+  isEdit?: boolean
+  editData?: ResSummaryBook
+}
+
+const SummaryForm: FC<Props> = props => {
+  const { isEdit, editData } = props
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [values, setValues] = useState<SummaryBook>({})
   const [categories, setCategories] = useState<ResCategory[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
   const [publishingSettings, setPublishingSettings] = useState([
     { id: "public", name: "公開" },
     { id: "private", name: "非公開" }
@@ -36,6 +44,9 @@ const SummaryForm = () => {
   const [isPreview, setIsPreview] = useState<boolean>(false)
   const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState<string | void>("")
+  const [errorTexts, setErrorTexts] = useState<SummaryBook>({})
+  const [thumnail, setThumnail] = useState<string>("")
+  const [loading, setLoading] = useState<boolean>(false)
   const { register, handleSubmit, errors, formState } = useForm<SummaryBook>({
     mode: "onChange"
   })
@@ -101,7 +112,6 @@ const SummaryForm = () => {
   }
 
   const handleChangeThumbnail = (_fileImg: File): string | void => {
-    //const fileBase64 = getBase64(file)
     if (validateImageUploads(_fileImg)) return
     if (_fileImg.type.startsWith("image/")) {
       const imgUrl = window.URL.createObjectURL(_fileImg)
@@ -132,24 +142,99 @@ const SummaryForm = () => {
     setIsPreview(!isPreview)
   }
 
+  const validationCheck = async (): Promise<boolean> => {
+    let isError: boolean = false
+    let errorText: SummaryBook = {}
+    const {
+      title,
+      content,
+      category,
+      thumbnail,
+      discription,
+      publishing_status
+    } = values
+    if (!title || !title.match(/\S/g)) {
+      isError = true
+      errorText.title = "名前を入力してください。"
+    }
+
+    if (!discription || !discription.match(/\S/g)) {
+      isError = true
+      errorText.discription = "リード文を入力してください。"
+    } else if (discription.length < 20) {
+      errorText.discription = "20文字以上で入力してください。"
+    }
+    if (!content || !content.match(/\S/g)) {
+      isError = true
+      errorText.content = "本の内容を入力してください。"
+    } else if (content) {
+      let count = 0
+      const blocks = JSON.parse(content).blocks
+      blocks.forEach((block: any) => {
+        if (!block.text) return
+        count += block.text.length
+      })
+      if (count < 50) {
+        errorText.content = "50文字以上で入力してください。"
+      }
+    }
+    if ((!thumbnail || !thumbnail.match(/\S/g)) && !image) {
+      isError = true
+      errorText.thumbnail = "サムネイル画像を設定してください。"
+    }
+    if (!category || !category.match(/\S/g)) {
+      isError = true
+      errorText.category = "本のカテゴリーを設定してください。"
+    }
+    if (!publishing_status || !category.match(/\S/g)) {
+      isError = true
+      errorText.publishing_status = "この記事の公開設定をしてください。"
+    }
+    setErrorTexts(errorText)
+
+    if (isError) {
+      await throwAlert("danger", "入力に不備があります。")
+      return isError
+    } else {
+      isError = false
+      return isError
+    }
+  }
+
   const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
     values.favorite_id = []
-
-    if (window.confirm("記事を作成しますか？")) {
-      const resUpload: ResultResponse<any> = await uploadImage(image, "summary")
-      if (resUpload.status === 200) {
-        values.thumbnail = resUpload.data
-      } else {
-        return await throwAlert("danger", "画像のアップロードに失敗しました。")
+    if (await validationCheck()) return
+    if (
+      window.confirm(isEdit ? "修正分を反映しますか？" : "記事を作成しますか？")
+    ) {
+      if (imageUrl) {
+        const resUpload: ResultResponse<any> = await uploadImage(
+          image,
+          "summary"
+        )
+        if (resUpload.status === 200) {
+          values.thumbnail = resUpload.data
+        } else {
+          return await throwAlert(
+            "danger",
+            "画像のアップロードに失敗しました。"
+          )
+        }
       }
-      console.log(values)
-      const resSummary: ResultResponse<SummaryBook> = await createSummary(
-        values
-      )
+      let resSummary: ResultResponse<SummaryBook>
+      if (isEdit) {
+        console.log(values)
+        resSummary = await updateSummary(values)
+      } else {
+        resSummary = await createSummary(values)
+      }
       if (resSummary && resSummary.status === 200) {
-        await throwAlert("success", "記事が作成されました。")
+        await throwAlert(
+          "success",
+          isEdit ? "記事が編集されました。" : "記事が作成されました。"
+        )
         setValues({})
         //history.push(`/summary/${resSummary.id}`)
       } else {
@@ -165,9 +250,11 @@ const SummaryForm = () => {
         <Input
           title="本のタイトル"
           name="title"
+          value={values && values.title ? values.title : ""}
           placeholder="人を動かす"
           required={true}
           onChange={handleInputChange}
+          errorMessage={errorTexts.title ? errorTexts.title : ""}
         />
         <Input
           title="サムネイル"
@@ -175,28 +262,57 @@ const SummaryForm = () => {
           required={true}
           type="file"
           onChange={handleImageChange}
+          errorMessage={errorTexts.thumbnail ? errorTexts.thumbnail : ""}
         />
-        {imageUrl && <img src={imageUrl} alt="" />}
+        <div className="_thumnail-area">
+          {thumnail && (
+            <dl>
+              <dt>登録サムネイル</dt>
+              <dd>
+                <img src={thumnail} alt="登録サムネイル画像" />
+              </dd>
+            </dl>
+          )}
+          {imageUrl && (
+            <dl>
+              <dt>{isEdit ? "変更後サムネイル" : "登録サムネイル"}</dt>
+              <dd>
+                <img src={imageUrl} alt="表示画像" />
+              </dd>
+            </dl>
+          )}
+        </div>
         <Textarea
           title="リード分"
           name="discription"
+          value={values && values.discription ? values.discription : ""}
           placeholder="一覧表示時に表示される文章になります。"
           required={true}
           onChange={handleTextareaChange}
+          errorMessage={errorTexts.discription ? errorTexts.discription : ""}
         />
         {errors.title && "作者名は1文字以上、20文字以下でなければなりません。"}
-        <RichEditor title="本の内容" handleEditorChange={handleEditorChange} />
+        <RichEditor
+          title="本の内容"
+          required={true}
+          handleEditorChange={handleEditorChange}
+          value={values && values.content ? values.content : ""}
+          errorMessage={errorTexts.content ? errorTexts.content : ""}
+        />
         <Select
           title="本のカテゴリー"
           name="category"
           required={true}
           dataList={categories}
           onChange={handleSelectCategoryChange}
+          value={values && values.category ? values.category : ""}
+          errorMessage={errorTexts.category ? errorTexts.category : ""}
         />
         {isSelectCategory && (
           <Select
             title="本のサブカテゴリー"
             name="sub_category"
+            value={values && values.sub_category ? values.sub_category : ""}
             onChange={handleSelectChange}
             dataList={subCategories}
           />
@@ -204,9 +320,15 @@ const SummaryForm = () => {
         <Select
           title="公開設定"
           name="publishing_status"
+          value={
+            values && values.publishing_status ? values.publishing_status : ""
+          }
           required={true}
           dataList={publishingSettings}
           onChange={handleSelectChange}
+          errorMessage={
+            errorTexts.publishing_status ? errorTexts.publishing_status : ""
+          }
         />
       </>
     )
@@ -223,17 +345,36 @@ const SummaryForm = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true)
       try {
         const resCategoryList: ResultResponseList<ResCategory> = await getCategories()
         if (resCategoryList && resCategoryList.status === 200) {
           setCategories(resCategoryList.data)
         }
-        setValues({
-          ...values,
-          ["user_id"]: currentUser.id,
-          ["user_name"]: currentUser.displayName ? currentUser.displayName : ""
-        })
+        if (isEdit && Object.keys(editData).length > 0) {
+          const resThumnail: string = await responseUploadImage(
+            editData.thumbnail
+          )
+          subCategorySelect(editData.category)
+          setIsSelectCategory(true)
+          setThumnail(resThumnail)
+          console.log(editData)
+          setValues({
+            ...editData,
+            ["user_id"]: currentUser.id,
+            ["user_name"]: currentUser.displayName
+              ? currentUser.displayName
+              : ""
+          })
+        } else {
+          setValues({
+            ...values,
+            ["user_id"]: currentUser.id,
+            ["user_name"]: currentUser.displayName
+              ? currentUser.displayName
+              : ""
+          })
+        }
+        setLoading(true)
       } catch (e) {}
     }
 
@@ -252,22 +393,27 @@ const SummaryForm = () => {
           {isPreview && preview()}
           <form className="form-table">
             {!isPreview && editForm()}
-            <div className="btn-area mgt-2 inline">
-              <button className="_btn submit" type="submit" onClick={onSubmit}>
-                作成する
-              </button>
-              {/* <button className="_btn submit" type="submit">
-            編集する
-          </button> */}
+            <div className="_btns">
+              {!isPreview && (
+                <>
+                  <button
+                    className="_btn _sm-btn"
+                    type="submit"
+                    onClick={onSubmit}
+                  >
+                    {isEdit ? "編集する" : "作成する"}
+                  </button>
+                  {/* <button className="_btn _sm-btn _sub-btn" type="button">
+                    保存する(下書き)
+                  </button> */}
+                </>
+              )}
               <button
-                className="_btn preview"
+                className="_btn _sm-btn _sub-btn"
                 type="button"
                 onClick={onTogglePreview}
               >
                 {isPreview ? "編集する" : "プレビュー"}
-              </button>
-              <button className="_btn remove" type="button">
-                削除する
               </button>
             </div>
           </form>

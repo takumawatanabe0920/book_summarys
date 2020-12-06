@@ -9,6 +9,7 @@ type Props = {
   accept?: string
   required?: boolean
   name?: string
+  errorMessage?: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -21,7 +22,8 @@ const Input: FC<Props> = props => {
     placeholder,
     name,
     onChange,
-    accept
+    accept,
+    errorMessage
   } = props
   return (
     <>
@@ -30,6 +32,7 @@ const Input: FC<Props> = props => {
           <label>
             {title}
             {required && <span className="req">必須</span>}
+            {errorMessage && <p className="_error-message">{errorMessage}</p>}
           </label>
         </dt>
         <dd>
@@ -39,9 +42,9 @@ const Input: FC<Props> = props => {
             type={type}
             accept={accept}
             className={type === "file" ? "" : "form-control"}
-            placeholder={placeholder}
             onChange={onChange}
           />
+          {placeholder && <p className="_example-form">例）{placeholder}</p>}
         </dd>
       </dl>
     </>

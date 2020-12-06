@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useParams } from "react-router-dom"
-import { ResSummaryBook, CurrentUser } from "../../../types"
-import { formatUserIcon } from "../../../firebase/functions"
+import { ResSummaryBook, ResUser as CurrentUser } from "../../../types"
+import { responseUploadImage } from "../../../firebase/functions"
 import { formatUpdateDate } from "../../../utils/function"
 import { FavoriteButton } from "../../../components"
 import { ReadOnlyEditor } from "../../../utils/richtext"
@@ -33,7 +33,9 @@ const SummaryDetails: FC<Props> = props => {
     const loadData = async () => {
       try {
         if (user_id && user_id.photoURL) {
-          const resUserIcon: string = await formatUserIcon(user_id.photoURL)
+          const resUserIcon: string = await responseUploadImage(
+            user_id.photoURL
+          )
           setUserIcon(resUserIcon)
         }
       } catch (e) {}
@@ -44,7 +46,7 @@ const SummaryDetails: FC<Props> = props => {
   return (
     <>
       <div className="prof-area">
-        <Link to={`/mypage/${user_id}/home`} className="_icon-area">
+        <Link to={`/mypage/${user_id.id}/home`} className="_user-icon-area">
           <div className="_icon">
             <img src={userIcon ? userIcon : userCircleIcon} alt="ロゴ" />
           </div>
@@ -76,7 +78,9 @@ const SummaryDetails: FC<Props> = props => {
         </div>
         <div className="_body">
           <ReadOnlyEditor editorState={content} />
-          <FavoriteButton user_id={currentUser.id} summary_id={url.id} />
+          <div className="_favorite-area">
+            <FavoriteButton user_id={currentUser.id} summary_id={url.id} />
+          </div>
         </div>
       </div>
     </>

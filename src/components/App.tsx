@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react"
 // components
 import { SummaryList, Sidebar, TopSummaryList } from "./../components"
 import { ResSummaryBook, ResultResponseList } from "./../types"
-import { getSummaries } from "../firebase/functions"
+import { getNewSummaries } from "../firebase/functions"
 import { Link } from "react-router-dom"
 
 const HomePage = () => {
@@ -13,9 +13,9 @@ const HomePage = () => {
     const loadData = async () => {
       setLoading(true)
       try {
-        let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
+        let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getNewSummaries(
           6,
-          1
+          "public"
         )
         if (resSummariesDataList && resSummariesDataList.status === 200) {
           setSummaries(resSummariesDataList.data)

@@ -2,11 +2,11 @@ import React from "react"
 const db = firebase.firestore()
 import {
   RegisterUser,
-  CurrentUser,
   Login,
   ResultResponse,
   ResultResponseList,
-  ResUser
+  ResUser,
+  ResUser as CurrentUser
 } from "../../types"
 import { firebase } from "../config"
 

@@ -1,6 +1,11 @@
 import React, { FC, useState, useEffect } from "react"
 import clsx from "clsx"
-import { ResSummaryBook, CurrentUser, User, ResultResponse } from "../../types"
+import {
+  ResSummaryBook,
+  ResUser as CurrentUser,
+  User,
+  ResultResponse
+} from "../../types"
 import { getCurrentUser, getImage } from "../../firebase/functions"
 import { Link } from "react-router-dom"
 import {

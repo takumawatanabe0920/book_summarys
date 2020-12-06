@@ -1,8 +1,7 @@
 import React, { useEffect, useState, FC } from "react"
 import {
-  Favorite,
   ResFavorite,
-  CurrentUser,
+  ResUser as CurrentUser,
   ResultResponseList,
   ResultResponse
 } from "../../../types"
@@ -114,7 +113,7 @@ const FavoliteButton: FC<Props> = props => {
         alert_status={alertStatus}
         alert_text={alertText}
       />
-      <div className="favolite-button" onClick={handleFavorite}>
+      <div className="favorite-button" onClick={handleFavorite}>
         {Object.keys(currentUserfavorites).length > 0 ? (
           <FavoriteIcon className="favorite-button isClick" />
         ) : (

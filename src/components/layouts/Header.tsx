@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { CurrentUser } from "../../types"
+import { ResUser as CurrentUser } from "../../types"
 import {
   getCurrentUser,
   getMyNotReadNotificationsCount,
-  formatUserIcon
+  responseUploadImage
 } from "../../firebase/functions"
 import { logoIcon, editIcon, userCircleIcon, bellIcon } from "../../utils/icons"
 
@@ -23,7 +23,9 @@ const Header = () => {
         const notificationCount: number = await getMyNotReadNotificationsCount(
           currentUser.id
         )
-        const resUserIcon: string = await formatUserIcon(currentUser.photoURL)
+        const resUserIcon: string = await responseUploadImage(
+          currentUser.photoURL
+        )
         setUserIcon(resUserIcon)
         setNotReadNotificationCount(notificationCount)
       } catch (e) {}

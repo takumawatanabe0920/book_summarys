@@ -1,14 +1,18 @@
 import React, { useState, useEffect, FC } from "react"
 import { Link } from "react-router-dom"
 import { Input, Alert, Trimming } from "../../../components"
-import { RegisterUser, ResultResponse, CurrentUser } from "../../../types"
+import {
+  RegisterUser,
+  ResultResponse,
+  ResUser as CurrentUser
+} from "../../../types"
 import { stateFile } from "../../../components/common/form/Trimming"
 import useAlertState from "../../../assets/hooks/useAlertState"
 import {
   register,
   updateUser,
   uploadImage,
-  formatUserIcon
+  responseUploadImage
 } from "../../../firebase/functions"
 
 type Props = {
@@ -19,6 +23,7 @@ type Props = {
 const RegisterForm: FC<Props> = props => {
   const { isEdit, userData } = props
   const [values, setValues] = useState<RegisterUser>({})
+  const [errorTexts, setErrorTexts] = useState<RegisterUser>({})
   const [userIcon, setUserIcon] = useState<string>("")
   const [state, setState] = useState<stateFile>({
     src: null,
@@ -66,25 +71,69 @@ const RegisterForm: FC<Props> = props => {
     }
   }
 
+  const validationCheck = async (): Promise<boolean> => {
+    let isError: boolean = false
+    let errorText: RegisterUser = {}
+    const { displayName, email, password } = values
+    if (!displayName || !displayName.match(/\S/g)) {
+      isError = true
+      errorText.displayName = "名前を入力してください。"
+    }
+    if (!isEdit) {
+      if (!email || !email.match(/\S/g)) {
+        isError = true
+        errorText.email = "メールアドレスを入力してください。"
+      } else if (
+        !email.match(
+          /^[\w!#$%&'*+/=?^_` + "`" + `{|}~-]+(?:\.[\w!#$%&'*+/=?^_` + "`" + `{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[a-zA-Z0-9](?:[\w-]*[\w])?$/
+        )
+      ) {
+        isError = true
+        errorText.email = "形式が正しくありません。"
+      }
+
+      if (!password || !password.match(/\S/g)) {
+        isError = true
+        errorText.password = "パスワードを入力してください。"
+      } else if (password.length < 6) {
+        errorText.password = "6文字以上で入力してください。"
+      } else if (!password.match(/^[0-9a-zA-Z]*$/)) {
+        errorText.password = "半角英数字で入力してください。"
+      }
+    }
+
+    setErrorTexts(errorText)
+
+    if (isError) {
+      await throwAlert("danger", "入力に不備があります。")
+      return isError
+    } else {
+      isError = false
+      return isError
+    }
+  }
+
   const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
     const { displayName, email, password } = values
-    if (!isEdit && (!displayName || !email || !password)) {
-      return await throwAlert(
-        "success",
-        "名前とパスワードとメールを入力してください"
-      )
-    }
-    if (window.confirm("会員登録しますか？")) {
-      const resUpload: ResultResponse<any> = await uploadImage(
-        state.blobFile,
-        "user"
-      )
-      if (resUpload.status === 200) {
-        values.photoURL = resUpload.data
-      } else {
-        return await throwAlert("danger", "画像のアップロードに失敗しました。")
+    if (await validationCheck()) return
+    if (
+      window.confirm(isEdit ? "会員情報を編集しますか？" : "会員登録しますか？")
+    ) {
+      if (state && state.blobFile) {
+        const resUpload: ResultResponse<any> = await uploadImage(
+          state.blobFile,
+          "user"
+        )
+        if (resUpload.status === 200) {
+          values.photoURL = resUpload.data
+        } else {
+          return await throwAlert(
+            "danger",
+            "画像のアップロードに失敗しました。"
+          )
+        }
       }
       let resCreateOrUpdate: ResultResponse<RegisterUser>
       if (isEdit) {
@@ -129,10 +178,9 @@ const RegisterForm: FC<Props> = props => {
       try {
         if (isEdit) {
           const { displayName, photoURL } = userData
-          const resUserIcon: string = await formatUserIcon(photoURL)
+          const resUserIcon: string = await responseUploadImage(photoURL)
           setUserIcon(resUserIcon)
           setValues({ displayName, photoURL })
-          console.log(photoURL)
         }
       } catch (e) {}
     }
@@ -155,13 +203,15 @@ const RegisterForm: FC<Props> = props => {
           placeholder="要約太郎"
           required={true}
           onChange={handleInputChange}
+          errorMessage={errorTexts.displayName ? errorTexts.displayName : ""}
         />
         <Trimming
           setState={setState}
           title="ユーザーアイコン"
           required={true}
+          userIcon={userIcon}
+          isEdit={isEdit}
         />
-        {/* {isEdit && userIcon && <img src={userIcon} alt="ユーザー画像" />} */}
         {!isEdit && (
           <Input
             title="メールアドレス"
@@ -170,16 +220,21 @@ const RegisterForm: FC<Props> = props => {
             placeholder="example@gmail.com"
             required={true}
             onChange={handleInputChange}
+            errorMessage={errorTexts.email ? errorTexts.email : ""}
           />
         )}
         {!isEdit && (
-          <Input
-            title="パスワード"
-            name="password"
-            type="password"
-            required={true}
-            onChange={handleInputChange}
-          />
+          <>
+            <Input
+              title="パスワード"
+              name="password"
+              type="password"
+              placeholder="六文字以上の全角半角の英数字"
+              required={true}
+              onChange={handleInputChange}
+              errorMessage={errorTexts.password ? errorTexts.password : ""}
+            />
+          </>
         )}
         <div className="btn-area mgt-2 inline">{formatButton()}</div>
       </form>

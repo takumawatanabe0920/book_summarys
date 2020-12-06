@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { ResSummaryBook, ResultResponseList } from "../../types"
 import clsx from "clsx"
-import { getSummaries, getRankingSummaries } from "../../firebase/functions"
+import { getRankingSummaries } from "../../firebase/functions"
 
 const Sidebar = () => {
   const [allRankingSummaries, setAllRankingSummaries] = useState<
@@ -19,7 +19,8 @@ const Sidebar = () => {
     const loadData = async () => {
       try {
         let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
-          3
+          3,
+          "public"
         )
         if (
           resSummariesRankingDataList &&

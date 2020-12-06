@@ -3,7 +3,12 @@ import { Link, useLocation } from "react-router-dom"
 import useReactRouter from "use-react-router"
 import clsx from "clsx"
 import { useParams } from "react-router-dom"
-import { ResUser, CurrentUser, ResultResponse, Login } from "../../../../types"
+import {
+  ResUser,
+  ResUser as CurrentUser,
+  ResultResponse,
+  Login
+} from "../../../../types"
 import { Alert } from "../../.."
 import { logout, getCurrentUser } from "../../../../firebase/functions"
 import useAlertState from "../../../../assets/hooks/useAlertState"

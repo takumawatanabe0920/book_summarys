@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react"
-import { getSummaries, getRankingSummaries } from "../../firebase/functions"
+import { getRankingSummaries } from "../../firebase/functions"
 import Slider from "react-slick"
 import { SummaryItem } from "../../components"
 import { ResultResponseList, ResSummaryBook } from "../../types"
@@ -30,7 +30,8 @@ const TopSummaryList = () => {
       setLoading(true)
       try {
         let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
-          6
+          6,
+          "public"
         )
         if (
           resSummariesRankingDataList &&

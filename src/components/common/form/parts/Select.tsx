@@ -7,15 +7,21 @@ type Props = {
   required?: boolean
   name: string
   dataList: { id?: string; name?: string; slug?: string }[]
+  errorMessage?: string
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 const Select: FC<Props> = props => {
-  const { title, required, value, name, onChange, dataList } = props
-  // dataList &&
-  //   dataList.forEach(data => {
-  //     console.log(data)
-  //   })
+  const {
+    title,
+    required,
+    value,
+    name,
+    onChange,
+    dataList,
+    errorMessage
+  } = props
+
   return (
     <>
       <dl className="form-group">
@@ -23,6 +29,7 @@ const Select: FC<Props> = props => {
           <label>
             {title}
             {required && <span className="req">必須</span>}
+            {errorMessage && <p className="_error-message">{errorMessage}</p>}
           </label>
         </dt>
         <dd>
