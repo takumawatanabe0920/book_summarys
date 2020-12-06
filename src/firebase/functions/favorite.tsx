@@ -6,8 +6,10 @@ import {
   Favorite,
   ResFavorite,
   ResultResponse,
-  ResultResponseList
+  ResultResponseList,
+  ResSummaryBook
 } from "../../types"
+import { getSummaryBook } from "./"
 
 export const getFavorite = (
   userId?: string,
@@ -43,6 +45,36 @@ export const getFavorites = (): Promise<ResultResponseList<ResFavorite>> => {
       return { status: 200, data: resData }
     })
     .catch(error => {
+      return { status: 400, error }
+    })
+
+  return response
+}
+
+export const getMyFavorites = (
+  user_id: string
+): Promise<ResultResponseList<ResFavorite>> => {
+  const response = db
+    .collection("favorite")
+    .where("user_id", "==", user_id)
+    .orderBy("update_date", "desc")
+    .get()
+    .then(async res => {
+      let resdata = await Promise.all(
+        res.docs.map(async doc => {
+          const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
+            doc.data().summary_id
+          )
+          let summary: ResSummaryBook
+          if (resSummary && resSummary.status === 200) {
+            summary = resSummary.data
+          }
+          return { id: doc.id, ...doc.data(), summary_id: summary }
+        })
+      )
+      return { status: 200, data: resdata }
+    })
+    .catch(function(error) {
       return { status: 400, error }
     })
 

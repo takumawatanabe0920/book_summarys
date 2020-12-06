@@ -1,20 +1,32 @@
 import React, { useState, useEffect, FC } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import useReactRouter from "use-react-router"
 import clsx from "clsx"
-import { ResUser, ResultResponse, Login } from "../../../../types"
+import { useParams } from "react-router-dom"
+import {
+  ResUser,
+  ResUser as CurrentUser,
+  ResultResponse,
+  Login
+} from "../../../../types"
 import { Alert } from "../../.."
-import { logout } from "../../../../firebase/functions"
+import { logout, getCurrentUser } from "../../../../firebase/functions"
 import useAlertState from "../../../../assets/hooks/useAlertState"
+const currentUser: CurrentUser = getCurrentUser()
 
 type Props = {
   user: ResUser
 }
 
 const MypageSidebar: FC<Props> = props => {
+  const url: { id: string } = useParams()
   const { user } = props
   const { history } = useReactRouter()
   const [currentTab, setCurrentTab] = useState<string>()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [isMyAccount, setIsMyAccount] = useState<boolean>(() => {
+    return url.id === currentUser.id
+  })
   const [
     isShowAlert,
     alertStatus,
@@ -22,6 +34,7 @@ const MypageSidebar: FC<Props> = props => {
     throwAlert,
     closeAlert
   ] = useAlertState(false)
+  const location = useLocation()
 
   const handleLogout = async () => {
     if (window.confirm("ログアウトしますか？")) {
@@ -35,83 +48,86 @@ const MypageSidebar: FC<Props> = props => {
     }
   }
 
-  const handleChangeTab = (_tabType: string): void => {
-    setCurrentTab(_tabType)
-  }
-
   const isActive = (_tabType: string) => {
-    if (currentTab === _tabType) {
+    if (location.pathname.indexOf(_tabType) !== -1) {
       return "active"
     }
   }
 
   useEffect(() => {
-    let unmounted = false
     closeAlert()
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
+    setLoading(true)
   }, [])
 
   return (
     <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
-      <div className="_side-block">
-        {user && user.id && (
-          <Link
-            to={`/mypage/${user.id}/edit`}
-            className={clsx("_side-item", isActive("user_edit"))}
-            onClick={() => handleChangeTab("user_edit")}
-          >
-            ユーザー情報を編集
-          </Link>
-        )}
-        <Link
-          to={`/mypage/${user.id}/summaries`}
-          className={clsx("_side-item", isActive("summaries"))}
-          onClick={() => handleChangeTab("summaries")}
-        >
-          投稿記事
-        </Link>
-        <Link
-          to={`/mypage/${user.id}/browsings`}
-          className={clsx("_side-item", isActive("browsings"))}
-          onClick={() => handleChangeTab("browsings")}
-        >
-          閲覧履歴
-        </Link>
-        <Link
-          to={`/mypage/${user.id}/favorites`}
-          className={clsx("_side-item", isActive("favorites"))}
-          onClick={() => handleChangeTab("favorites")}
-        >
-          いいね
-        </Link>
-        <Link
-          to={`/mypage/${user.id}/comments`}
-          className={clsx("_side-item", isActive("comments"))}
-          onClick={() => handleChangeTab("comments")}
-        >
-          コメント
-        </Link>
-        <div
-          className={clsx("_side-item", isActive("logout"))}
-          onClick={() => {
-            handleChangeTab("logout")
-            handleLogout()
-          }}
-        >
-          ログアウト
-        </div>
-      </div>
+      {loading && (
+        <>
+          <Alert
+            is_show_alert={isShowAlert}
+            alert_status={alertStatus}
+            alert_text={alertText}
+          />
+          <div className="_side-block">
+            <Link
+              to={`/mypage/${user.id ? user.id : url.id}/home`}
+              className={clsx("_side-item", isActive("home"))}
+            >
+              ユーザー情報
+            </Link>
+            {isMyAccount ? (
+              <Link
+                to={`/mypage/${user.id ? user.id : url.id}/edit`}
+                className={clsx("_side-item", isActive("edit"))}
+              >
+                会員情報を編集
+              </Link>
+            ) : (
+              ""
+            )}
+            <Link
+              to={`/mypage/${user.id ? user.id : url.id}/summaries`}
+              className={clsx("_side-item", isActive("summaries"))}
+            >
+              投稿記事
+            </Link>
+            {isMyAccount ? (
+              <Link
+                to={`/mypage/${user.id ? user.id : url.id}/browsings`}
+                className={clsx("_side-item", isActive("browsings"))}
+              >
+                閲覧履歴
+              </Link>
+            ) : (
+              ""
+            )}
+            <Link
+              to={`/mypage/${user.id ? user.id : url.id}/favorites`}
+              className={clsx("_side-item", isActive("favorites"))}
+            >
+              いいね
+            </Link>
+            <Link
+              to={`/mypage/${user.id ? user.id : url.id}/comments`}
+              className={clsx("_side-item", isActive("comments"))}
+            >
+              コメント
+            </Link>
+            {isMyAccount ? (
+              <div
+                className={clsx("_side-item", isActive("logout"))}
+                onClick={() => {
+                  handleLogout()
+                }}
+              >
+                ログアウト
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        </>
+      )}
     </>
   )
 }

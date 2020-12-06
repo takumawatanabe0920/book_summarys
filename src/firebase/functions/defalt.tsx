@@ -16,6 +16,7 @@ export const uploadImage = (
   image: File,
   path: string
 ): Promise<ResultResponse<any>> => {
+  console.log(image)
   const response = storage
     .ref(`/images/${path}/${image.name}`)
     .put(image)
@@ -44,4 +45,14 @@ export const getImage = (_imgPath: string): Promise<ResultResponse<string>> => {
       return { status: 400, error }
     })
   return response
+}
+
+export const responseUploadImage = async (
+  _photoUrl: string
+): Promise<string> => {
+  if (!_photoUrl) return
+  const resUploadImage = await getImage(_photoUrl)
+  if (resUploadImage && resUploadImage.status === 200) {
+    return resUploadImage.data ? resUploadImage.data : ""
+  }
 }

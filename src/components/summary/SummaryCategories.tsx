@@ -33,18 +33,16 @@ const SummaryCategories: FC<Props> = props => {
   }
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      const resCategoryList: ResultResponseList<ResCategory> = await getCategories()
-
-      if (!unmounted) {
+    const loadData = async () => {
+      try {
+        const resCategoryList: ResultResponseList<ResCategory> = await getCategories()
         setCategories(resCategoryList.data)
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
+
   return (
     <>
       <div className="summary-category">

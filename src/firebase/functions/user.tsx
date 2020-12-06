@@ -1,35 +1,14 @@
 import React from "react"
 const db = firebase.firestore()
-import axios from "axios"
 import {
   RegisterUser,
-  CurrentUser,
   Login,
   ResultResponse,
-  ResUser
+  ResultResponseList,
+  ResUser,
+  ResUser as CurrentUser
 } from "../../types"
 import { firebase } from "../config"
-
-//api
-export const getUser = async (
-  email: string
-): Promise<ResultResponse<ResUser>> => {
-  const data = {
-    headers: {
-      Authorization: "Bearer 8213f5cd-5fds2-4891-83d0-48d172ffab77"
-    },
-    params: { email }
-  }
-  const response = await axios
-    .get("http://localhost:3012/v1/users", data)
-    .then(res => {
-      return { ...res.data }
-    })
-    .catch(error => {
-      return { error }
-    })
-  return response
-}
 
 export const getCurrentUser = (): CurrentUser => {
   const currentUserData = localStorage.getItem("user")
@@ -45,8 +24,8 @@ export const register = async (
   displayName: string,
   photoURL: string
 ): Promise<ResultResponse<RegisterUser>> => {
-  const resUser: ResultResponse<ResUser> = await getUser(email)
-  if (resUser && resUser.data) {
+  const resUser: ResultResponseList<ResUser> = await checkAlreadyEmail(email)
+  if (resUser && resUser.status === 200 && resUser.data.length > 0) {
     return { status: 400, error: "user is exist" }
   }
   const response = firebase
@@ -58,7 +37,8 @@ export const register = async (
         .add({
           displayName,
           photoURL,
-          login_id: result.user.uid
+          login_id: result.user.uid,
+          email: result.user.email
         })
         .then(async res => {
           await setUser(res.id, "register")
@@ -70,6 +50,30 @@ export const register = async (
     })
     .catch(error => {
       return { status: 400, error }
+    })
+  return response
+}
+
+export const updateUser = async (
+  id: string,
+  uid: string,
+  displayName: string,
+  photoURL: string
+): Promise<ResultResponse<RegisterUser>> => {
+  const response = db
+    .collection("user")
+    .doc(id)
+    .update({
+      displayName,
+      photoURL
+    })
+    .then(async res => {
+      await setUser(uid, "login")
+      return { status: 200 }
+    })
+    .catch(error => {
+      console.log(error)
+      return { status: 400 }
     })
   return response
 }
@@ -107,7 +111,7 @@ export const logout = (): Promise<ResultResponse<Login>> => {
   return response
 }
 
-const getIdUser = (id: string): Promise<ResultResponse<ResUser>> => {
+export const getIdUser = (id: string): Promise<ResultResponse<ResUser>> => {
   const response = db
     .collection("user")
     .doc(id)
@@ -129,6 +133,26 @@ const getUidUser = (uid: string): Promise<ResultResponse<ResUser[]>> => {
   const response = db
     .collection("user")
     .where("login_id", "==", uid)
+    .get()
+    .then(res => {
+      let resData: ResUser[] = res.docs.map(doc => {
+        return { id: doc.id, ...doc.data() }
+      })
+      return { status: 200, data: resData }
+    })
+    .catch(error => {
+      return { status: 400, error }
+    })
+
+  return response
+}
+
+const checkAlreadyEmail = (
+  email: string
+): Promise<ResultResponse<ResUser[]>> => {
+  const response = db
+    .collection("user")
+    .where("email", "==", email)
     .get()
     .then(res => {
       let resData: ResUser[] = res.docs.map(doc => {
@@ -177,10 +201,8 @@ const setUser = async (
         id,
         displayName,
         photoURL,
-        login_id: {
-          uid,
-          email
-        }
+        login_id: uid,
+        email
       }
       setLocalStrage(currentUser)
     } else {
@@ -198,8 +220,6 @@ export const emailAuthMixin_sendVerifyMail = () => {
       .then(() => {
         console.log("送信しました！")
       })
-      .catch(error => {
-        // 失敗した際の処理
-      })
+      .catch(error => {})
   }
 }

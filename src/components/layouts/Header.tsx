@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { CurrentUser } from "../../types"
+import { ResUser as CurrentUser } from "../../types"
 import {
   getCurrentUser,
-  getMyNotReadNotificationsCount
+  getMyNotReadNotificationsCount,
+  responseUploadImage
 } from "../../firebase/functions"
 import { logoIcon, editIcon, userCircleIcon, bellIcon } from "../../utils/icons"
 
@@ -14,20 +15,23 @@ const Header = () => {
   const [notReadNotificationCount, setNotReadNotificationCount] = useState<
     number
   >(0)
+  const [userIcon, setUserIcon] = useState<string>("")
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      const notificationCount: number = await getMyNotReadNotificationsCount(
-        currentUser.id
-      )
-      if (!unmounted) {
+    const loadData = async () => {
+      try {
+        const notificationCount: number = await getMyNotReadNotificationsCount(
+          currentUser.id
+        )
+        const resUserIcon: string = await responseUploadImage(
+          currentUser.photoURL
+        )
+        setUserIcon(resUserIcon)
         setNotReadNotificationCount(notificationCount)
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
 
   return (
@@ -54,10 +58,10 @@ const Header = () => {
           )}
           {currentUser && (
             <Link
-              to={`/mypage/${currentUser.id}`}
-              className="l-header__sub-logo"
+              to={`/mypage/${currentUser.id}/home`}
+              className="l-header__sub-logo _userIcon"
             >
-              <img src={userCircleIcon} alt="ロゴ" />
+              <img src={userIcon ? userIcon : userCircleIcon} alt="ロゴ" />
             </Link>
           )}
           {!currentUser && (

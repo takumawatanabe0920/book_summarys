@@ -9,21 +9,27 @@ import {
 } from "./category"
 import {
   getSummaries,
+  getMyPublicSummaries,
   getSummaryBook,
+  getSummaryBookPopulate,
   getSelectCategorySummaries,
   createSummary,
+  updateSummary,
   getSummariesCount,
   getCategorySummariesCount,
   updateFavoriteSummaries,
-  getRankingSummaries
+  getRankingSummaries,
+  getMySummaries,
+  getNewSummaries
 } from "./summary"
 import {
-  getUser,
   emailAuthMixin_sendVerifyMail,
   register,
   login,
   logout,
-  getCurrentUser
+  getCurrentUser,
+  getIdUser,
+  updateUser
 } from "./user"
 import {
   getFavorite,
@@ -31,14 +37,21 @@ import {
   createFavorite,
   deleteFavorite,
   getDonefavorite,
-  getfavoriteNum
+  getfavoriteNum,
+  getMyFavorites
 } from "./favorite"
-import { readQuery, formatDateHour, uploadImage, getImage } from "./defalt"
+import {
+  readQuery,
+  formatDateHour,
+  uploadImage,
+  getImage,
+  responseUploadImage
+} from "./defalt"
 import { createBrowsing, getMyBrowsings } from "./browsing"
 import {
   createSummaryComment,
-  getMyComment,
-  getSummaryComment,
+  getMyComments,
+  getSummaryComments,
   getIdComment
 } from "./comment"
 import {
@@ -56,13 +69,18 @@ export {
   categoryLinkingSubCategory,
   getSummaries,
   getSummaryBook,
+  getMySummaries,
+  getMyPublicSummaries,
   createSummary,
+  updateSummary,
   updateFavoriteSummaries,
+  getMyFavorites,
   getRankingSummaries,
   getSummariesCount,
   getCategorySummariesCount,
   getSelectCategorySummaries,
-  getUser,
+  getIdUser,
+  updateUser,
   getCurrentUser,
   emailAuthMixin_sendVerifyMail,
   register,
@@ -78,14 +96,17 @@ export {
   createBrowsing,
   getMyBrowsings,
   formatDateHour,
-  getMyComment,
+  getMyComments,
   createSummaryComment,
-  getSummaryComment,
+  getSummaryComments,
+  getNewSummaries,
+  getSummaryBookPopulate,
   getIdComment,
   createNotification,
   getMyNotifications,
   getMyNotReadNotificationsCount,
   updateReadNotifications,
   uploadImage,
-  getImage
+  getImage,
+  responseUploadImage
 }

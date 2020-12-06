@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { Link } from "react-router-dom"
 import clsx from "clsx"
-import { FavoriteIcon, Avatar } from "../../utils/material"
+import { FavoriteIcon } from "../../utils/material"
 import { comments } from "../../utils/icons"
 import { formatUpdateDate } from "../../utils/function"
 
@@ -48,21 +48,12 @@ function NotificationItem<T extends PropsData>(props: Props<T>): JSX.Element {
     }
   }
 
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
-
   return (
     <>
       <Link
-        to={`/summary/${target_id.id}`}
+        to={`/summary/${
+          type === "favorite" ? target_id.id : target_id.summary_id.id
+        }`}
         className={clsx("data-item", is_read ? "read" : "")}
       >
         <div className="left-block">{notificationTypeLogo(type)}</div>

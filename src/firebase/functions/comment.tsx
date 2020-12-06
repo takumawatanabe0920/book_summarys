@@ -4,9 +4,13 @@ import {
   SummaryComment,
   ResSummaryComment,
   ResultResponse,
-  ResultResponseList
+  ResultResponseList,
+  ResSummaryBook,
+  ResUser,
+  SummaryBook
 } from "../../types"
 import { firebase } from "../config"
+import { getSummaryBook, getIdUser } from "./"
 const db = firebase.firestore()
 
 export const createSummaryComment = (
@@ -31,18 +35,27 @@ export const createSummaryComment = (
   return response
 }
 
-export const getSummaryComment = (
+export const getSummaryComments = (
   summaryId?: string
 ): Promise<ResultResponseList<ResSummaryComment>> => {
   const response = db
     .collection("summaryComment")
     .where("summary_id", "==", summaryId)
-    //.orderBy("update_date")
+    .orderBy("update_date")
     .get()
-    .then(res => {
-      let resData: ResSummaryComment[] = res.docs.map(doc => {
-        return { id: doc.id, ...doc.data() }
-      })
+    .then(async res => {
+      let resData: ResSummaryComment[] = await Promise.all(
+        res.docs.map(async doc => {
+          const resUser: ResultResponse<ResUser> = await getIdUser(
+            doc.data().user_id
+          )
+          let user: ResUser
+          if (resUser && resUser.status === 200) {
+            user = resUser.data
+          }
+          return { id: doc.id, ...doc.data(), user_id: user }
+        })
+      )
       return { status: 200, data: resData }
     })
     .catch(function(error) {
@@ -52,18 +65,27 @@ export const getSummaryComment = (
   return response
 }
 
-export const getMyComment = (
-  userId?: string
+export const getMyComments = (
+  user_id?: string
 ): Promise<ResultResponseList<ResSummaryComment>> => {
   const response = db
     .collection("summaryComment")
-    .where("user_id", "==", userId)
-    //.orderBy("update_date")
+    .where("user_id", "==", user_id)
+    .orderBy("update_date", "desc")
     .get()
-    .then(res => {
-      let resData: ResSummaryComment[] = res.docs.map(doc => {
-        return { id: doc.id, ...doc.data() }
-      })
+    .then(async res => {
+      let resData: ResSummaryComment[] = await Promise.all(
+        res.docs.map(async doc => {
+          const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
+            doc.data().summary_id
+          )
+          let summary: ResSummaryBook
+          if (resSummary && resSummary.status === 200) {
+            summary = resSummary.data
+          }
+          return { id: doc.id, ...doc.data(), summary_id: summary }
+        })
+      )
       return { status: 200, data: resData }
     })
     .catch(function(error) {
@@ -81,9 +103,14 @@ export const getIdComment = (
     .doc(id)
     //.orderBy("update_date")
     .get()
-    .then(doc => {
+    .then(async doc => {
       if (doc.exists) {
-        const data = { id: doc.id, ...doc.data() }
+        const resSummary = await getSummaryBook(doc.data().summary_id)
+        let summary: ResSummaryBook = {}
+        if (resSummary && resSummary.status === 200) {
+          summary = resSummary.data
+        }
+        const data = { id: doc.id, ...doc.data(), summary_id: summary }
         return { status: 200, data }
       }
     })

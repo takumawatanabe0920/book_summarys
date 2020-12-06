@@ -2,7 +2,7 @@ import React, { useState, useEffect, FC } from "react"
 import useReactRouter from "use-react-router"
 import { Textarea, Alert } from "./../../components"
 import {
-  CurrentUser,
+  ResUser as CurrentUser,
   SummaryComment,
   ResSummaryComment,
   ResultResponse
@@ -32,9 +32,7 @@ const SummaryCommentForm: FC<Props> = props => {
   const [comments, setComments] = useState<SummaryComment>({
     ...initialState
   })
-  const [summaryCommentList, setSummaryCommentList] = useState<
-    SummaryComment[]
-  >()
+  const [errorTexts, setErrorTexts] = useState<SummaryComment>({})
   const [
     isShowAlert,
     alertStatus,
@@ -54,6 +52,25 @@ const SummaryCommentForm: FC<Props> = props => {
     setComments({ ...comments, [name]: value })
   }
 
+  const validationCheck = async (): Promise<boolean> => {
+    let isError: boolean = false
+    let errorText: SummaryComment = {}
+    const { comment } = comments
+    if (!comment || !comment.match(/\S/g)) {
+      isError = true
+      errorText.comment = "コメントを入力してください。"
+    }
+    setErrorTexts(errorText)
+
+    if (isError) {
+      await throwAlert("danger", "入力に不備があります。")
+      return isError
+    } else {
+      isError = false
+      return isError
+    }
+  }
+
   const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
@@ -61,10 +78,7 @@ const SummaryCommentForm: FC<Props> = props => {
     if (!summary_id || !user_id) {
       return await throwAlert("danger", "エラーが発生しました。")
     }
-    if (!comment) {
-      return await throwAlert("danger", "コメントが入力されてません。")
-    }
-
+    if (await validationCheck()) return
     if (window.confirm("記事を作成しますか？")) {
       const resCommnet: ResultResponse<ResSummaryComment> = await createSummaryComment(
         comments
@@ -85,15 +99,7 @@ const SummaryCommentForm: FC<Props> = props => {
   }
 
   useEffect(() => {
-    let unmounted = false
     closeAlert()
-    ;(async () => {
-      if (!unmounted) {
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
   }, [])
 
   return (
@@ -109,7 +115,8 @@ const SummaryCommentForm: FC<Props> = props => {
           <Textarea
             name="comment"
             onChange={handleTextareaChange}
-            placeholder={"テキストを入力する"}
+            placeholder={"とてもわかりやすく要約されてますね。"}
+            errorMessage={errorTexts.comment ? errorTexts.comment : ""}
           />
           <div className="btn-area mgt-2 inline">
             <button className="_btn submit" type="submit" onClick={onSubmit}>

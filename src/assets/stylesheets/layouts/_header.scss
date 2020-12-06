@@ -23,19 +23,19 @@
   }
 
   &__register-ttl {
-    border: 2px solid #00A4BB;
-    color: #00A4BB;
+    border: 2px solid #00a4bb;
+    color: #00a4bb;
     font-weight: bold;
     padding: 0.25rem 0.75rem;
   }
 
   &__login-ttl {
     font-weight: bold;
-    color: #00A4BB;
+    color: #00a4bb;
   }
 
   &__top-header {
-    background: linear-gradient(90deg, #00A4BB 0%, #67ecff 100%);
+    background: linear-gradient(90deg, #00a4bb 0%, #67ecff 100%);
 
     &._txt {
       padding: 0.75rem 1.25rem;
@@ -63,6 +63,13 @@
 
     img {
       width: 100%;
+    }
+
+    &._userIcon {
+      width: 2rem;
+      img {
+        border-radius: 50%;
+      }
     }
 
     .notification_count {

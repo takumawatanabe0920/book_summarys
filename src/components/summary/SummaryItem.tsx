@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react"
-import { ResSummaryBook, CurrentUser } from "../../types"
+import { ResSummaryBook, ResUser as CurrentUser } from "../../types"
 import { getCurrentUser } from "../../firebase/functions"
 import { MediaCard } from "../../utils/material"
 import { settings } from "cluster"

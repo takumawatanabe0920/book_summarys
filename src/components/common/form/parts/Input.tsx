@@ -6,13 +6,25 @@ type Props = {
   value?: string
   type?: string
   placeholder?: string
+  accept?: string
   required?: boolean
-  name: string
+  name?: string
+  errorMessage?: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Input: FC<Props> = props => {
-  const { title, required, type, value, placeholder, name, onChange } = props
+  const {
+    title,
+    required,
+    type,
+    value,
+    placeholder,
+    name,
+    onChange,
+    accept,
+    errorMessage
+  } = props
   return (
     <>
       <dl className="form-group">
@@ -20,6 +32,7 @@ const Input: FC<Props> = props => {
           <label>
             {title}
             {required && <span className="req">必須</span>}
+            {errorMessage && <p className="_error-message">{errorMessage}</p>}
           </label>
         </dt>
         <dd>
@@ -27,10 +40,11 @@ const Input: FC<Props> = props => {
             value={value}
             name={name}
             type={type}
-            className="form-control"
-            placeholder={placeholder}
+            accept={accept}
+            className={type === "file" ? "" : "form-control"}
             onChange={onChange}
           />
+          {placeholder && <p className="_example-form">例）{placeholder}</p>}
         </dd>
       </dl>
     </>

@@ -2,17 +2,12 @@ import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import {
   ResSummaryBook,
-  Category,
-  SubCategory,
-  CurrentUser,
   ResBrowsing,
+  ResUser as CurrentUser,
   SummaryComment as SummaryCommentType,
   ResSummaryComment,
   ResultResponseList,
-  ResultResponse,
-  ResCategory,
-  ResSubCategory,
-  SummaryBook
+  ResultResponse
 } from "../../types"
 import {
   SummaryDetails,
@@ -21,101 +16,118 @@ import {
   Sidebar
 } from "./../../components"
 import {
-  getSummaryBook,
-  getCategory,
-  getSubCategory,
+  getSummaryBookPopulate,
   createBrowsing,
   getCurrentUser,
   getMyBrowsings,
-  getSummaryComment
+  getSummaryComments
 } from "../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const SummaryShowPage = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
-  const [category, setCategory] = useState<Category>({})
-  const [subCategory, setSubCategory] = useState<SubCategory>({})
   const [summaryCommentList, setSummaryCommentList] = useState<
     ResSummaryComment[]
   >([])
+  const [loading, setLoading] = useState<boolean>(false)
 
   const slug: { id: string } = useParams()
 
-  useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      const resSummaryBook: ResultResponse<ResSummaryBook> = await getSummaryBook(
-        slug.id
-      )
-      const resCategory: ResultResponse<ResCategory> = await getCategory(
-        resSummaryBook.data.category
-      )
-      let resSubCategory: ResultResponse<ResSubCategory>
-      if (resSummaryBook.data.sub_category) {
-        resSubCategory = await getSubCategory(resSummaryBook.data.sub_category)
-      }
-      const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComment(
-        slug.id
-      )
-
-      if (slug && slug.id && currentUser) {
-        const browsing = {
-          summary_id: slug.id,
-          user_id: currentUser.id,
-          user_name: currentUser.displayName ? currentUser.displayName : ""
-        }
-        let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
-        if (
-          !res ||
-          (res && res.summary_id && res.summary_id.id !== browsing.summary_id)
-        ) {
-          createBrowsing(browsing)
-        }
-      }
-      if (!unmounted) {
-        if (resSummaryBook && resSummaryBook.status === 200) {
-          setSummaryBook(resSummaryBook.data)
-        }
-        if (resCategory && resCategory.status === 200) {
-          setCategory(resCategory.data)
-        }
-        if (resSubCategory && resSubCategory.status === 200) {
-          setSubCategory(resSubCategory.data)
-        }
-        if (resSummaryCommentList && resSummaryCommentList.status === 200) {
-          setSummaryCommentList(resSummaryCommentList.data)
-        }
-      }
-    })()
-    return () => {
-      unmounted = true
-    }
-  }, [])
-
-  return (
-    <>
-      <div className="summary_main">
+  const publicSummary = (_type: string, user_id: string) => {
+    if (_type === "public" || currentUser.id === user_id) {
+      return (
         <div className="main-block">
-          <SummaryDetails
-            summaryBook={summarybook}
-            category={category}
-            subCategory={subCategory}
-            currentUser={currentUser}
-          />
+          <SummaryDetails summaryBook={summarybook} currentUser={currentUser} />
           <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
           {user.id ? (
             <SummaryCommentForm
               slug={slug}
-              user_id={user.id}
+              user_id={currentUser.id}
               summary_id={slug.id}
             />
           ) : (
             <p>ログインをしてからコメントをしよう</p>
           )}
         </div>
-        <Sidebar />
-      </div>
+      )
+    } else if (_type === "private") {
+      return (
+        <div className="main-block">
+          <p className="publishing-text">この記事は非公開です。</p>
+          <div className="mosaic">
+            <SummaryDetails
+              summaryBook={summarybook}
+              currentUser={currentUser}
+            />
+            <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
+            {user.id ? (
+              <SummaryCommentForm
+                slug={slug}
+                user_id={user.id}
+                summary_id={slug.id}
+              />
+            ) : (
+              <p>ログインをしてからコメントをしよう</p>
+            )}
+          </div>
+        </div>
+      )
+    }
+  }
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const resSummaryBook: ResultResponse<ResSummaryBook> = await getSummaryBookPopulate(
+          slug.id
+        )
+        if (resSummaryBook && resSummaryBook.status === 200) {
+          setSummaryBook(resSummaryBook.data)
+        }
+        setLoading(true)
+      } catch (e) {}
+    }
+    loadData()
+  }, [])
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        if (slug && slug.id && currentUser) {
+          const browsing = {
+            summary_id: slug.id,
+            user_id: currentUser.id,
+            user_name: currentUser.displayName ? currentUser.displayName : ""
+          }
+          let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
+          if (
+            !res ||
+            (res && res.summary_id && res.summary_id.id !== browsing.summary_id)
+          ) {
+            createBrowsing(browsing)
+          }
+        }
+
+        const resSummaryCommentList: ResultResponseList<ResSummaryComment> = await getSummaryComments(
+          slug.id
+        )
+        if (resSummaryCommentList && resSummaryCommentList.status === 200) {
+          setSummaryCommentList(resSummaryCommentList.data)
+        }
+      } catch (e) {}
+    }
+    loadData()
+  }, [])
+
+  return (
+    <>
+      {loading && (
+        <div className="summary_main">
+          {publicSummary(summarybook.publishing_status, summarybook.user_id.id)}
+          <Sidebar />
+        </div>
+      )}
     </>
   )
 }

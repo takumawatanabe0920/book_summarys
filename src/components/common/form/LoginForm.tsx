@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
+import { Link } from "react-router-dom"
 import { Input, Alert } from "../../../components"
 import { Login, ResultResponse } from "../../../types"
 import { login } from "../../../firebase/functions"
@@ -7,6 +8,7 @@ import useReactRouter from "use-react-router"
 
 const LoginForm = () => {
   const [loginValues, setLogin] = useState<Login>({})
+  const [errorTexts, setErrorTexts] = useState<Login>({})
   const [
     isShowAlert,
     alertStatus,
@@ -24,13 +26,47 @@ const LoginForm = () => {
     setLogin({ ...loginValues, [name]: value })
   }
 
+  const validationCheck = async (): Promise<boolean> => {
+    let isError: boolean = false
+    let errorText: Login = {}
+    const { email, password } = loginValues
+    if (!email || !email.match(/\S/g)) {
+      isError = true
+      errorText.email = "メールアドレスを入力してください。"
+    } else if (
+      !email.match(
+        /^[\w!#$%&'*+/=?^_` + "`" + `{|}~-]+(?:\.[\w!#$%&'*+/=?^_` + "`" + `{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[a-zA-Z0-9](?:[\w-]*[\w])?$/
+      )
+    ) {
+      isError = true
+      errorText.email = "形式が正しくありません。"
+    }
+
+    if (!password || !password.match(/\S/g)) {
+      isError = true
+      errorText.password = "パスワードを入力してください。"
+    } else if (password.length < 6) {
+      errorText.password = "6文字以上で入力してください。"
+    } else if (!password.match(/^[0-9a-zA-Z]*$/)) {
+      errorText.password = "半角英数字で入力してください。"
+    }
+
+    setErrorTexts(errorText)
+
+    if (isError) {
+      await throwAlert("danger", "入力に不備があります。")
+      return isError
+    } else {
+      isError = false
+      return isError
+    }
+  }
+
   const onSubmit = async (event: React.MouseEvent) => {
     event.persist()
     event.preventDefault()
     const { email, password } = loginValues
-    if (!email || !password) {
-      return await throwAlert("danger", "パスワードとメールを入力してください")
-    }
+    if (await validationCheck()) return
     if (window.confirm("ログインしますか？")) {
       const resLogin: ResultResponse<Login> = await login(email, password)
       if (resLogin && resLogin.status === 200) {
@@ -57,6 +93,7 @@ const LoginForm = () => {
           placeholder="example@gmail.com"
           required={true}
           onChange={handleInputChange}
+          errorMessage={errorTexts.email ? errorTexts.email : ""}
         />
         <Input
           title="パスワード"
@@ -64,11 +101,15 @@ const LoginForm = () => {
           type="password"
           required={true}
           onChange={handleInputChange}
+          errorMessage={errorTexts.password ? errorTexts.password : ""}
         />
-        <div className="btn-area mgt-2 inline">
+        <div className="_btns">
           <button className="_btn submit" type="submit" onClick={onSubmit}>
             ログインする
           </button>
+          <Link to="/sign_up" className="_btn _sub-btn">
+            会員登録ページへ
+          </Link>
         </div>
       </form>
     </>

@@ -3,27 +3,31 @@ import {
   EditorState,
   RichUtils,
   getDefaultKeyBinding,
-  convertToRaw
+  convertToRaw,
+  convertFromRaw
 } from "draft-js"
 import { Map } from "immutable"
 import Editor from "draft-js-plugins-editor"
-import createImagePlugin from "draft-js-image-plugin"
 import { iconUl, iconOl } from "../icons"
-const imagePlugin = createImagePlugin()
-const plugins = [imagePlugin]
 import "draft-js/dist/Draft.css"
-// import "draft-js-image-plugin/lib/plugin.css"
 
 const { useState, useRef, useCallback } = React
 
 type Props = {
   title: string
+  required?: boolean
+  errorMessage?: string
+  value?: any
   handleEditorChange: (value: any) => void
 }
 
 const RichEditor: FC<Props> = props => {
-  const { title, handleEditorChange } = props
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const { title, required, handleEditorChange, errorMessage, value } = props
+  const [editorState, setEditorState] = useState(
+    value
+      ? EditorState.createWithContent(convertFromRaw(JSON.parse(value)))
+      : EditorState.createEmpty()
+  )
   const editor = useRef(null)
 
   const focus = () => {
@@ -64,7 +68,6 @@ const RichEditor: FC<Props> = props => {
   const customRenderMap = Map({
     unstyled: {
       element: "div",
-      // will be used in convertFromHTMLtoContentBlocks
       aliasedElements: ["p"]
     }
   })
@@ -92,45 +95,56 @@ const RichEditor: FC<Props> = props => {
 
   return (
     <>
-      <h4>{title}</h4>
-      <div className="RichEditor-root">
-        <BlockStyleControls
-          editorState={editorState}
-          onToggle={(blockType: any) => {
-            const newState = RichUtils.toggleBlockType(editorState, blockType)
-            onChangeState(newState)
-          }}
-        />
-        <InlineStyleControls
-          editorState={editorState}
-          onToggle={(inlineStyle: any) => {
-            const newState = RichUtils.toggleInlineStyle(
-              editorState,
-              inlineStyle
-            )
-            onChangeState(newState)
-          }}
-        />
-        <div className={className} onClick={focus}>
-          <Editor
-            blockRenderMap={customRenderMap}
-            blockStyleFn={getBlockStyle}
-            customStyleMap={styleMap}
-            editorState={editorState}
-            plugins={plugins}
-            handleKeyCommand={handleKeyCommand}
-            keyBindingFn={mapKeyToEditorCommand}
-            onChange={onChangeState}
-            ref={editor}
-            spellCheck={true}
-          />
-        </div>
-      </div>
+      <dl className="form-group">
+        <dt>
+          <label>
+            {title}
+            {required && <span className="req">必須</span>}
+            {errorMessage && <p className="_error-message">{errorMessage}</p>}
+          </label>
+        </dt>
+        <dd>
+          <div className="RichEditor-root">
+            <BlockStyleControls
+              editorState={editorState}
+              onToggle={(blockType: any) => {
+                const newState = RichUtils.toggleBlockType(
+                  editorState,
+                  blockType
+                )
+                onChangeState(newState)
+              }}
+            />
+            <InlineStyleControls
+              editorState={editorState}
+              onToggle={(inlineStyle: any) => {
+                const newState = RichUtils.toggleInlineStyle(
+                  editorState,
+                  inlineStyle
+                )
+                onChangeState(newState)
+              }}
+            />
+            <div className={className} onClick={focus}>
+              <Editor
+                blockRenderMap={customRenderMap}
+                blockStyleFn={getBlockStyle}
+                customStyleMap={styleMap}
+                editorState={editorState}
+                handleKeyCommand={handleKeyCommand}
+                keyBindingFn={mapKeyToEditorCommand}
+                onChange={onChangeState}
+                ref={editor}
+                spellCheck={true}
+              />
+            </div>
+          </div>
+        </dd>
+      </dl>
     </>
   )
 }
 
-// Custom overrides for "code" style.
 const styleMap = {
   CODE: {
     backgroundColor: "rgba(0, 0, 0, 0.05)",

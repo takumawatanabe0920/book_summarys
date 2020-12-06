@@ -6,8 +6,10 @@ const SummaryCreatePage = () => {
   return (
     <>
       <div className="summary_main">
-        <div className="main-block _block-center">
-          <SummaryForm />
+        <div className="md-container">
+          <div className="main-block _block-center">
+            <SummaryForm />
+          </div>
         </div>
       </div>
     </>

@@ -57,7 +57,7 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js", ".json"],
     alias: {}
   },
-  plugins: [],
+  //plugins: [],
   //plugins: [new BundleAnalyzerPlugin()],
   // new BundleAnalyzerPlugin()
 
@@ -74,9 +74,6 @@ module.exports = {
     react: "React",
     "react-dom": "ReactDOM",
     firebase: "firebase",
-    // "firebase/auth": "",
-    // "firebase/storage": "",
-    // "firebase/firestore": "",
     "@material-ui/core": "MaterialUI"
   }
 }

@@ -1,16 +1,14 @@
-import React, { FC, useState, useEffect, useMemo } from "react"
-import { getSummaries, getRankingSummaries } from "../../firebase/functions"
+import React, { FC, useState, useEffect } from "react"
+import { getRankingSummaries } from "../../firebase/functions"
 import Slider from "react-slick"
 import { SummaryItem } from "../../components"
 import { ResultResponseList, ResSummaryBook } from "../../types"
-
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
 
 const TopSummaryList = () => {
   const [allRankingSummaries, setAllRankingSummaries] = useState<
     ResSummaryBook[]
   >([])
+  const [loading, setLoading] = useState<boolean>(false)
 
   const settings = {
     dots: true,
@@ -28,38 +26,39 @@ const TopSummaryList = () => {
   }
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
-        6
-      )
-      if (!unmounted) {
+    const loadData = async () => {
+      setLoading(true)
+      try {
+        let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
+          6,
+          "public"
+        )
         if (
           resSummariesRankingDataList &&
           resSummariesRankingDataList.status === 200
         ) {
           setAllRankingSummaries(resSummariesRankingDataList.data)
         }
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+    loadData()
   }, [])
 
   return (
     <>
-      <Slider {...settings}>
-        {allRankingSummaries.map((data: ResSummaryBook) => {
-          return (
-            <SummaryItem
-              key={data.id}
-              data={data}
-              setting={settingsTopSlider}
-            />
-          )
-        })}
-      </Slider>
+      {loading && (
+        <Slider {...settings}>
+          {allRankingSummaries.map((data: ResSummaryBook) => {
+            return (
+              <SummaryItem
+                key={data.id}
+                data={data}
+                setting={settingsTopSlider}
+              />
+            )
+          })}
+        </Slider>
+      )}
     </>
   )
 }

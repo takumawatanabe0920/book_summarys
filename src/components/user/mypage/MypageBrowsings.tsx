@@ -1,66 +1,68 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import clsx from "clsx"
-import { CurrentUser, ResultResponse, ResBrowsing } from "../../../types"
-import { MypageSidebar } from "../.."
-import {
-  getCurrentUser,
-  getMyBrowsings,
-  formatDateHour
-} from "../../../firebase/functions"
+import useReactRouter from "use-react-router"
+import { useParams } from "react-router-dom"
+import { ResUser as CurrentUser, ResBrowsing } from "../../../types"
+import { MypageSidebar, SummaryStackItem } from "../.."
+import { getCurrentUser, getMyBrowsings } from "../../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const MypageBrowsings = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [myBrowings, setMyBrowings] = useState<ResBrowsing[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const { history } = useReactRouter()
+  const url: { id: string } = useParams()
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      let resBrowing: ResBrowsing[]
-      if (user) {
-        resBrowing = await getMyBrowsings(user.id)
+    const loadData = async () => {
+      setLoading(true)
+      if (url.id !== currentUser.id) {
+        history.push(`/mypage/${url.id}/home`)
       }
-      if (!unmounted) {
+      try {
+        if (url.id !== currentUser.id) {
+          history.push(`/mypage/${url.id}/home`)
+        }
+        let resBrowing: ResBrowsing[]
+        if (user) {
+          resBrowing = await getMyBrowsings(user.id)
+        }
         setMyBrowings(resBrowing)
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
 
   return (
-    <div className="mypage_main">
-      <div className="main-block _block-center _block-list">
-        <div className="user-mypage">
-          <h1 className="main-title blue-main-title">MY PAGE</h1>
-          <div className="mypage-content">
-            <MypageSidebar user={currentUser} />
-            <div className="_main-block"></div>
-          </div>
-
-          <p>{currentUser.displayName}</p>
-
-          <h3>最近見た記事</h3>
-          {myBrowings &&
-            myBrowings.map((browing: ResBrowsing) => {
-              return (
-                <div key={browing.id}>
-                  <dl>
-                    <dt>記事</dt>
-                    <dd>{browing.summary_id && browing.summary_id.title}</dd>
-                  </dl>
-                  <dl>
-                    <dt>閲覧日時</dt>
-                    <dd>{formatDateHour(browing.update_date)}</dd>
-                  </dl>
+    <>
+      {loading && (
+        <div className="mypage_main">
+          <div className="l-container">
+            <div className="main-block _block-center">
+              <div className="user-mypage">
+                <h1 className="main-title blue-main-title">MY PAGE</h1>
+                <div className="mypage-content">
+                  <MypageSidebar user={currentUser} />
+                  <div className="_mypage">
+                    <h2 className="sub-ttl">閲覧履歴</h2>
+                    {myBrowings &&
+                      myBrowings.map((browsing: ResBrowsing) => {
+                        return (
+                          <SummaryStackItem
+                            data={browsing.summary_id}
+                            time={browsing.update_date}
+                          />
+                        )
+                      })}
+                  </div>
                 </div>
-              )
-            })}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   )
 }
 

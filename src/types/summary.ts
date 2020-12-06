@@ -8,16 +8,12 @@ export type SummaryBook = Partial<{
   discription: string
   category: any
   sub_category: any
-  author: string
-  price: string
-  review: string
-  product_links: string
-  user_id: string
+  user_id: any
   user_name: string
   thumbnail: string
   favorite_id: []
   favorite_count: number
-  publishing_status: "public" | "private"
+  publishing_status: string
   create_date: number
   update_date: number
 }>

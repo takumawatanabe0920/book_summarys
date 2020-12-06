@@ -1,66 +1,49 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import clsx from "clsx"
-import { CurrentUser, ResultResponse, ResBrowsing } from "../../../types"
-import { MypageSidebar } from "../.."
-import {
-  getCurrentUser,
-  getMyBrowsings,
-  formatDateHour
-} from "../../../firebase/functions"
+import useReactRouter from "use-react-router"
+import { useParams } from "react-router-dom"
+import { ResUser as CurrentUser } from "../../../types"
+import { MypageSidebar, RegisterForm } from "../.."
+import { getCurrentUser } from "../../../firebase/functions"
 const user: CurrentUser = getCurrentUser()
 
 const MypageEdit = () => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
-  const [myBrowings, setMyBrowings] = useState<ResBrowsing[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const { history } = useReactRouter()
+  const url: { id: string } = useParams()
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      let resBrowing: ResBrowsing[]
-      if (user) {
-        resBrowing = await getMyBrowsings(user.id)
+    const loadData = async () => {
+      setLoading(true)
+      if (url.id !== currentUser.id) {
+        history.push(`/mypage/${url.id}/home`)
       }
-      if (!unmounted) {
-        setMyBrowings(resBrowing)
-      }
-    })()
-    return () => {
-      unmounted = true
     }
+
+    loadData()
   }, [])
 
   return (
-    <div className="mypage_main">
-      <div className="main-block _block-center _block-list">
-        <div className="user-mypage">
-          <h1 className="main-title blue-main-title">MY PAGE</h1>
-          <div className="mypage-content">
-            <MypageSidebar user={currentUser} />
-            <div className="_main-block"></div>
-          </div>
-
-          <p>{currentUser.displayName}</p>
-
-          <h3>最近見た記事</h3>
-          {myBrowings &&
-            myBrowings.map((browing: ResBrowsing) => {
-              return (
-                <div key={browing.id}>
-                  <dl>
-                    <dt>記事</dt>
-                    <dd>{browing.summary_id && browing.summary_id.title}</dd>
-                  </dl>
-                  <dl>
-                    <dt>閲覧日時</dt>
-                    <dd>{formatDateHour(browing.update_date)}</dd>
-                  </dl>
+    <>
+      {loading && (
+        <div className="mypage_main">
+          <div className="l-container">
+            <div className="main-block _block-center">
+              <div className="user-mypage">
+                <h1 className="main-title blue-main-title">MY PAGE</h1>
+                <div className="mypage-content">
+                  <MypageSidebar user={currentUser} />
+                  <div className="_mypage">
+                    <h2 className="sub-ttl">会員情報編集</h2>
+                    <RegisterForm userData={currentUser} isEdit={true} />
+                  </div>
                 </div>
-              )
-            })}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   )
 }
 

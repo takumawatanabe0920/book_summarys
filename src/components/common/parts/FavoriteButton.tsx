@@ -1,8 +1,7 @@
 import React, { useEffect, useState, FC } from "react"
 import {
-  Favorite,
   ResFavorite,
-  CurrentUser,
+  ResUser as CurrentUser,
   ResultResponseList,
   ResultResponse
 } from "../../../types"
@@ -88,13 +87,12 @@ const FavoliteButton: FC<Props> = props => {
   }
 
   useEffect(() => {
-    let unmounted = false
-    ;(async () => {
-      let resfavoriteList: ResultResponseList<ResFavorite>
-      if (user_id && summary_id) {
-        resfavoriteList = await getFavorite(user_id, summary_id)
-      }
-      if (!unmounted) {
+    const loadData = async () => {
+      try {
+        let resfavoriteList: ResultResponseList<ResFavorite>
+        if (user_id && summary_id) {
+          resfavoriteList = await getFavorite(user_id, summary_id)
+        }
         if (
           resfavoriteList &&
           resfavoriteList.status === 200 &&
@@ -102,11 +100,10 @@ const FavoliteButton: FC<Props> = props => {
         ) {
           setCurrentUserFavorites(resfavoriteList.data[0])
         }
-      }
-    })()
-    return () => {
-      unmounted = true
+      } catch (e) {}
     }
+
+    loadData()
   }, [])
 
   return (
@@ -116,7 +113,7 @@ const FavoliteButton: FC<Props> = props => {
         alert_status={alertStatus}
         alert_text={alertText}
       />
-      <div className="favolite-button" onClick={handleFavorite}>
+      <div className="favorite-button" onClick={handleFavorite}>
         {Object.keys(currentUserfavorites).length > 0 ? (
           <FavoriteIcon className="favorite-button isClick" />
         ) : (

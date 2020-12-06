@@ -9,6 +9,7 @@ import {
   Header,
   Footer,
   SummaryCreatePage,
+  SummaryEditPage,
   GuestRoute,
   SummaryShowPage,
   SignUpPage,
@@ -42,7 +43,16 @@ ReactDOM.render(
                   path="/summary/create"
                   component={SummaryCreatePage}
                 />
-                <PrivateRoute exact path="/mypage/:id" component={MypagePage} />
+                <PrivateRoute
+                  exact
+                  path="/summary/:id/edit"
+                  component={SummaryEditPage}
+                />
+                <PrivateRoute
+                  exact
+                  path="/mypage/:id/home"
+                  component={MypagePage}
+                />
                 <PrivateRoute
                   exact
                   path="/mypage/:id/edit"

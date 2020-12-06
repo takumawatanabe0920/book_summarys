@@ -7,7 +7,8 @@
 
 .l-container {
   @include pc() {
-    width: 1040px;
+    max-width: 1040px;
+    width: 100%;
     margin: auto;
   }
 }
@@ -15,6 +16,7 @@
 .md-container {
   @include pc() {
     max-width: 840px;
+    width: 100%;
     margin: auto;
   }
 }

@@ -4,11 +4,12 @@ import {
   ResSummaryBook,
   ResultResponseList,
   ResultResponse,
-  ResCategory
+  ResCategory,
+  ResUser
 } from "../../types"
 import { firebase } from "../config"
 import dayjs from "dayjs"
-import { getCategory, getSubCategory } from "./"
+import { getCategory, getSubCategory, getIdUser } from "./"
 const db = firebase.firestore()
 
 export const createSummary = (
@@ -36,6 +37,26 @@ export const createSummary = (
   return response
 }
 
+export const updateSummary = async (
+  values: ResSummaryBook
+): Promise<ResultResponse<ResSummaryBook>> => {
+  console.log(values)
+  const response = db
+    .collection("summary")
+    .doc(values.id)
+    .update({
+      ...values
+    })
+    .then(res => {
+      return { status: 200 }
+    })
+    .catch(error => {
+      console.log(error)
+      return { status: 400 }
+    })
+  return response
+}
+
 export const updateFavoriteSummaries = async (
   favorite_id?: string,
   summary_id?: string
@@ -59,35 +80,39 @@ export const updateFavoriteSummaries = async (
       })
     })
   })
-    .then(function(newPopulation) {
+    .then(newPopulation => {
       console.log("Population increased to ", newPopulation)
     })
-    .catch(function(err) {
+    .catch(error => {
       // This will be an "population is too big" error.
-      console.error(err)
+      console.error(error)
     })
 }
 
 export const getRankingSummaries = async (
-  limit?: number
+  limit?: number,
+  publishing_status?: string
 ): Promise<ResultResponseList<ResSummaryBook>> => {
   const response = await db
     .collection("summary")
+    .where("publishing_status", "==", publishing_status)
     .orderBy("favorite_count", "desc")
     .limit(limit)
     .get()
     .then(async res => {
       let resData: ResSummaryBook[] = await Promise.all(
         res.docs.map(async doc => {
-          const [resCategory, resSubCategory] = await Promise.all([
-            await getCategory(doc.data().category),
-            await getSubCategory(doc.data().sub_category)
-          ])
+          const resCategory: ResultResponse<ResCategory> = await getCategory(
+            doc.data().category
+          )
           let category: ResCategory
+          const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+            doc.data().sub_category
+          )
+          let sub_category: ResCategory
           if (resCategory && resCategory.status === 200) {
             category = resCategory.data
           }
-          let sub_category: ResCategory
           if (resSubCategory && resSubCategory.status === 200) {
             sub_category = resSubCategory.data
           }
@@ -97,7 +122,8 @@ export const getRankingSummaries = async (
       )
       return { status: 200, data: resData }
     })
-    .catch(function(error) {
+    .catch(error => {
+      console.log(error)
       return { status: 400, error }
     })
   return response
@@ -105,7 +131,8 @@ export const getRankingSummaries = async (
 
 export const getSummaries = async (
   limit?: number,
-  page?: number
+  page?: number,
+  publishing_status?: string
 ): Promise<ResultResponseList<ResSummaryBook>> => {
   const startTime = performance.now() // 開始時間
   if (!limit) return
@@ -116,6 +143,7 @@ export const getSummaries = async (
   } else {
     data = await db
       .collection("summary")
+      .where("publishing_status", "==", publishing_status)
       .orderBy("update_date")
       .limit(limit * skip)
       .get()
@@ -127,6 +155,7 @@ export const getSummaries = async (
 
   const next = await db
     .collection("summary")
+    .where("publishing_status", "==", publishing_status)
     .orderBy("update_date")
     .startAfter(data)
     .limit(limit)
@@ -134,15 +163,123 @@ export const getSummaries = async (
     .then(async res => {
       let resData: ResSummaryBook[] = await Promise.all(
         res.docs.map(async doc => {
-          const [resCategory, resSubCategory] = await Promise.all([
-            await getCategory(doc.data().category),
-            await getSubCategory(doc.data().sub_category)
-          ])
+          const resCategory: ResultResponse<ResCategory> = await getCategory(
+            doc.data().category
+          )
           let category: ResCategory
+          const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+            doc.data().sub_category
+          )
+          let sub_category: ResCategory
           if (resCategory && resCategory.status === 200) {
             category = resCategory.data
           }
+          if (resSubCategory && resSubCategory.status === 200) {
+            sub_category = resSubCategory.data
+          }
+
+          return { id: doc.id, ...doc.data(), category, sub_category }
+        })
+      )
+      return { status: 200, data: resData }
+    })
+    .catch(function(error) {
+      console.log(error)
+      return { status: 400, error }
+    })
+  const endTime = performance.now() // 終了時間
+  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
+  return next
+}
+
+export const getNewSummaries = async (
+  limit?: number,
+  publishing_status?: string
+): Promise<ResultResponseList<ResSummaryBook>> => {
+  const startTime = performance.now() // 開始時間
+  const response = await db
+    .collection("summary")
+    .where("publishing_status", "==", publishing_status)
+    .orderBy("update_date", "desc")
+    .limit(limit)
+    .get()
+    .then(async res => {
+      let resData: ResSummaryBook[] = await Promise.all(
+        res.docs.map(async doc => {
+          const resCategory: ResultResponse<ResCategory> = await getCategory(
+            doc.data().category
+          )
+          let category: ResCategory
+          const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+            doc.data().sub_category
+          )
           let sub_category: ResCategory
+          if (resCategory && resCategory.status === 200) {
+            category = resCategory.data
+          }
+          if (resSubCategory && resSubCategory.status === 200) {
+            sub_category = resSubCategory.data
+          }
+
+          return { id: doc.id, ...doc.data(), category, sub_category }
+        })
+      )
+      return { status: 200, data: resData }
+    })
+    .catch(error => {
+      console.log(error)
+      return { status: 400, error }
+    })
+  const endTime = performance.now() // 終了時間
+  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
+  return response
+}
+
+export const getMySummaries = async (
+  limit?: number,
+  page?: number,
+  user_id?: string
+): Promise<ResultResponseList<ResSummaryBook>> => {
+  const startTime = performance.now() // 開始時間
+  if (!limit) return
+  let data
+  const skip = page - 1
+  if (skip === 0) {
+    data = skip
+  } else {
+    data = await db
+      .collection("summary")
+      .where("user_id", "==", user_id)
+      .orderBy("update_date")
+      .limit(limit * skip)
+      .get()
+      .then(
+        documentresponses =>
+          documentresponses.docs[documentresponses.docs.length - 1]
+      )
+  }
+
+  const next = await db
+    .collection("summary")
+    .where("user_id", "==", user_id)
+    .orderBy("update_date")
+    .startAfter(data)
+    .limit(limit)
+    .get()
+    .then(async res => {
+      let resData: ResSummaryBook[] = await Promise.all(
+        res.docs.map(async doc => {
+          const resCategory: ResultResponse<ResCategory> = await getCategory(
+            doc.data().category
+          )
+          let category: ResCategory
+          const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+            doc.data().sub_category
+          )
+          let sub_category: ResCategory
+          if (resCategory && resCategory.status === 200) {
+            category = resCategory.data
+          }
           if (resSubCategory && resSubCategory.status === 200) {
             sub_category = resSubCategory.data
           }
@@ -160,9 +297,77 @@ export const getSummaries = async (
   return next
 }
 
+export const getMyPublicSummaries = async (
+  limit?: number,
+  page?: number,
+  user_id?: string,
+  publishing_status?: string
+): Promise<ResultResponseList<ResSummaryBook>> => {
+  const startTime = performance.now() // 開始時間
+  console.log(publishing_status)
+  if (!limit) return
+  let data
+  const skip = page - 1
+  if (skip === 0) {
+    data = skip
+  } else {
+    data = await db
+      .collection("summary")
+      .where("user_id", "==", user_id)
+      .where("publishing_status", "==", publishing_status)
+      .orderBy("update_date")
+      .limit(limit * skip)
+      .get()
+      .then(
+        documentresponses =>
+          documentresponses.docs[documentresponses.docs.length - 1]
+      )
+  }
+
+  const next = await db
+    .collection("summary")
+    .where("user_id", "==", user_id)
+    .where("publishing_status", "==", publishing_status)
+    .orderBy("update_date")
+    .startAfter(data)
+    .limit(limit)
+    .get()
+    .then(async res => {
+      let resData: ResSummaryBook[] = await Promise.all(
+        res.docs.map(async doc => {
+          const resCategory: ResultResponse<ResCategory> = await getCategory(
+            doc.data().category
+          )
+          let category: ResCategory
+          const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+            doc.data().sub_category
+          )
+          let sub_category: ResCategory
+          if (resCategory && resCategory.status === 200) {
+            category = resCategory.data
+          }
+          if (resSubCategory && resSubCategory.status === 200) {
+            sub_category = resSubCategory.data
+          }
+
+          return { id: doc.id, ...doc.data(), category, sub_category }
+        })
+      )
+      return { status: 200, data: resData }
+    })
+    .catch(function(error) {
+      console.log(error)
+      return { status: 400, error }
+    })
+  const endTime = performance.now() // 終了時間
+  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
+  return next
+}
+
 export const getSelectCategorySummaries = async (
   limit?: number,
   page?: number,
+  publishing_status?: string,
   category_id?: string
 ): Promise<ResultResponseList<ResSummaryBook>> => {
   const startTime = performance.now() // 開始時間
@@ -175,6 +380,7 @@ export const getSelectCategorySummaries = async (
     data = await db
       .collection("summary")
       .where("category", "==", category_id)
+      .where("publishing_status", "==", publishing_status)
       .orderBy("update_date")
       .limit(limit * skip)
       .get()
@@ -191,6 +397,7 @@ export const getSelectCategorySummaries = async (
   const next = await db
     .collection("summary")
     .where("category", "==", category_id)
+    .where("publishing_status", "==", publishing_status)
     .orderBy("update_date")
     .startAfter(data)
     .limit(limit)
@@ -198,15 +405,17 @@ export const getSelectCategorySummaries = async (
     .then(async res => {
       let resData: ResSummaryBook[] = await Promise.all(
         res.docs.map(async doc => {
-          const [resCategory, resSubCategory] = await Promise.all([
-            await getCategory(doc.data().category),
-            await getSubCategory(doc.data().sub_category)
-          ])
+          const resCategory: ResultResponse<ResCategory> = await getCategory(
+            doc.data().category
+          )
           let category: ResCategory
+          const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+            doc.data().sub_category
+          )
+          let sub_category: ResCategory
           if (resCategory && resCategory.status === 200) {
             category = resCategory.data
           }
-          let sub_category: ResCategory
           if (resSubCategory && resSubCategory.status === 200) {
             sub_category = resSubCategory.data
           }
@@ -217,6 +426,7 @@ export const getSelectCategorySummaries = async (
       return { status: 200, data: resData }
     })
     .catch(function(error) {
+      console.log(error)
       return { status: 400, error }
     })
   const endTime = performance.now() // 終了時間
@@ -224,26 +434,39 @@ export const getSelectCategorySummaries = async (
   return next
 }
 
-export const getSummariesCount = async (): Promise<number> => {
+export const getSummariesCount = async (
+  publishing_status?: string
+): Promise<number> => {
   let docNum = await db
     .collection("summary")
+    .where("publishing_status", "==", publishing_status)
     .get()
     .then(snap => {
       return snap.size // will return the collection size
+    })
+    .catch(error => {
+      console.log(error)
+      return 0
     })
 
   return docNum
 }
 
 export const getCategorySummariesCount = async (
-  category_id?: string
+  category_id?: string,
+  publishing_status?: string
 ): Promise<number> => {
   let docNum = await db
     .collection("summary")
     .where("category", "==", category_id)
+    .where("publishing_status", "==", publishing_status)
     .get()
     .then(snap => {
       return snap.size // will return the collection size
+    })
+    .catch(error => {
+      console.log(error)
+      return 0
     })
 
   return docNum
@@ -256,9 +479,56 @@ export const getSummaryBook = (
     .collection("summary")
     .doc(id)
     .get()
-    .then(doc => {
+    .then(async doc => {
       if (doc.exists) {
         const data = { id: doc.id, ...doc.data() }
+        return { status: 200, data }
+      }
+    })
+    .catch(error => {
+      return { status: 400, error }
+    })
+
+  return response
+}
+
+export const getSummaryBookPopulate = (
+  id: string
+): Promise<ResultResponse<ResSummaryBook>> => {
+  const response = db
+    .collection("summary")
+    .doc(id)
+    .get()
+    .then(async doc => {
+      if (doc.exists) {
+        const resUser: ResultResponse<ResUser> = await getIdUser(
+          doc.data().user_id
+        )
+        const resCategory: ResultResponse<ResCategory> = await getCategory(
+          doc.data().category
+        )
+        const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+          doc.data().sub_category
+        )
+        let category: ResCategory
+        let sub_category: ResCategory
+        let user: ResUser
+        if (resUser && resUser.status === 200) {
+          user = resUser.data
+        }
+        if (resCategory && resCategory.status === 200) {
+          category = resCategory.data
+        }
+        if (resSubCategory && resSubCategory.status === 200) {
+          sub_category = resSubCategory.data
+        }
+        const data = {
+          id: doc.id,
+          ...doc.data(),
+          user_id: user ? user : doc.data().user_id,
+          category,
+          sub_category
+        }
         return { status: 200, data }
       }
     })
