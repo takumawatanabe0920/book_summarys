@@ -4,6 +4,11 @@
   margin-bottom: 2rem;
   letter-spacing: 4px;
 
+  @include sp {
+    font-size: 1.35rem;
+    padding: 0.5rem 1rem;
+  }
+
   &.blue-main-title {
     border-left: 4px solid #00a4bb;
   }

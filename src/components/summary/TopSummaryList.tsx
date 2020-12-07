@@ -10,13 +10,34 @@ const TopSummaryList = () => {
   >([])
   const [loading, setLoading] = useState<boolean>(false)
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    autoplay: true,
-    slidesToShow: 3,
-    slidesToScroll: 1
+  let settings
+  if (window.innerWidth < 768) {
+    settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      autoplay: true,
+      slidesToShow: 1,
+      slidesToScroll: 1
+    }
+  } else if (window.innerWidth < 1040) {
+    settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      autoplay: true,
+      slidesToShow: 2,
+      slidesToScroll: 1
+    }
+  } else {
+    settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      autoplay: true,
+      slidesToShow: 3,
+      slidesToScroll: 1
+    }
   }
 
   const settingsTopSlider = {
@@ -54,6 +75,7 @@ const TopSummaryList = () => {
                 key={data.id}
                 data={data}
                 setting={settingsTopSlider}
+                elType="top-summary-list"
               />
             )
           })}

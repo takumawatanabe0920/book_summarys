@@ -44,6 +44,14 @@
       font-weight: bold;
       font-size: 0.8rem;
       color: #fff;
+
+      @include sp {
+        font-size: 0.7rem;
+      }
+
+      @include sp_5s {
+        font-size: 0.6rem;
+      }
     }
   }
 

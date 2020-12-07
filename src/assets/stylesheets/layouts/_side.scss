@@ -7,6 +7,10 @@
   border-radius: 5px;
   box-shadow: 0 0 3px #d6d3d3;
 
+  @include sp {
+    width: 100%;
+  }
+
   h3 {
     font-size: 1.25rem;
     margin-bottom: 1.5rem;
@@ -66,12 +70,13 @@
           }
 
           &.ranking3 {
-            background: #BA6E40;
+            background: #ba6e40;
           }
         }
       }
 
-      dd {}
+      dd {
+      }
     }
   }
 }

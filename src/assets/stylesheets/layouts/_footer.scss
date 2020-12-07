@@ -12,13 +12,14 @@
   }
 
   &__link {
-    @include pc() {
+    @include more-sp {
       margin: 0 25px;
     }
-    @include sp() {
+    @include sp {
       margin: 0;
       padding: 5px 10px;
       display: inline-block;
+      width: 48%;
     }
   }
 
@@ -29,8 +30,12 @@
     margin-bottom: 20px;
     display: flex;
     justify-content: center;
-    @include pc() {
+    @include more-sp {
       margin: 40px 0 20px;
+    }
+
+    @include sp {
+      flex-wrap: wrap;
     }
   }
 
@@ -39,9 +44,8 @@
     font-size: 24px;
     font-weight: bold;
 
-    @include sp() {
-      width: 150px;
-      margin: 40px auto;
+    @include sp {
+      margin: 30px auto;
     }
 
     img {

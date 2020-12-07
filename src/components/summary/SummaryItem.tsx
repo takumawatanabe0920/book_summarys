@@ -9,13 +9,21 @@ type Props = {
   data: ResSummaryBook
   setting?: any
   columnNum?: string
+  elType?: string
 }
 
 const SummaryItem: FC<Props> = props => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
-  const { data, setting, columnNum } = props
+  const { data, setting, columnNum, elType } = props
 
-  return <MediaCard data={data} setting={setting} columnNum={columnNum} />
+  return (
+    <MediaCard
+      data={data}
+      setting={setting}
+      columnNum={columnNum}
+      elType={elType}
+    />
+  )
 }
 
 export default SummaryItem

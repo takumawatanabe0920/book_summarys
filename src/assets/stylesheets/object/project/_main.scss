@@ -74,10 +74,21 @@
   display: flex;
   align-items: flex-end;
 
+  .favorite-button {
+    font-size: 1.25rem;
+    @include sp {
+      font-size: 1.1rem;
+    }
+  }
+
   .favoriteNum {
     color: #e24949;
-    font-size: 1rem;
+    font-size: 0.9rem;
     line-height: 1.4;
+
+    @include sp {
+      font-size: 0.8rem;
+    }
   }
 }
 
@@ -85,6 +96,10 @@
   color: #dadada;
   font-size: 1.125rem;
   margin-right: 0.2rem;
+
+  @include sp {
+    font-size: 1.1rem;
+  }
 
   &.isClick {
     color: #e24949;
@@ -129,13 +144,42 @@
 
 .slick-slider {
   margin-bottom: 3rem;
+  .slick-list {
+    @include more-sp {
+      height: 380px;
+    }
+    @include sp {
+      padding-bottom: 1.5rem;
+    }
+  }
 }
 
 .summary-data-item {
-  height: 360px;
-  width: 48%;
-  margin: 0 4% 1.5rem 0;
+  display: block;
+  height: 340px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
+
+  @include more-sp {
+    display: flex;
+    margin: 0 4% 1.5rem 0;
+    width: 48%;
+  }
+
+  @include sp {
+    height: 280px;
+    margin-bottom: 1.5rem;
+  }
+
+  &.top-summary-list {
+    @include more-sp {
+      width: 100%;
+      display: block;
+    }
+    @include sp {
+      margin: 0 auto;
+      height: 100%;
+    }
+  }
 
   &:nth-of-type(2n) {
     margin-right: 0;
@@ -152,9 +196,12 @@
 
   ._summary-ttl {
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.95rem;
     letter-spacing: 2.4px;
     margin-bottom: 0.5;
+    @include sp {
+      font-size: 0.85rem;
+    }
   }
 
   ._summary-txt {
@@ -162,10 +209,18 @@
     overflow: hidden;
     font-size: 0.8rem;
     padding-top: 0.25rem;
+    @include sp {
+      font-size: 0.65rem;
+      height: 44px;
+    }
   }
 
   .MuiCardContent-root {
-    padding: 1.5rem 1rem 0rem;
+    padding: 1.25rem 1rem 0rem;
+
+    @include sp {
+      padding: 1rem 1rem 0rem;
+    }
   }
 
   .summary-bottom {
@@ -179,14 +234,22 @@
   .categories {
     margin-bottom: 1rem;
 
+    @include sp {
+      margin-bottom: 0.75rem;
+    }
+
     .main-tag {
       color: #fff;
       font-weight: bold;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       padding: 0.2rem 0.7rem 0.15rem 0.75rem;
       line-height: 1;
       border-radius: 0.2rem;
       border-radius: 10px;
+
+      @include sp {
+        font-size: 0.7rem;
+      }
 
       &.sport-tag {
         border: 2px solid #2f66cc;
@@ -229,6 +292,10 @@
         color: #fff;
         margin-left: 0.35rem;
         padding: 0.37rem 0.7rem 0.25rem;
+
+        @include sp {
+          padding: 0.3rem 0.5rem 0.2rem;
+        }
       }
 
       &.new-tag {
@@ -236,6 +303,10 @@
         color: #fff;
         margin-left: 0.35rem;
         padding: 0.37rem 0.7rem 0.25rem;
+
+        @include sp {
+          padding: 0.3rem 0.5rem 0.2rem;
+        }
       }
     }
   }
@@ -260,6 +331,13 @@
 
       &.sliderImg {
         height: 280px;
+
+        &.top-summary-img {
+          height: 100%;
+          @include sp {
+            height: 360px;
+          }
+        }
       }
     }
 

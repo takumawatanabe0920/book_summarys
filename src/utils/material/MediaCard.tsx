@@ -23,11 +23,12 @@ type Props = {
   data: ResSummaryBook
   setting?: any
   columnNum?: string
+  elType?: string
 }
 
 const MediaCard: FC<Props> = props => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
-  const { data, setting, columnNum } = props
+  const { data, setting, columnNum, elType } = props
   const {
     id,
     title,
@@ -88,7 +89,11 @@ const MediaCard: FC<Props> = props => {
   return (
     <Link
       to={`/summary/${id}`}
-      className={clsx("summary-data-item", columnNum && columnNum)}
+      className={clsx(
+        "summary-data-item",
+        columnNum && columnNum,
+        elType === "top-summary-list" ? "top-summary-list" : ""
+      )}
     >
       <Card>
         <CardActionArea
@@ -98,7 +103,10 @@ const MediaCard: FC<Props> = props => {
           )}
         >
           <CardMedia
-            className={setting && setting.topSlider ? "sliderImg" : "media"}
+            className={clsx(
+              setting && setting.topSlider ? "sliderImg" : "media",
+              elType === "top-summary-list" ? "top-summary-img" : ""
+            )}
             image={summaryThumbnail}
             title="Contemplative Reptile"
           />
