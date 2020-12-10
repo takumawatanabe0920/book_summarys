@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC, useContext } from "react"
 import { Link } from "react-router-dom"
-import { Input, Alert, Trimming } from "../../../components"
+import { Input, Trimming } from "../../../components"
 import {
   RegisterUser,
   ResultResponse,
@@ -181,7 +181,6 @@ const RegisterForm: FC<Props> = props => {
 
   useEffect(() => {
     const loadData = async () => {
-      closeAlert()
       try {
         if (isEdit) {
           const { displayName, photoURL } = userData
@@ -197,11 +196,6 @@ const RegisterForm: FC<Props> = props => {
 
   return (
     <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
       <form className="form-table">
         <Input
           title="名前"

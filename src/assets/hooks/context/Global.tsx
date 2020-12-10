@@ -8,6 +8,12 @@ type ContextState = {
   setCurrentUser: React.Dispatch<React.SetStateAction<Partial<CurrentUser>>>
   notificationCount: number
   setNotificationCount: React.Dispatch<React.SetStateAction<number>>
+  alertState: boolean
+  setAlertState: React.Dispatch<React.SetStateAction<boolean>>
+  alertStatus: string
+  setAlertStatus: React.Dispatch<React.SetStateAction<string>>
+  alertText: string
+  setAlertText: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const GlobalContext = React.createContext({} as ContextState)
@@ -15,6 +21,9 @@ export const GlobalContext = React.createContext({} as ContextState)
 export const GlobalProvider: FC<any> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [notificationCount, setNotificationCount] = useState<number>(0)
+  const [alertState, setAlertState] = useState<boolean>(false)
+  const [alertStatus, setAlertStatus] = useState<string>("")
+  const [alertText, setAlertText] = useState<string>("")
 
   return (
     <GlobalContext.Provider
@@ -22,7 +31,13 @@ export const GlobalProvider: FC<any> = ({ children }) => {
         currentUser,
         setCurrentUser,
         notificationCount,
-        setNotificationCount
+        setNotificationCount,
+        alertState,
+        setAlertState,
+        alertStatus,
+        setAlertStatus,
+        alertText,
+        setAlertText
       }}
     >
       {children}

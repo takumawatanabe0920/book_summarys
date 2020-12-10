@@ -7,7 +7,6 @@ import {
   updateFavoriteSummaries,
   createNotification
 } from "../../../firebase/functions"
-import { Alert } from "../../../components"
 import useAlertState from "../../../assets/hooks/useAlertState"
 import { FavoriteIcon } from "../../../utils/material"
 import { GlobalContext } from "../../../assets/hooks/context/Global"
@@ -22,7 +21,6 @@ const FavoliteButton: FC<Props> = props => {
   const [currentUserfavorites, setCurrentUserFavorites] = useState<ResFavorite>(
     {}
   )
-  const [favorites, setFavorites] = useState<ResFavorite>({})
   const [favoritesNum, setFavoritesNum] = useState(0)
   const [
     isShowAlert,
@@ -102,11 +100,6 @@ const FavoliteButton: FC<Props> = props => {
 
   return (
     <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
       <div className="favorite-button" onClick={handleFavorite}>
         {Object.keys(currentUserfavorites).length > 0 ? (
           <FavoriteIcon className="favorite-button isClick" />

@@ -4,7 +4,6 @@ import useReactRouter from "use-react-router"
 import clsx from "clsx"
 import { useParams } from "react-router-dom"
 import { ResUser, ResultResponse, Login } from "../../../../types"
-import { Alert } from "../../.."
 import { logout } from "../../../../firebase/functions"
 import useAlertState from "../../../../assets/hooks/useAlertState"
 import { GlobalContext } from "../../../../assets/hooks/context/Global"
@@ -51,7 +50,6 @@ const MypageSidebar: FC<Props> = props => {
   }
 
   useEffect(() => {
-    closeAlert()
     setLoading(true)
   }, [])
 
@@ -59,11 +57,6 @@ const MypageSidebar: FC<Props> = props => {
     <>
       {loading && (
         <>
-          <Alert
-            is_show_alert={isShowAlert}
-            alert_status={alertStatus}
-            alert_text={alertText}
-          />
           <div className="_side-block">
             <Link
               to={`/mypage/${user.id ? user.id : url.id}/home`}

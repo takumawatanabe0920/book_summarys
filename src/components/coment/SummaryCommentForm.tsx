@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC, useContext } from "react"
 import useReactRouter from "use-react-router"
-import { Textarea, Alert } from "./../../components"
+import { Textarea } from "./../../components"
 import {
   SummaryComment,
   ResSummaryComment,
@@ -97,17 +97,10 @@ const SummaryCommentForm: FC<Props> = props => {
     }
   }
 
-  useEffect(() => {
-    closeAlert()
-  }, [])
+  useEffect(() => {}, [])
 
   return (
     <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
       <div className="comment-form">
         <h3>投稿する</h3>
         <form className="form-table">

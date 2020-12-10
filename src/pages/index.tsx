@@ -23,7 +23,8 @@ import {
   UserDetailPage,
   NotificationPage,
   SummaryPage,
-  TopHeader
+  TopHeader,
+  Alert
 } from "../components"
 // コンポーネント読み込み
 
@@ -36,6 +37,7 @@ ReactDOM.render(
         <div className="wrapper pt0">
           <div className="main-contents">
             <div className="lg-container">
+              <Alert />
               <Switch>
                 <Route exact path="/" component={HomePage} />
                 <PrivateRoute

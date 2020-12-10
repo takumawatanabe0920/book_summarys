@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FC, useContext } from "react"
 import { useForm } from "react-hook-form"
 import useReactRouter from "use-react-router"
-import { Input, Textarea, Select, Alert } from "../../../components"
+import { Input, Textarea, Select } from "../../../components"
 import {
   SummaryBook,
   ResCategory,
@@ -221,7 +221,7 @@ const SummaryForm: FC<Props> = props => {
           )
         }
       }
-      let resSummary: ResultResponse<SummaryBook>
+      let resSummary: ResultResponse<ResSummaryBook>
       if (isEdit) {
         resSummary = await updateSummary(values)
       } else {
@@ -233,7 +233,7 @@ const SummaryForm: FC<Props> = props => {
           isEdit ? "記事が編集されました。" : "記事が作成されました。"
         )
         setValues({})
-        //history.push(`/summary/${resSummary.id}`)
+        history.push(`/summary/${resSummary.data.id}`)
       } else {
         history.push("/")
       }
@@ -381,11 +381,6 @@ const SummaryForm: FC<Props> = props => {
     <>
       {loading && (
         <>
-          <Alert
-            is_show_alert={isShowAlert}
-            alert_status={alertStatus}
-            alert_text={alertText}
-          />
           {isPreview && preview()}
           <form className="form-table">
             {!isPreview && editForm()}

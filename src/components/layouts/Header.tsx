@@ -62,8 +62,6 @@ const Header = () => {
           currentUser.photoURL
         )
         setUserIcon(resUserIcon)
-        console.log(notificationCount)
-        console.log(resNotificationCount)
         setNotificationCount(resNotificationCount)
       } catch (e) {}
     }

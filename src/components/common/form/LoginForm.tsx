@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react"
 import { Link } from "react-router-dom"
-import { Input, Alert } from "../../../components"
+import { Input } from "../../../components"
 import { Login, ResultResponse, ResUser as CurrentUser } from "../../../types"
 import { login, getCurrentUser } from "../../../firebase/functions"
 import useAlertState from "../../../assets/hooks/useAlertState"
@@ -85,11 +85,6 @@ const LoginForm = () => {
 
   return (
     <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
       <form className="form-table">
         <Input
           title="メールアドレス"
