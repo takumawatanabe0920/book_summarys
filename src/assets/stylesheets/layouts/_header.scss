@@ -1,6 +1,6 @@
 .l-header {
   &__top {
-    padding: 16px 20px;
+    padding: 1rem 1.5rem 1rem 1.25rem;
     font-weight: bold;
     letter-spacing: 1px;
     display: flex;
@@ -11,7 +11,7 @@
     @include sp() {
       @include fz_sm();
       text-align: left;
-      padding-left: 16px;
+      padding: 12px 10px;
     }
 
     &.m-center {
@@ -27,6 +27,7 @@
     color: #00a4bb;
     font-weight: bold;
     padding: 0.25rem 0.75rem;
+    margin-right: 1rem;
   }
 
   &__login-ttl {
@@ -63,20 +64,82 @@
   &__logo {
     mix-blend-mode: multiply;
     width: 12rem;
+
+    @include sp {
+      width: 8rem;
+    }
   }
 
   &__sub-logo {
     width: 1.5rem;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include more-sp {
+      margin-left: 1.85rem;
+    }
+
+    @include sp {
+      margin-right: 1.25rem;
+      font-size: 0.7rem;
+    }
+
+    @include sp_5s {
+      font-size: 0.65rem;
+      margin-right: 0.5rem;
+    }
 
     img {
       width: 100%;
     }
 
     &._userIcon {
-      width: 2rem;
+      display: flex;
+      align-items: center;
+      width: 3rem;
+      margin-right: 0;
+
+      ._icon {
+        width: 2rem;
+        margin-right: 0.25rem;
+      }
+
+      ._logo {
+        width: 0.65rem;
+      }
       img {
         border-radius: 50%;
+      }
+    }
+
+    ._pull-down {
+      display: block;
+      position: absolute;
+      top: 3.5rem;
+      right: 0;
+      z-index: 1000;
+      width: 200px;
+      background-color: #fff;
+      padding: 4px 0;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+      top: 40px;
+      ._item {
+        display: block;
+        font-weight: normal;
+        font-size: 0.9rem;
+        padding: 12px 16px;
+        color: #555;
+      }
+
+      .hr {
+        width: 100%;
+        height: 1px;
+        margin: 4px 0;
+        background-color: #ddd;
       }
     }
 
@@ -100,11 +163,6 @@
   &__right-box {
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem 0 0;
-
-    a {
-      margin-left: 1.85rem;
-    }
   }
 
   &__message {

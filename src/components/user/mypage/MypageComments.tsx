@@ -6,7 +6,7 @@ import {
   ResultResponseList,
   ResultResponse
 } from "../../../types"
-import { MypageSidebar, SummaryStackItem } from "../.."
+import { MypageSidebar, MypageSummaryStackItem } from "../.."
 import { getIdUser, getMyComments } from "../../../firebase/functions"
 
 const MypageComments = () => {
@@ -56,7 +56,7 @@ const MypageComments = () => {
                       summaryComments.map(
                         (summaryComment: ResSummaryComment) => {
                           return (
-                            <SummaryStackItem
+                            <MypageSummaryStackItem
                               data={summaryComment.summary_id}
                             />
                           )

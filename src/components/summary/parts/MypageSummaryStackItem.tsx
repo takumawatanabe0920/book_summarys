@@ -1,25 +1,21 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, useEffect, FC, useContext } from "react"
 import { Link } from "react-router-dom"
-import {
-  ResUser as CurrentUser,
-  ResSummaryBook,
-  ResultResponse
-} from "../../../types"
+import { ResSummaryBook, ResultResponse } from "../../../types"
 import clsx from "clsx"
-import { getCurrentUser, getImage } from "../../../firebase/functions"
+import { getImage } from "../../../firebase/functions"
 import { formatUpdateDate } from "../../../utils/function"
-const user: CurrentUser = getCurrentUser()
+import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 type Props = {
   data: ResSummaryBook
   time?: number
 }
 
-const MypageSummaries: FC<Props> = props => {
+const MypageSummaryStackItem: FC<Props> = props => {
   const [summaryThumbnail, setSummaryThumbnail] = useState<string>("")
   const { data, time } = props
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [loading, setLoading] = useState<boolean>(false)
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
 
   const formatPublishingStatus = (_status: string) => {
     switch (_status) {
@@ -114,4 +110,4 @@ const MypageSummaries: FC<Props> = props => {
   )
 }
 
-export default MypageSummaries
+export default MypageSummaryStackItem

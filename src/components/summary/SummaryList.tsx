@@ -1,19 +1,22 @@
 import React, { FC } from "react"
+import clsx from "clsx"
 import { SummaryItem } from "./../../components"
 import { ResSummaryBook } from "./../../types"
 
 type Props = {
   dataList: ResSummaryBook[]
-  columnNum?: string
+  articleType?: string
 }
 
 const SummaryList: FC<Props> = props => {
-  const { dataList, columnNum } = props
-  //console.log(dataList)
+  const { dataList, articleType } = props
+
   return (
-    <div className="data-list">
+    <div className={clsx("data-list", `${articleType && "_stack-list"}`)}>
       {dataList.map((data: ResSummaryBook) => {
-        return <SummaryItem key={data.id} data={data} columnNum={columnNum} />
+        return (
+          <SummaryItem key={data.id} data={data} articleType={articleType} />
+        )
       })}
     </div>
   )

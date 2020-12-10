@@ -1,18 +1,13 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, useEffect, FC, useContext } from "react"
 import { Link, useLocation } from "react-router-dom"
 import useReactRouter from "use-react-router"
 import clsx from "clsx"
 import { useParams } from "react-router-dom"
-import {
-  ResUser,
-  ResUser as CurrentUser,
-  ResultResponse,
-  Login
-} from "../../../../types"
+import { ResUser, ResultResponse, Login } from "../../../../types"
 import { Alert } from "../../.."
-import { logout, getCurrentUser } from "../../../../firebase/functions"
+import { logout } from "../../../../firebase/functions"
 import useAlertState from "../../../../assets/hooks/useAlertState"
-const currentUser: CurrentUser = getCurrentUser()
+import { GlobalContext } from "../../../../assets/hooks/context/Global"
 
 type Props = {
   user: ResUser
@@ -22,8 +17,8 @@ const MypageSidebar: FC<Props> = props => {
   const url: { id: string } = useParams()
   const { user } = props
   const { history } = useReactRouter()
-  const [currentTab, setCurrentTab] = useState<string>()
   const [loading, setLoading] = useState<boolean>(false)
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const [isMyAccount, setIsMyAccount] = useState<boolean>(() => {
     return url.id === currentUser.id
   })
@@ -40,6 +35,7 @@ const MypageSidebar: FC<Props> = props => {
     if (window.confirm("ログアウトしますか？")) {
       const resLogout: ResultResponse<Login> = await logout()
       if (resLogout && resLogout.status === 200) {
+        setCurrentUser(null)
         await throwAlert("success", "ログアウトしました。")
         history.replace(`/`)
       } else {

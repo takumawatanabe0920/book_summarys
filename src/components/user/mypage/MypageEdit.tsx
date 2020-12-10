@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import useReactRouter from "use-react-router"
 import { useParams } from "react-router-dom"
-import { ResUser as CurrentUser } from "../../../types"
 import { MypageSidebar, RegisterForm } from "../.."
-import { getCurrentUser } from "../../../firebase/functions"
-const user: CurrentUser = getCurrentUser()
+import { GlobalContext } from "./../../../assets/hooks/context/Global"
 
 const MypageEdit = () => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [loading, setLoading] = useState<boolean>(false)
   const { history } = useReactRouter()
   const url: { id: string } = useParams()
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
 
   useEffect(() => {
     const loadData = async () => {

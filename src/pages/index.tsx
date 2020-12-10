@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import { Provider } from "../assets/hooks/context/Global"
+import { GlobalProvider } from "../assets/hooks/context/Global"
 import "../assets/stylesheets/main.scss"
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom"
 import {
@@ -14,11 +14,11 @@ import {
   SummaryShowPage,
   SignUpPage,
   SignInPage,
-  MypagePage,
   MypageFavorites,
   MypageSummaries,
   MypageBrowsings,
   MypageComments,
+  MypageHome,
   MypageEdit,
   UserDetailPage,
   NotificationPage,
@@ -29,7 +29,7 @@ import {
 
 ReactDOM.render(
   <div>
-    <Provider>
+    <GlobalProvider>
       <Router>
         <TopHeader />
         <Header />
@@ -51,7 +51,7 @@ ReactDOM.render(
                 <PrivateRoute
                   exact
                   path="/mypage/:id/home"
-                  component={MypagePage}
+                  component={MypageHome}
                 />
                 <PrivateRoute
                   exact
@@ -96,7 +96,7 @@ ReactDOM.render(
           <Footer />
         </div>
       </Router>
-    </Provider>
+    </GlobalProvider>
   </div>,
   document.getElementById("root")
 )

@@ -1,11 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Route, Redirect, RouteProps } from "react-router-dom"
-import { ResUser as CurrentUser } from "../../../types"
-import { getCurrentUser } from "../../../firebase/functions"
-const user: CurrentUser = getCurrentUser()
+import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 const GuestRoute = (props: RouteProps) => {
-  const [isAuth, setIsAuth] = useState(!!user)
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
+  const [isAuth, setIsAuth] = useState(!!currentUser)
 
   return isAuth ? <Redirect to="/" /> : <Route {...props} />
 }

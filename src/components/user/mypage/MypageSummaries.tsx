@@ -1,31 +1,29 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { useParams } from "react-router-dom"
 import {
   ResultResponseList,
   ResultResponse,
   ResSummaryBook,
-  ResUser,
-  ResUser as CurrentUser
+  ResUser
 } from "../../../types"
-import { MypageSidebar, SummaryStackItem } from "../.."
+import { MypageSidebar, MypageSummaryStackItem } from "../.."
 import {
   getMySummaries,
   getMyPublicSummaries,
-  getIdUser,
-  getCurrentUser
+  getIdUser
 } from "../../../firebase/functions"
-const resCurrentUser: CurrentUser = getCurrentUser()
+import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 const MypageSummaries = () => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(resCurrentUser)
   const [user, setUser] = useState<ResUser>({})
   const [summaries, setSummaries] = useState<ResSummaryBook[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const url: { id: string } = useParams()
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
 
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true)
+      console.log(currentUser)
       try {
         const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
         let resMySummariesDataList: ResultResponseList<ResSummaryBook>
@@ -38,7 +36,6 @@ const MypageSummaries = () => {
             url.id,
             "public"
           )
-          console.log(resMySummariesDataList)
         }
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)
@@ -48,8 +45,8 @@ const MypageSummaries = () => {
         }
       } catch (e) {}
     }
-
     loadData()
+    setLoading(true)
   }, [])
 
   return (
@@ -61,12 +58,12 @@ const MypageSummaries = () => {
               <div className="user-mypage">
                 <h1 className="main-title blue-main-title">MY PAGE</h1>
                 <div className="mypage-content">
-                  <MypageSidebar user={user} />
+                  <MypageSidebar user={currentUser} />
                   <div className="_mypage">
                     <h2 className="sub-ttl">投稿記事一覧</h2>
                     {summaries &&
                       summaries.map((summaryBook: ResSummaryBook) => {
-                        return <SummaryStackItem data={summaryBook} />
+                        return <MypageSummaryStackItem data={summaryBook} />
                       })}
                   </div>
                 </div>

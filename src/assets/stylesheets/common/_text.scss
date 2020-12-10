@@ -6,7 +6,8 @@
 
   @include sp {
     font-size: 1.35rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0 0.5rem 1rem;
+    margin-bottom: 1.5rem;
   }
 
   &.blue-main-title {

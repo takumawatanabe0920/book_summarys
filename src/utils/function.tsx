@@ -27,3 +27,28 @@ export const formatUpdateDate = (_datetime: number) => {
     }
   }
 }
+
+export const formatTagColor = (_categoryName: string): string => {
+  switch (_categoryName) {
+    case "スポーツ":
+      return "sport-tag"
+    case "自然界":
+      return "nature-tag"
+    case "小説":
+      return "novel-tag"
+    case "ビジネス":
+      return "business-tag"
+    case "雑誌":
+      return "magazin-tag"
+    default:
+      return "all-tag"
+  }
+}
+
+export const createUniqueStr = () => {
+  const number = 1000
+  return (
+    new Date().getTime().toString(16) +
+    Math.floor(number * Math.random()).toString(16)
+  )
+}

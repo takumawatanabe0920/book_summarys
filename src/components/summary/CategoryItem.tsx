@@ -10,7 +10,6 @@ type Props = {
 
 const CategoryItem: FC<Props> = props => {
   const [categories, setCategories] = useState<ResCategory[]>([])
-  console.log(props.data)
   const { data, fetchData } = props
   const { id, name, slug } = data
 

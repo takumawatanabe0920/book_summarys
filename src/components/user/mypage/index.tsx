@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { ResUser, ResultResponse } from "../../../types"
 import { useParams } from "react-router-dom"
 import { MypageSidebar } from "../.."

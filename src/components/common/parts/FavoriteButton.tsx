@@ -1,22 +1,16 @@
-import React, { useEffect, useState, FC } from "react"
-import {
-  ResFavorite,
-  ResUser as CurrentUser,
-  ResultResponseList,
-  ResultResponse
-} from "../../../types"
+import React, { useEffect, useState, FC, useContext } from "react"
+import { ResFavorite, ResultResponseList, ResultResponse } from "../../../types"
 import {
   getFavorite,
   createFavorite,
   deleteFavorite,
-  getCurrentUser,
   updateFavoriteSummaries,
   createNotification
 } from "../../../firebase/functions"
 import { Alert } from "../../../components"
 import useAlertState from "../../../assets/hooks/useAlertState"
 import { FavoriteIcon } from "../../../utils/material"
-const user: CurrentUser = getCurrentUser()
+import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 type Props = {
   summary_id: string
@@ -29,7 +23,6 @@ const FavoliteButton: FC<Props> = props => {
     {}
   )
   const [favorites, setFavorites] = useState<ResFavorite>({})
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [favoritesNum, setFavoritesNum] = useState(0)
   const [
     isShowAlert,
@@ -38,6 +31,7 @@ const FavoliteButton: FC<Props> = props => {
     throwAlert,
     closeAlert
   ] = useAlertState(false)
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
 
   const handleFavorite = async (event: React.MouseEvent<HTMLElement>) => {
     event.persist()

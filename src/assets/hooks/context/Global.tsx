@@ -1,36 +1,31 @@
-import * as React from "react"
+import React, { useState, FC } from "react"
+import { getCurrentUser } from "../../../firebase/functions"
+import { ResUser as CurrentUser } from "./../../../types"
+const user: CurrentUser = getCurrentUser()
 
-import { IAction, initialState, reducer, State } from "./reducer"
+type ContextState = {
+  currentUser: CurrentUser
+  setCurrentUser: React.Dispatch<React.SetStateAction<Partial<CurrentUser>>>
+  notificationCount: number
+  setNotificationCount: React.Dispatch<React.SetStateAction<number>>
+}
 
-const { createContext, useContext, useReducer } = React
+export const GlobalContext = React.createContext({} as ContextState)
 
-// グローバルステイトの初期値を引数として取り、state用のcontextを生成
-const stateContext = createContext(initialState)
-// IAction型の引数を取る空の関数を初期値とし、dispatch用のcontextを生成
-const dispatchContext = createContext((() => true) as React.Dispatch<IAction>)
+export const GlobalProvider: FC<any> = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
+  const [notificationCount, setNotificationCount] = useState<number>(0)
 
-export const Provider: React.FunctionComponent = props => {
-  const [state, dispatch] = useReducer(reducer, initialState)
   return (
-    <dispatchContext.Provider value={dispatch}>
-      {" "}
-      {/* dispatch用contextにdispatchを設置 */}
-      <stateContext.Provider value={state}>
-        {" "}
-        {/* state用contextにstateを設置 */}
-        {props.children}
-      </stateContext.Provider>
-    </dispatchContext.Provider>
+    <GlobalContext.Provider
+      value={{
+        currentUser,
+        setCurrentUser,
+        notificationCount,
+        setNotificationCount
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
   )
-}
-
-// dispatch関数を利用できるようにする
-export const useDispatch = () => {
-  return useContext(dispatchContext)
-}
-
-// グローバルステイトを利用できるようにする
-export const useGlobalState = <K extends keyof State>(property: K) => {
-  const state = useContext(stateContext)
-  return state[property]
 }
