@@ -59,6 +59,7 @@ export const getSummaryComments = (
       return { status: 200, data: resData }
     })
     .catch(function(error) {
+      console.log(error)
       return { status: 400, error }
     })
 
@@ -89,6 +90,7 @@ export const getMyComments = (
       return { status: 200, data: resData }
     })
     .catch(function(error) {
+      console.log(error)
       return { status: 400, error }
     })
 

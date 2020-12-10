@@ -6,7 +6,7 @@ import {
   ResultResponse,
   ResUser
 } from "../../../types"
-import { MypageSidebar, SummaryStackItem } from "../.."
+import { MypageSidebar, MypageSummaryStackItem } from "../.."
 import { getMyFavorites, getIdUser } from "../../../firebase/functions"
 
 const MypageFavorites = () => {
@@ -27,7 +27,6 @@ const MypageFavorites = () => {
           setUser(resUser.data)
         }
         if (resMyFavoritesDataList && resMyFavoritesDataList.status === 200) {
-          console.log(resMyFavoritesDataList.data)
           setFavorites(resMyFavoritesDataList.data)
         }
       } catch (e) {}
@@ -51,7 +50,9 @@ const MypageFavorites = () => {
                     {favorites &&
                       favorites.length > 0 &&
                       favorites.map((favorite: ResFavorite) => {
-                        return <SummaryStackItem data={favorite.summary_id} />
+                        return (
+                          <MypageSummaryStackItem data={favorite.summary_id} />
+                        )
                       })}
                   </div>
                 </div>

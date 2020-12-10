@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { useParams } from "react-router-dom"
-import { ResUser as CurrentUser } from "./../../types"
+import { GlobalContext } from "./../../assets/hooks/context/Global"
 
 const UserDetailPage = () => {
-  const [User, setUser] = useState<CurrentUser>()
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const url: { id: string } = useParams()
 
   return (

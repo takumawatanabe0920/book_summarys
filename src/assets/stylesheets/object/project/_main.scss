@@ -1,12 +1,13 @@
 .notification-list {
-  width: 480px;
+  max-width: 480px;
+  width: 100%;
   max-height: 700px;
   overflow: auto;
   margin: auto;
   border: 1px solid #e3e3e3;
 
   > ._txt {
-    padding: 0 1rem 1rem;
+    padding: 1rem;
   }
 
   .data-item {
@@ -16,8 +17,14 @@
     display: flex;
     justify-content: space-between;
 
+    @include sp {
+      padding: 1rem 0.75rem 0.625rem;
+    }
+
     &:first-of-type {
-      padding: 1.5rem 1.25rem 0.625rem;
+      @include more-sp {
+        padding: 1.5rem 1.25rem 0.625rem;
+      }
     }
 
     &:last-of-type {
@@ -42,9 +49,16 @@
       ._notification-txt {
         font-size: 0.8rem;
 
+        @include sp {
+          font-size: 0.7rem;
+        }
+
         &.bold {
           font-size: 1.125rem;
           font-weight: bold;
+          @include sp {
+            font-size: 0.9rem;
+          }
         }
       }
 
@@ -74,10 +88,21 @@
   display: flex;
   align-items: flex-end;
 
+  .favorite-button {
+    font-size: 1.25rem;
+    @include sp {
+      font-size: 1.1rem;
+    }
+  }
+
   .favoriteNum {
     color: #e24949;
-    font-size: 1rem;
+    font-size: 0.9rem;
     line-height: 1.4;
+
+    @include sp {
+      font-size: 0.8rem;
+    }
   }
 }
 
@@ -85,6 +110,10 @@
   color: #dadada;
   font-size: 1.125rem;
   margin-right: 0.2rem;
+
+  @include sp {
+    font-size: 1.1rem;
+  }
 
   &.isClick {
     color: #e24949;
@@ -100,12 +129,20 @@
 
   .tag {
     margin-right: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    line-height: 1;
+    padding: 0 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    line-height: 0;
     border-radius: 0.25rem;
     color: #666;
     font-weight: 500;
     background-color: $tag-bg-color;
+    @include sp {
+      font-size: 0.8rem;
+      height: 1.75rem;
+    }
   }
 }
 
@@ -129,32 +166,50 @@
 
 .slick-slider {
   margin-bottom: 3rem;
+  .slick-list {
+    @include more-sp {
+      height: 380px;
+    }
+    @include sp {
+      padding-bottom: 1.5rem;
+    }
+  }
 }
 
 .summary-data-item {
-  height: 360px;
-  width: 48%;
-  margin: 0 4% 1.5rem 0;
+  display: block;
+  height: 340px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
+
+  @include sp {
+    height: 300px;
+  }
+
+  &.top-summary-list {
+    @include more-sp {
+      width: 100%;
+      display: block;
+    }
+    @include sp {
+      margin: 0 auto;
+      height: 100%;
+    }
+  }
 
   &:nth-of-type(2n) {
     margin-right: 0;
   }
 
-  &.three-column {
-    width: 32%;
-    margin-right: 1.85%;
-
-    &:nth-of-type(3n) {
-      margin-right: 0;
-    }
-  }
-
   ._summary-ttl {
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.95rem;
     letter-spacing: 2.4px;
-    margin-bottom: 0.5;
+    @include tablet {
+      font-size: 0.9rem;
+    }
+    @include sp {
+      font-size: 0.85rem;
+    }
   }
 
   ._summary-txt {
@@ -162,10 +217,22 @@
     overflow: hidden;
     font-size: 0.8rem;
     padding-top: 0.25rem;
+    @include tablet {
+      font-size: 0.75rem;
+      height: 52px;
+    }
+    @include sp {
+      font-size: 0.65rem;
+      height: 44px;
+    }
   }
 
   .MuiCardContent-root {
-    padding: 1.5rem 1rem 0rem;
+    padding: 1.25rem 1rem 0rem;
+
+    @include sp {
+      padding: 1rem 1rem 0rem;
+    }
   }
 
   .summary-bottom {
@@ -174,70 +241,6 @@
 
   .user-name {
     font-size: 0.8rem;
-  }
-
-  .categories {
-    margin-bottom: 1rem;
-
-    .main-tag {
-      color: #fff;
-      font-weight: bold;
-      font-size: 0.8rem;
-      padding: 0.2rem 0.7rem 0.15rem 0.75rem;
-      line-height: 1;
-      border-radius: 0.2rem;
-      border-radius: 10px;
-
-      &.sport-tag {
-        border: 2px solid #2f66cc;
-        color: #2f66cc;
-      }
-
-      &.nature-tag {
-        border: 2px solid #61bd4f;
-        color: #61bd4f;
-      }
-
-      &.novel-tag {
-        border: 2px solid #00c2e0;
-        color: #00c2e0;
-      }
-
-      &.business-tag {
-        border: 2px solid #eb5a46;
-        color: #eb5a46;
-      }
-
-      &.magazin-tag {
-        border: 2px solid #ff9f1a;
-        color: #ff9f1a;
-      }
-
-      &.all-tag {
-        border: 2px solid #f2d600;
-        color: #f2d600;
-      }
-
-      &.sub-tag {
-        border: 2px solid #505050;
-        color: #444343;
-        margin-left: 0.35rem;
-      }
-
-      &.recommned-tag {
-        background: #ff9f1a;
-        color: #fff;
-        margin-left: 0.35rem;
-        padding: 0.37rem 0.7rem 0.25rem;
-      }
-
-      &.new-tag {
-        background: #eb5a46;
-        color: #fff;
-        margin-left: 0.35rem;
-        padding: 0.37rem 0.7rem 0.25rem;
-      }
-    }
   }
 
   .MuiCard-root {
@@ -260,6 +263,13 @@
 
       &.sliderImg {
         height: 280px;
+
+        &.top-summary-img {
+          height: 100%;
+          @include sp {
+            height: 360px;
+          }
+        }
       }
     }
 
@@ -294,26 +304,126 @@
   }
 }
 
+.categories {
+  margin-bottom: 1rem;
+
+  @include sp {
+    margin-bottom: 0.75rem;
+  }
+
+  .main-tag {
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.7rem 0.15rem 0.75rem;
+    line-height: 1;
+    border-radius: 0.2rem;
+    border-radius: 10px;
+
+    @include sp {
+      font-size: 0.7rem;
+    }
+
+    &.sport-tag {
+      border: 2px solid #2f66cc;
+      color: #2f66cc;
+    }
+
+    &.nature-tag {
+      border: 2px solid #61bd4f;
+      color: #61bd4f;
+    }
+
+    &.novel-tag {
+      border: 2px solid #00c2e0;
+      color: #00c2e0;
+    }
+
+    &.business-tag {
+      border: 2px solid #eb5a46;
+      color: #eb5a46;
+    }
+
+    &.magazin-tag {
+      border: 2px solid #ff9f1a;
+      color: #ff9f1a;
+    }
+
+    &.all-tag {
+      border: 2px solid #f2d600;
+      color: #f2d600;
+    }
+
+    &.sub-tag {
+      border: 2px solid #505050;
+      color: #444343;
+      margin-left: 0.35rem;
+    }
+
+    &.recommned-tag {
+      background: #ff9f1a;
+      color: #fff;
+      margin-left: 0.35rem;
+      padding: 0.37rem 0.7rem 0.25rem;
+
+      @include sp {
+        padding: 0.3rem 0.5rem 0.2rem;
+      }
+    }
+
+    &.new-tag {
+      background: #eb5a46;
+      color: #fff;
+      margin-left: 0.35rem;
+      padding: 0.37rem 0.7rem 0.25rem;
+
+      @include sp {
+        padding: 0.3rem 0.5rem 0.2rem;
+      }
+    }
+  }
+}
+
 .summary-category {
   margin-bottom: 3rem;
 
   ._ttl {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-size: 1.35rem;
     letter-spacing: 4px;
+
+    @include sp {
+      font-size: 1.25rem;
+    }
   }
 
   ._category-body {
     display: flex;
-    justify-content: space-between;
-    width: 880px;
+    max-width: 880px;
+    width: 100%;
     margin: auto;
+    @include more-sp {
+      justify-content: space-between;
+    }
+    @include sp {
+      flex-wrap: wrap;
+    }
 
     ._data {
       width: 160px;
       height: 150px;
       position: relative;
+
+      @include sp {
+        width: calc(94% / 3);
+        height: 0;
+        padding-top: calc(94% / 3);
+        position: relative;
+        text-align: center;
+        margin-left: 1.5%;
+        margin: 1.5% 0 0 1.5%;
+      }
 
       &:before {
         /* 透過した黒を上から重ねるイメージ */
@@ -363,17 +473,29 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        @include sp {
+          font-size: 0.85rem;
+        }
+        @include sp_5s {
+          font-size: 0.75rem;
+        }
       }
     }
   }
 }
 
 .summary-contents {
-  padding-top: 3rem;
+  padding: 3rem 0;
+  @include sp {
+    padding: 2rem 0 3rem;
+  }
 }
 
 .notification-content {
   padding: 4rem 0 5rem;
+  @include sp {
+    padding: 2.5rem 0 3rem;
+  }
 }
 
 .not-find {

@@ -1,21 +1,27 @@
-import React, { FC, useState } from "react"
-import { ResSummaryBook, ResUser as CurrentUser } from "../../types"
-import { getCurrentUser } from "../../firebase/functions"
+import React, { FC } from "react"
+import { ResSummaryBook } from "../../types"
 import { MediaCard } from "../../utils/material"
-import { settings } from "cluster"
-const user: CurrentUser = getCurrentUser()
+import { SummaryStackItem } from "../"
 
 type Props = {
   data: ResSummaryBook
   setting?: any
-  columnNum?: string
+  elType?: string
+  articleType?: string
 }
 
 const SummaryItem: FC<Props> = props => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
-  const { data, setting, columnNum } = props
+  const { data, setting, elType, articleType } = props
 
-  return <MediaCard data={data} setting={setting} columnNum={columnNum} />
+  return (
+    <>
+      {articleType === "stack" ? (
+        <SummaryStackItem data={data} />
+      ) : (
+        <MediaCard data={data} setting={setting} elType={elType} />
+      )}
+    </>
+  )
 }
 
 export default SummaryItem

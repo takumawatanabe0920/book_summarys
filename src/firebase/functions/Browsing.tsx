@@ -22,7 +22,6 @@ export const createBrowsing = (values: Browsing) => {
       return { status: 200, data }
     })
     .catch(error => {
-      console.log(error)
       return { status: 400 }
     })
 

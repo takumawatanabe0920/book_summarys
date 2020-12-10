@@ -1,29 +1,35 @@
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useContext } from "react"
+import { GlobalContext } from "./../../assets/hooks/context/Global"
 
 const useAlertState = (
   _isOpen: boolean
 ): [boolean, string, string, any, any] => {
-  const [state, setState] = useState(_isOpen)
-  const [status, setStatus] = useState("")
-  const [text, setText] = useState("")
+  const {
+    alertState,
+    setAlertState,
+    alertStatus,
+    setAlertStatus,
+    alertText,
+    setAlertText
+  } = useContext(GlobalContext)
 
   const throwAlert = useCallback(
     (_status: string, _text: string): void => {
-      setState(true)
-      setText(_text)
-      setStatus(_status)
+      setAlertState(true)
+      setAlertText(_text)
+      setAlertStatus(_status)
       setTimeout(() => {
-        setState(false)
+        setAlertState(false)
       }, 3500)
     },
-    [setState]
+    [setAlertState]
   )
 
   const setFalse = useCallback((): void => {
-    setState(false)
-  }, [setState])
+    setAlertState(false)
+  }, [setAlertState])
 
-  return [state, status, text, throwAlert, setFalse]
+  return [alertState, alertStatus, alertText, throwAlert, setFalse]
 }
 
 export default useAlertState

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { ResSummaryBook, ResultResponseList } from "../../types"
 import clsx from "clsx"
 import { getRankingSummaries } from "../../firebase/functions"
+import useReactRouter from "use-react-router"
 
 const Sidebar = () => {
   const [allRankingSummaries, setAllRankingSummaries] = useState<
@@ -14,6 +15,11 @@ const Sidebar = () => {
   const [thisMonthSummaries, setThisMonthSummaries] = useState<
     ResSummaryBook[]
   >([])
+  const { history } = useReactRouter()
+
+  const changeUrl = (_data: any) => {
+    history.push(`/summary/${_data.id}`)
+  }
 
   useEffect(() => {
     const loadData = async () => {
@@ -43,7 +49,7 @@ const Sidebar = () => {
             return (
               <dl>
                 <dt>
-                  <span className={clsx("ranking", `ranking${_index + 1}`)}>
+                  <span className={clsx("ranking", `ranking-week`)}>
                     {_index + 1}
                   </span>
                 </dt>
@@ -67,31 +73,31 @@ const Sidebar = () => {
             return (
               <dl>
                 <dt>
-                  <span className={clsx("ranking", `ranking${_index + 1}`)}>
+                  <span className={clsx("ranking", `ranking-month`)}>
                     {_index + 1}
                   </span>
                 </dt>
                 <dd>
-                  <Link
-                    to={`/summary/${summary.id}`}
+                  <div
+                    onClick={() => changeUrl(summary)}
                     className="article-item"
                     key={summary.id}
                   >
                     {summary.title}
-                  </Link>
+                  </div>
                 </dd>
               </dl>
             )
           })}
       </div>
       <h3 className="border-blue">総合ランキング</h3>
-      <div className="article-box">
+      <div className="article-box mbt0">
         {allRankingSummaries &&
           allRankingSummaries.map((summary: ResSummaryBook, _index: number) => {
             return (
               <dl>
                 <dt>
-                  <span className={clsx("ranking", `ranking${_index + 1}`)}>
+                  <span className={clsx("ranking", `ranking-total`)}>
                     {_index + 1}
                   </span>
                 </dt>

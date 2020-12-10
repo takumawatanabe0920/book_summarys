@@ -1,12 +1,11 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, useEffect, FC, useContext } from "react"
 import { useForm } from "react-hook-form"
 import useReactRouter from "use-react-router"
-import { Input, Textarea, Select, Alert } from "../../../components"
+import { Input, Textarea, Select } from "../../../components"
 import {
   SummaryBook,
   ResCategory,
   ResSubCategory,
-  ResUser as CurrentUser,
   ResultResponse,
   ResultResponseList,
   ResFavorite,
@@ -17,13 +16,12 @@ import {
   categoryLinkingSubCategory,
   createSummary,
   updateSummary,
-  getCurrentUser,
   uploadImage,
   responseUploadImage
 } from "../../../firebase/functions"
 import useAlertState from "../../../assets/hooks/useAlertState"
 import { RichEditor, ReadOnlyEditor } from "./../../../utils/richtext"
-const user: CurrentUser = getCurrentUser()
+import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 type Props = {
   isEdit?: boolean
@@ -32,7 +30,6 @@ type Props = {
 
 const SummaryForm: FC<Props> = props => {
   const { isEdit, editData } = props
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [values, setValues] = useState<SummaryBook>({})
   const [categories, setCategories] = useState<ResCategory[]>([])
   const [publishingSettings, setPublishingSettings] = useState([
@@ -57,6 +54,7 @@ const SummaryForm: FC<Props> = props => {
     throwAlert,
     closeAlert
   ] = useAlertState(false)
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
 
   const { history } = useReactRouter()
 
@@ -223,9 +221,8 @@ const SummaryForm: FC<Props> = props => {
           )
         }
       }
-      let resSummary: ResultResponse<SummaryBook>
+      let resSummary: ResultResponse<ResSummaryBook>
       if (isEdit) {
-        console.log(values)
         resSummary = await updateSummary(values)
       } else {
         resSummary = await createSummary(values)
@@ -236,7 +233,7 @@ const SummaryForm: FC<Props> = props => {
           isEdit ? "記事が編集されました。" : "記事が作成されました。"
         )
         setValues({})
-        //history.push(`/summary/${resSummary.id}`)
+        history.push(`/summary/${resSummary.data.id}`)
       } else {
         history.push("/")
       }
@@ -357,7 +354,6 @@ const SummaryForm: FC<Props> = props => {
           subCategorySelect(editData.category)
           setIsSelectCategory(true)
           setThumnail(resThumnail)
-          console.log(editData)
           setValues({
             ...editData,
             ["user_id"]: currentUser.id,
@@ -385,11 +381,6 @@ const SummaryForm: FC<Props> = props => {
     <>
       {loading && (
         <>
-          <Alert
-            is_show_alert={isShowAlert}
-            alert_status={alertStatus}
-            alert_text={alertText}
-          />
           {isPreview && preview()}
           <form className="form-table">
             {!isPreview && editForm()}

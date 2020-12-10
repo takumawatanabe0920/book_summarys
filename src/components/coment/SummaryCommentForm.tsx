@@ -1,19 +1,17 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, useEffect, FC, useContext } from "react"
 import useReactRouter from "use-react-router"
-import { Textarea, Alert } from "./../../components"
+import { Textarea } from "./../../components"
 import {
-  ResUser as CurrentUser,
   SummaryComment,
   ResSummaryComment,
   ResultResponse
 } from "./../../types"
 import {
-  getCurrentUser,
   createSummaryComment,
   createNotification
 } from "./../../firebase/functions"
 import useAlertState from "./../../assets/hooks/useAlertState"
-const user: CurrentUser = getCurrentUser()
+import { GlobalContext } from "./../../assets/hooks/context/Global"
 
 type Props = {
   slug?: { id?: string }
@@ -23,9 +21,10 @@ type Props = {
 
 const SummaryCommentForm: FC<Props> = props => {
   const { slug, user_id, summary_id } = props
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const initialState = {
     user_id,
-    user_name: user.displayName ? user.displayName : "",
+    user_name: currentUser.displayName ? currentUser.displayName : "",
     summary_id,
     comment: ""
   }
@@ -86,7 +85,7 @@ const SummaryCommentForm: FC<Props> = props => {
       if (resCommnet && resCommnet.status === 200) {
         createNotification({
           user_id,
-          user_name: user.displayName ? user.displayName : "",
+          user_name: currentUser.displayName ? currentUser.displayName : "",
           target_id: resCommnet.data.id,
           type: "summary_comment"
         })
@@ -98,18 +97,11 @@ const SummaryCommentForm: FC<Props> = props => {
     }
   }
 
-  useEffect(() => {
-    closeAlert()
-  }, [])
+  useEffect(() => {}, [])
 
   return (
     <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
-      <div>
+      <div className="comment-form">
         <h3>投稿する</h3>
         <form className="form-table">
           <Textarea

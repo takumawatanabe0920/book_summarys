@@ -2,6 +2,7 @@ import React, { useState, FC } from "react"
 import ReactCrop, { Crop } from "react-image-crop"
 import "react-image-crop/lib/ReactCrop.scss"
 import { Input } from "../../../components"
+import { createUniqueStr } from "../../../utils/function"
 
 export type stateFile = {
   src?: any
@@ -53,10 +54,12 @@ const Trimming: FC<Props> = props => {
 
   const onCropComplete = async (crop: Crop) => {
     if (imageRef && crop.width && crop.height) {
+      const UNIQUEID = createUniqueStr()
+      console.log(UNIQUEID)
       const [croppedImageUrl, blobFile] = await getCroppedImg(
         imageRef,
         crop,
-        "newFile.jpeg"
+        `${UNIQUEID}.jpeg`
       )
       setPreviewImage(croppedImageUrl)
       setChildState({ ...childState, blobFile })

@@ -204,6 +204,7 @@ const setUser = async (
         login_id: uid,
         email
       }
+
       setLocalStrage(currentUser)
     } else {
       return { status: 400, error: "login is not yet" }

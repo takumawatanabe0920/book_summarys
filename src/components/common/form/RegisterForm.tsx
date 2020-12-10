@@ -1,6 +1,6 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, useEffect, FC, useContext } from "react"
 import { Link } from "react-router-dom"
-import { Input, Alert, Trimming } from "../../../components"
+import { Input, Trimming } from "../../../components"
 import {
   RegisterUser,
   ResultResponse,
@@ -12,8 +12,10 @@ import {
   register,
   updateUser,
   uploadImage,
-  responseUploadImage
+  responseUploadImage,
+  getCurrentUser
 } from "../../../firebase/functions"
+import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 type Props = {
   isEdit?: boolean
@@ -41,6 +43,7 @@ const RegisterForm: FC<Props> = props => {
     throwAlert,
     closeAlert
   ] = useAlertState(false)
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist()
@@ -153,12 +156,16 @@ const RegisterForm: FC<Props> = props => {
       }
       if (isEdit) {
         if (resCreateOrUpdate && resCreateOrUpdate.status === 200) {
+          const user: CurrentUser = getCurrentUser()
+          setCurrentUser(user)
           await throwAlert("success", "会員情報を更新しました。")
         } else if (resCreateOrUpdate.status === 400) {
           await throwAlert("danger", "会員情報の更新に失敗しました。")
         }
       } else if (!isEdit) {
         if (resCreateOrUpdate && resCreateOrUpdate.status === 200) {
+          const user: CurrentUser = getCurrentUser()
+          setCurrentUser(user)
           await throwAlert("success", "会員情報に成功しました。")
         } else if (
           resCreateOrUpdate.status === 400 &&
@@ -174,7 +181,6 @@ const RegisterForm: FC<Props> = props => {
 
   useEffect(() => {
     const loadData = async () => {
-      closeAlert()
       try {
         if (isEdit) {
           const { displayName, photoURL } = userData
@@ -190,11 +196,6 @@ const RegisterForm: FC<Props> = props => {
 
   return (
     <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
       <form className="form-table">
         <Input
           title="名前"

@@ -40,7 +40,6 @@ export const createSummary = (
 export const updateSummary = async (
   values: ResSummaryBook
 ): Promise<ResultResponse<ResSummaryBook>> => {
-  console.log(values)
   const response = db
     .collection("summary")
     .doc(values.id)
@@ -80,9 +79,7 @@ export const updateFavoriteSummaries = async (
       })
     })
   })
-    .then(newPopulation => {
-      console.log("Population increased to ", newPopulation)
-    })
+    .then(newPopulation => {})
     .catch(error => {
       // This will be an "population is too big" error.
       console.error(error)
@@ -209,19 +206,32 @@ export const getNewSummaries = async (
           const resCategory: ResultResponse<ResCategory> = await getCategory(
             doc.data().category
           )
-          let category: ResCategory
           const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
             doc.data().sub_category
           )
-          let sub_category: ResCategory
+          const resUser: ResultResponse<ResUser> = await getIdUser(
+            doc.data().user_id
+          )
+          let category: ResCategory
           if (resCategory && resCategory.status === 200) {
             category = resCategory.data
           }
+          let sub_category: ResCategory
           if (resSubCategory && resSubCategory.status === 200) {
             sub_category = resSubCategory.data
           }
+          let user: ResUser = {}
+          if (resUser && resUser.status === 200) {
+            user = resUser.data
+          }
 
-          return { id: doc.id, ...doc.data(), category, sub_category }
+          return {
+            id: doc.id,
+            ...doc.data(),
+            category,
+            sub_category,
+            user_id: user ? user : doc.data().user_id
+          }
         })
       )
       return { status: 200, data: resData }
@@ -290,6 +300,7 @@ export const getMySummaries = async (
       return { status: 200, data: resData }
     })
     .catch(function(error) {
+      console.log(error)
       return { status: 400, error }
     })
   const endTime = performance.now() // 終了時間
@@ -304,7 +315,6 @@ export const getMyPublicSummaries = async (
   publishing_status?: string
 ): Promise<ResultResponseList<ResSummaryBook>> => {
   const startTime = performance.now() // 開始時間
-  console.log(publishing_status)
   if (!limit) return
   let data
   const skip = page - 1

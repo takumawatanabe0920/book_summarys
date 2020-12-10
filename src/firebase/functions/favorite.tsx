@@ -75,6 +75,7 @@ export const getMyFavorites = (
       return { status: 200, data: resdata }
     })
     .catch(function(error) {
+      console.log(error)
       return { status: 400, error }
     })
 

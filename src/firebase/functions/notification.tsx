@@ -49,7 +49,6 @@ export const getMyNotifications = (
     .get()
     .then(async res => {
       const startTime = performance.now() // 開始時間
-      console.log(res.docs.length <= 0)
       if (res.docs.length <= 0) return []
       let resData = await Promise.all(
         res.docs.map(async doc => {
@@ -155,24 +154,33 @@ export const getMyNotReadNotificationsCount = (
   return response
 }
 
-export const updateReadNotifications = (
+export const updateReadNotifications = async (
   user_id: string,
   type: string
-): void => {
-  const batch = db.batch()
-  db.collection("notification")
+): Promise<any> => {
+  const batch = await db.batch()
+  let resCount = await db
+    .collection("notification")
     .where("user_id", "==", user_id)
     .where("type", "==", type)
     .where("is_read", "==", false)
     .get()
     .then(async res => {
+      let count = 0
       await Promise.all(
         res.docs.map(async (doc: any) => {
+          count++
           let notificationRef = await db.collection("notification").doc(doc.id)
           batch.update(notificationRef, { is_read: true })
         })
       )
       await batch.commit()
+      console.log(count)
+      return count
     })
-    .catch(error => {})
+    .catch(error => {
+      console.log(error)
+      return 0
+    })
+  return resCount
 }

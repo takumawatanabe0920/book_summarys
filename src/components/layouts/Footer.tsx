@@ -3,7 +3,7 @@ import React from "react"
 const Footer = () => {
   return (
     <footer className="l-footer">
-      <div className="l-footer__logo">BOOKSUMMARY</div>
+      <div className="l-footer__logo">SHERENOTE</div>
       <div className="l-footer__links">
         <span className="l-footer__link">
           <a href="#" className="contact_link_hp">
@@ -23,12 +23,12 @@ const Footer = () => {
         </span>
         <span className="l-footer__link">
           <a href="#" className="contact_link_hp">
-            BOOKSUMMARYついて
+            SHERENOTEついて
           </a>
         </span>
       </div>
       <div className="l-footer--copyright">
-        <p>copyright BOOKSUMMARY All Rights Reserved</p>
+        <p>copyright SHERENOTE All Rights Reserved</p>
       </div>
     </footer>
   )

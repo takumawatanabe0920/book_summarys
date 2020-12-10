@@ -1,13 +1,10 @@
-import React, { FC, useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import React, { FC, useState } from "react"
 import { useParams } from "react-router-dom"
 import { ResSummaryBook, ResUser as CurrentUser } from "../../../types"
-import { responseUploadImage } from "../../../firebase/functions"
 import { formatUpdateDate } from "../../../utils/function"
-import { FavoriteButton } from "../../../components"
+import { FavoriteButton, UserIcon } from "../../../components"
 import { ReadOnlyEditor } from "../../../utils/richtext"
 import { FavoriteIcon } from "../../../utils/material"
-import { userCircleIcon } from "../../../utils/icons"
 
 type Props = {
   summaryBook: ResSummaryBook
@@ -15,43 +12,22 @@ type Props = {
 }
 
 const SummaryDetails: FC<Props> = props => {
-  const [userIcon, setUserIcon] = useState<string>("")
   const { summaryBook, currentUser } = props
   const {
     title,
     content,
     favorite_count,
     user_id,
-    user_name,
     category,
     sub_category,
     update_date
   } = summaryBook
   const url: { id: string } = useParams()
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        if (user_id && user_id.photoURL) {
-          const resUserIcon: string = await responseUploadImage(
-            user_id.photoURL
-          )
-          setUserIcon(resUserIcon)
-        }
-      } catch (e) {}
-    }
-    loadData()
-  }, [userIcon])
-
   return (
     <>
       <div className="prof-area">
-        <Link to={`/mypage/${user_id.id}/home`} className="_user-icon-area">
-          <div className="_icon">
-            <img src={userIcon ? userIcon : userCircleIcon} alt="ロゴ" />
-          </div>
-          <p className="_user-txt">{user_name}</p>
-        </Link>
+        <UserIcon user_id={user_id} />
         <div className="_update-date">
           <p>{formatUpdateDate(update_date)}に更新</p>
         </div>

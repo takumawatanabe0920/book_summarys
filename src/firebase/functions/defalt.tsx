@@ -16,7 +16,6 @@ export const uploadImage = (
   image: File,
   path: string
 ): Promise<ResultResponse<any>> => {
-  console.log(image)
   const response = storage
     .ref(`/images/${path}/${image.name}`)
     .put(image)

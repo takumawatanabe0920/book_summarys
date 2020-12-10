@@ -1,14 +1,26 @@
 .mypage_main {
   padding: 4rem 0 5rem;
 
+  @include sp {
+    padding: 2.5rem 0;
+  }
+
   .mypage-content {
     display: flex;
     margin-top: 4rem;
+
+    @include sp {
+      margin-top: 2rem;
+    }
 
     ._side-block {
       width: 12rem;
       border: 1px solid #e4e4e4;
       height: 100%;
+
+      @include sp {
+        display: none;
+      }
 
       ._side-item {
         padding: 0.5rem;
@@ -26,6 +38,25 @@
       }
     }
 
+    ._user-profile {
+      ._user-image {
+        width: 12rem;
+        @include sp {
+          width: 14rem;
+        }
+        img {
+          border-radius: 50%;
+        }
+      }
+
+      dl {
+        margin-top: 1rem;
+        dt {
+          font-size: 0.9rem;
+        }
+      }
+    }
+
     .sub-ttl {
       font-size: 1.25rem;
       letter-spacing: 4px;
@@ -33,14 +64,20 @@
     }
 
     ._mypage {
-      width: calc(100% - 12rem - 6%);
-      margin-left: 6%;
+      @include more-sp {
+        width: calc(100% - 12rem - 6%);
+        margin-left: 6%;
+      }
+
+      @include sp {
+        width: 100%;
+      }
     }
 
     .summaries-stack {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.5rem;
 
       .left-box {
         width: 30%;
@@ -60,6 +97,9 @@
         ._title {
           font-size: 1rem;
           margin-bottom: 1rem;
+          @include sp {
+            font-size: 0.9rem;
+          }
         }
 
         ._description {

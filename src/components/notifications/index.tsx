@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react"
-import { ResUser as CurrentUser, ResNotification } from "../../types"
+import React, { useState, useEffect, useContext } from "react"
+import { ResNotification } from "../../types"
 import {
-  getCurrentUser,
   getMyNotifications,
   updateReadNotifications
 } from "../../firebase/functions"
-import { NotificationList, Pager } from "./../../components"
+import { NotificationList } from "./../../components"
 import { Paper, Tabs, Tab } from "./../../utils/material"
-const user: CurrentUser = getCurrentUser()
+import { GlobalContext } from "./../../assets/hooks/context/Global"
 
 const NotificationPage = () => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
   const [notificationList, setNotificationList] = useState<ResNotification[]>(
     []
   )
   const [value, setValue] = React.useState(0)
   const [loading, setLoading] = useState<boolean>(false)
+  const { currentUser, notificationCount, setNotificationCount } = useContext(
+    GlobalContext
+  )
 
   const handleChange = (event: any, newValue: any) => {
     setValue(newValue)
@@ -27,7 +28,13 @@ const NotificationPage = () => {
       _tabType
     )
     setNotificationList(resMyNotifications)
-    updateReadNotifications(currentUser.id, _tabType)
+    let resCount: number = await updateReadNotifications(
+      currentUser.id,
+      _tabType
+    )
+    console.log(resCount)
+    console.log(notificationCount)
+    setNotificationCount(notificationCount - resCount)
   }
 
   useEffect(() => {
@@ -50,7 +57,7 @@ const NotificationPage = () => {
         <div className="notification-content">
           <div className="md-container">
             <div className="main-block _block-center">
-              <h2 className="main-title blue-main-title">通知一覧</h2>
+              <h2 className="main-title blue-main-title">通知</h2>
               <Paper className="tab-block">
                 <Tabs
                   value={value}

@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Link } from "react-router-dom"
-import { Input, Alert } from "../../../components"
-import { Login, ResultResponse } from "../../../types"
-import { login } from "../../../firebase/functions"
+import { Input } from "../../../components"
+import { Login, ResultResponse, ResUser as CurrentUser } from "../../../types"
+import { login, getCurrentUser } from "../../../firebase/functions"
 import useAlertState from "../../../assets/hooks/useAlertState"
 import useReactRouter from "use-react-router"
+import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 const LoginForm = () => {
   const [loginValues, setLogin] = useState<Login>({})
@@ -17,6 +18,7 @@ const LoginForm = () => {
     closeAlert
   ] = useAlertState(false)
   const { history } = useReactRouter()
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist()
@@ -70,6 +72,8 @@ const LoginForm = () => {
     if (window.confirm("ログインしますか？")) {
       const resLogin: ResultResponse<Login> = await login(email, password)
       if (resLogin && resLogin.status === 200) {
+        const user: CurrentUser = getCurrentUser()
+        setCurrentUser(user)
         await throwAlert("success", "ログインしました。")
         history.replace(`/`)
       } else {
@@ -81,11 +85,6 @@ const LoginForm = () => {
 
   return (
     <>
-      <Alert
-        is_show_alert={isShowAlert}
-        alert_status={alertStatus}
-        alert_text={alertText}
-      />
       <form className="form-table">
         <Input
           title="メールアドレス"
@@ -101,7 +100,6 @@ const LoginForm = () => {
           type="password"
           required={true}
           onChange={handleInputChange}
-          errorMessage={errorTexts.password ? errorTexts.password : ""}
         />
         <div className="_btns">
           <button className="_btn submit" type="submit" onClick={onSubmit}>

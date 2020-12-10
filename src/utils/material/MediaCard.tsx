@@ -1,12 +1,7 @@
-import React, { FC, useState, useEffect } from "react"
+import React, { FC, useState, useEffect, useContext } from "react"
 import clsx from "clsx"
-import {
-  ResSummaryBook,
-  ResUser as CurrentUser,
-  User,
-  ResultResponse
-} from "../../types"
-import { getCurrentUser, getImage } from "../../firebase/functions"
+import { ResSummaryBook, ResultResponse } from "../../types"
+import { getImage } from "../../firebase/functions"
 import { Link } from "react-router-dom"
 import {
   Card,
@@ -17,23 +12,24 @@ import {
   Typography,
   FavoriteIcon
 } from "."
-const user: CurrentUser = getCurrentUser()
+import { formatTagColor } from "../../utils/function"
+import { GlobalContext } from "./../../assets/hooks/context/Global"
 
 type Props = {
   data: ResSummaryBook
   setting?: any
-  columnNum?: string
+  elType?: string
 }
 
 const MediaCard: FC<Props> = props => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(user)
-  const { data, setting, columnNum } = props
+  const { currentUser, setCurrentUser } = useContext(GlobalContext)
+  const { data, setting, elType } = props
   const {
     id,
     title,
     favorite_count,
     category,
-    sub_category,
+    // sub_category,
     user_name,
     discription,
     thumbnail,
@@ -41,23 +37,6 @@ const MediaCard: FC<Props> = props => {
   } = data
   //const { isHiddenContent } = setting
   const [summaryThumbnail, setSummaryThumbnail] = useState<string>("")
-
-  const formatTagColor = (_categoryName: string): string => {
-    switch (_categoryName) {
-      case "スポーツ":
-        return "sport-tag"
-      case "自然界":
-        return "nature-tag"
-      case "小説":
-        return "novel-tag"
-      case "ビジネス":
-        return "business-tag"
-      case "雑誌":
-        return "magazin-tag"
-      default:
-        return "all-tag"
-    }
-  }
 
   const formatTag = () => {
     let now = new Date()
@@ -88,7 +67,10 @@ const MediaCard: FC<Props> = props => {
   return (
     <Link
       to={`/summary/${id}`}
-      className={clsx("summary-data-item", columnNum && columnNum)}
+      className={clsx(
+        "summary-data-item",
+        elType === "top-summary-list" ? "top-summary-list" : ""
+      )}
     >
       <Card>
         <CardActionArea
@@ -98,7 +80,10 @@ const MediaCard: FC<Props> = props => {
           )}
         >
           <CardMedia
-            className={setting && setting.topSlider ? "sliderImg" : "media"}
+            className={clsx(
+              setting && setting.topSlider ? "sliderImg" : "media",
+              elType === "top-summary-list" ? "top-summary-img" : ""
+            )}
             image={summaryThumbnail}
             title="Contemplative Reptile"
           />
@@ -118,13 +103,13 @@ const MediaCard: FC<Props> = props => {
                 >
                   {category && category.name}
                 </span>
-                {setting
+                {/* {setting
                   ? !setting.isHiddenCategory
                   : true && (
                       <span className="main-tag sub-tag">
                         {sub_category && sub_category.name}
                       </span>
-                    )}
+                    )} */}
                 {formatTag()}
               </div>
               <Typography
