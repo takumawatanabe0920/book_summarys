@@ -13,7 +13,6 @@ const MypageEdit = () => {
     const loadData = async () => {
       try {
         const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
-        console.log(resUser)
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)
         }

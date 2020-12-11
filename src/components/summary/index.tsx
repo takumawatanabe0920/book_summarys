@@ -3,12 +3,11 @@ import React, { useState, useEffect } from "react"
 import { SummaryList, SummaryCategories, Pager } from ".."
 import { ResSummaryBook, ResultResponseList } from "../../types"
 import {
-  getSummaries,
+  getOneConditionsSummaries,
   readQuery,
-  getSelectCategorySummaries,
+  getTwoConditionsSummaries,
   getCategorySummariesCount
 } from "../../firebase/functions"
-import { Link } from "react-router-dom"
 
 // sections
 
@@ -42,16 +41,15 @@ const SummaryIndexPage = () => {
     const loadData = async () => {
       setLoading(true)
       try {
-        let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getSummaries(
+        let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getOneConditionsSummaries(
           6,
           1,
-          "public"
+          ["publishing_status", "public"]
         )
-        let resSelectSummariesDataList: ResultResponseList<ResSummaryBook> = await getSelectCategorySummaries(
+        let resSelectSummariesDataList: ResultResponseList<ResSummaryBook> = await getTwoConditionsSummaries(
           6,
           page,
-          "public",
-          updateData.query
+          ["category", updateData.query, "publishing_status", "public"]
         )
         let count: number = 0
         if (updateData && updateData.query) {

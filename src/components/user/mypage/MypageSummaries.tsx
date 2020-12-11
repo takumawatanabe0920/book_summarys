@@ -8,8 +8,8 @@ import {
 } from "../../../types"
 import { MypageSidebar, MypageSummaryStackItem } from "../.."
 import {
-  getMySummaries,
-  getMyPublicSummaries,
+  getOneConditionsSummaries,
+  getTwoConditionsSummaries,
   getIdUser
 } from "../../../firebase/functions"
 import { GlobalContext } from "../../../assets/hooks/context/Global"
@@ -28,14 +28,17 @@ const MypageSummaries = () => {
         const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
         let resMySummariesDataList: ResultResponseList<ResSummaryBook>
         if (currentUser.id === url.id) {
-          resMySummariesDataList = await getMySummaries(6, 1, url.id)
+          resMySummariesDataList = await getOneConditionsSummaries(6, 1, [
+            "user_id",
+            url.id
+          ])
         } else {
-          resMySummariesDataList = await getMyPublicSummaries(
-            6,
-            1,
+          resMySummariesDataList = await getTwoConditionsSummaries(6, 1, [
+            "user_id",
             url.id,
+            "publishing_status",
             "public"
-          )
+          ])
         }
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)

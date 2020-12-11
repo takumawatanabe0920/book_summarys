@@ -16,9 +16,7 @@ const MypageSidebar: FC<Props> = props => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        console.log(user)
         const resUserIcon: string = await responseUploadImage(user.photoURL)
-        console.log(resUserIcon)
         setUserIcon(resUserIcon)
       } catch (e) {}
     }
