@@ -1,19 +1,33 @@
 import React, { useState, useEffect, useContext } from "react"
 import useReactRouter from "use-react-router"
 import { useParams } from "react-router-dom"
-import { ResBrowsing } from "../../../types"
-import { MypageSidebar, MypageSummaryStackItem } from "../.."
-import { getMyBrowsings } from "../../../firebase/functions"
+import { ResBrowsing, ResultResponseList } from "../../../types"
+import { MypageSidebar, MypageSummaryStackItem, Pager } from "../.."
+import {
+  getMyBrowsings,
+  getMyBrowsingsCount,
+  readQuery
+} from "../../../firebase/functions"
 import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 const MypageBrowsings = () => {
   const [myBrowings, setMyBrowings] = useState<ResBrowsing[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [page, setPage] = useState(Number(readQuery("pages") || 1))
+  const [myBrowingsNum, setMyBrowingsNum] = useState(0)
+  const [dataNumPerPage, setDataNumPerPager] = useState(12)
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const { history } = useReactRouter()
   const url: { id: string } = useParams()
 
+  const fetchPager = (num: number) => {
+    console.log(num)
+    setPage(num)
+  }
+
   useEffect(() => {
+    console.log("called")
+    console.log(page)
     const loadData = async () => {
       setLoading(true)
       if (url.id !== currentUser.id) {
@@ -23,16 +37,24 @@ const MypageBrowsings = () => {
         if (url.id !== currentUser.id) {
           history.push(`/mypage/${url.id}/home`)
         }
-        let resBrowing: ResBrowsing[]
+        let resBrowing: ResultResponseList<ResBrowsing>
         if (currentUser) {
-          resBrowing = await getMyBrowsings(currentUser.id)
+          resBrowing = await getMyBrowsings(
+            dataNumPerPage,
+            page,
+            currentUser.id
+          )
+          if (resBrowing.status === 200) {
+            setMyBrowings(resBrowing.data)
+          }
         }
-        setMyBrowings(resBrowing)
+        const count: number = await getMyBrowsingsCount(currentUser.id)
+        setMyBrowingsNum(count)
       } catch (e) {}
     }
 
     loadData()
-  }, [])
+  }, [page])
 
   return (
     <>

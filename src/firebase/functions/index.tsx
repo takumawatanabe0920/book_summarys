@@ -14,8 +14,8 @@ import {
   getSummaryBookPopulate,
   createSummary,
   updateSummary,
-  getSummariesCount,
-  getCategorySummariesCount,
+  getOneConditionsSummaryCount,
+  getTwoConditionsSummaryCount,
   updateFavoriteSummaries,
   getRankingSummaries,
   getNewSummaries
@@ -45,7 +45,7 @@ import {
   getImage,
   responseUploadImage
 } from "./defalt"
-import { createBrowsing, getMyBrowsings } from "./browsing"
+import { createBrowsing, getMyBrowsings, getMyBrowsingsCount } from "./browsing"
 import {
   createSummaryComment,
   getMyComments,
@@ -72,8 +72,8 @@ export {
   updateFavoriteSummaries,
   getMyFavorites,
   getRankingSummaries,
-  getSummariesCount,
-  getCategorySummariesCount,
+  getOneConditionsSummaryCount,
+  getTwoConditionsSummaryCount,
   getTwoConditionsSummaries,
   getIdUser,
   updateUser,
@@ -91,6 +91,7 @@ export {
   readQuery,
   createBrowsing,
   getMyBrowsings,
+  getMyBrowsingsCount,
   formatDateHour,
   getMyComments,
   createSummaryComment,

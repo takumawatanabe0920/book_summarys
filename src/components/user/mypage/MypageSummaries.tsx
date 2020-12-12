@@ -6,11 +6,14 @@ import {
   ResSummaryBook,
   ResUser
 } from "../../../types"
-import { MypageSidebar, MypageSummaryStackItem } from "../.."
+import { MypageSidebar, MypageSummaryStackItem, Pager } from "../.."
 import {
   getOneConditionsSummaries,
   getTwoConditionsSummaries,
-  getIdUser
+  getOneConditionsSummaryCount,
+  getTwoConditionsSummaryCount,
+  getIdUser,
+  readQuery
 } from "../../../firebase/functions"
 import { GlobalContext } from "../../../assets/hooks/context/Global"
 
@@ -20,26 +23,44 @@ const MypageSummaries = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const url: { id: string } = useParams()
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
+  const [page, setPage] = useState(Number(readQuery("pages") || 1))
+  const [summariesNum, setSummariesNum] = useState(0)
+  const [dataNumPerPage, setDataNumPerPager] = useState(8)
+
+  const fetchPager = (num: number) => {
+    setPage(num)
+  }
 
   useEffect(() => {
     const loadData = async () => {
-      console.log(currentUser)
       try {
         const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
         let resMySummariesDataList: ResultResponseList<ResSummaryBook>
+        let resSummariesNum = 0
         if (currentUser.id === url.id) {
-          resMySummariesDataList = await getOneConditionsSummaries(6, 1, [
+          resMySummariesDataList = await getOneConditionsSummaries(
+            dataNumPerPage,
+            page,
+            ["user_id", url.id]
+          )
+          resSummariesNum = await getOneConditionsSummaryCount([
             "user_id",
             url.id
           ])
         } else {
-          resMySummariesDataList = await getTwoConditionsSummaries(6, 1, [
+          resMySummariesDataList = await getTwoConditionsSummaries(
+            dataNumPerPage,
+            page,
+            ["user_id", url.id, "publishing_status", "public"]
+          )
+          resSummariesNum = await getTwoConditionsSummaryCount([
             "user_id",
             url.id,
             "publishing_status",
             "public"
           ])
         }
+        setSummariesNum(resSummariesNum)
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)
         }
@@ -50,7 +71,7 @@ const MypageSummaries = () => {
     }
     loadData()
     setLoading(true)
-  }, [])
+  }, [page])
 
   return (
     <>
@@ -64,10 +85,18 @@ const MypageSummaries = () => {
                   <MypageSidebar user={currentUser} />
                   <div className="_mypage">
                     <h2 className="sub-ttl">投稿記事一覧</h2>
-                    {summaries &&
-                      summaries.map((summaryBook: ResSummaryBook) => {
-                        return <MypageSummaryStackItem data={summaryBook} />
-                      })}
+                    {summaries && summaries.length > 0 && (
+                      <>
+                        {summaries.map((summaryBook: ResSummaryBook) => {
+                          return <MypageSummaryStackItem data={summaryBook} />
+                        })}
+                        <Pager
+                          fetchPager={fetchPager}
+                          dataNum={summariesNum}
+                          dataNumPerPage={dataNumPerPage}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

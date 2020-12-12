@@ -47,7 +47,8 @@ export const updateSummary = async (
       ...values
     })
     .then(res => {
-      return { status: 200 }
+      const data = { id: values.id }
+      return { status: 200, data }
     })
     .catch(error => {
       console.log(error)
@@ -325,12 +326,13 @@ export const getTwoConditionsSummaries = async (
   return next
 }
 
-export const getSummariesCount = async (
-  publishing_status?: string
+export const getOneConditionsSummaryCount = async (
+  queryList?: string[]
 ): Promise<number> => {
+  const [fieldPath, query] = queryList
   let docNum = await db
     .collection("summary")
-    .where("publishing_status", "==", publishing_status)
+    .where(fieldPath, "==", query)
     .get()
     .then(snap => {
       return snap.size // will return the collection size
@@ -343,14 +345,14 @@ export const getSummariesCount = async (
   return docNum
 }
 
-export const getCategorySummariesCount = async (
-  category_id?: string,
-  publishing_status?: string
+export const getTwoConditionsSummaryCount = async (
+  queryList?: string[]
 ): Promise<number> => {
+  const [fieldPath1, query1, fieldPath2, query2] = queryList
   let docNum = await db
     .collection("summary")
-    .where("category", "==", category_id)
-    .where("publishing_status", "==", publishing_status)
+    .where(fieldPath1, "==", query1)
+    .where(fieldPath2, "==", query2)
     .get()
     .then(snap => {
       return snap.size // will return the collection size

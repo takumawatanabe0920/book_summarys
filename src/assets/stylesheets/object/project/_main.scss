@@ -54,10 +54,10 @@
         }
 
         &.bold {
-          font-size: 1.125rem;
+          font-size: 0.9rem;
           font-weight: bold;
           @include sp {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
           }
         }
       }
@@ -278,6 +278,35 @@
       flex-direction: column;
       justify-content: space-between;
       height: 60%;
+      position: relative;
+
+      ._book-name {
+        position: absolute;
+        top: -1.5rem;
+        height: 1.5rem;
+        padding: 0.2rem 1rem 0;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.5);
+        font-weight: 700;
+        width: 100%;
+
+        &:before {
+          content: "";
+          display: block;
+          position: absolute;
+          background: inherit;
+          filter: blur(5px);
+          top: -5px;
+          right: -5px;
+          bottom: -5px;
+          left: -5px;
+          z-index: -1;
+        }
+      }
+      ._book-name-top {
+        font-weight: 700;
+        padding: 0.5rem 1rem 0;
+      }
     }
 
     .top-article-body {

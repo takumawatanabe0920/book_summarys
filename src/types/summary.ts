@@ -4,6 +4,7 @@ import { deflate } from "zlib"
 //要約スキーマ
 export type SummaryBook = Partial<{
   title: string
+  book_name: string
   content: any
   discription: string
   category: any

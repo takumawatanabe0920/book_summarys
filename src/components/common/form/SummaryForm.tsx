@@ -149,11 +149,17 @@ const SummaryForm: FC<Props> = props => {
       category,
       thumbnail,
       discription,
+      book_name,
       publishing_status
     } = values
     if (!title || !title.match(/\S/g)) {
       isError = true
-      errorText.title = "名前を入力してください。"
+      errorText.title = "記事のタイトルを入力してください。"
+    }
+
+    if (!book_name || !book_name.match(/\S/g)) {
+      isError = true
+      errorText.book_name = "本のタイトルを入力してください。"
     }
 
     if (!discription || !discription.match(/\S/g)) {
@@ -245,13 +251,22 @@ const SummaryForm: FC<Props> = props => {
       <>
         <h2 className="main-title blue-main-title blue-back">記事編集画面</h2>
         <Input
-          title="本のタイトル"
+          title="記事のタイトル"
           name="title"
           value={values && values.title ? values.title : ""}
-          placeholder="人を動かす"
+          placeholder="仲間を増やすコツ"
           required={true}
           onChange={handleInputChange}
           errorMessage={errorTexts.title ? errorTexts.title : ""}
+        />
+        <Input
+          title="本のタイトル"
+          name="book_name"
+          value={values && values.book_name ? values.book_name : ""}
+          placeholder="人を動かす"
+          required={true}
+          onChange={handleInputChange}
+          errorMessage={errorTexts.book_name ? errorTexts.book_name : ""}
         />
         <Input
           title="サムネイル"

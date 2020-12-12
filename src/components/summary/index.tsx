@@ -6,7 +6,7 @@ import {
   getOneConditionsSummaries,
   readQuery,
   getTwoConditionsSummaries,
-  getCategorySummariesCount
+  getTwoConditionsSummaryCount
 } from "../../firebase/functions"
 
 // sections
@@ -26,6 +26,7 @@ const SummaryIndexPage = () => {
     query: readQuery("category"),
     name: ""
   })
+  const [dataNumPerPage, setDataNumPerPager] = useState(6)
 
   const fetchData = (categoryId?: string, categoryName?: string) => {
     setUpdateData({ query: categoryId, name: categoryName })
@@ -40,6 +41,8 @@ const SummaryIndexPage = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
+      console.log(updateData)
+      console.log(page)
       try {
         let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getOneConditionsSummaries(
           6,
@@ -47,13 +50,18 @@ const SummaryIndexPage = () => {
           ["publishing_status", "public"]
         )
         let resSelectSummariesDataList: ResultResponseList<ResSummaryBook> = await getTwoConditionsSummaries(
-          6,
+          dataNumPerPage,
           page,
           ["category", updateData.query, "publishing_status", "public"]
         )
         let count: number = 0
         if (updateData && updateData.query) {
-          count = await getCategorySummariesCount(updateData.query, "public")
+          count = await getTwoConditionsSummaryCount([
+            "category",
+            updateData.query,
+            "publishing_status",
+            "public"
+          ])
         }
         if (resSummariesDataList && resSummariesDataList.status === 200) {
           setSummaries(resSummariesDataList.data)
@@ -86,7 +94,11 @@ const SummaryIndexPage = () => {
                   {selectSummaries.length > 0 ? (
                     <>
                       <SummaryList dataList={selectSummaries} />
-                      <Pager fetchPager={fetchPager} dataNum={summariesNum} />
+                      <Pager
+                        fetchPager={fetchPager}
+                        dataNum={summariesNum}
+                        dataNumPerPage={dataNumPerPage}
+                      />
                     </>
                   ) : (
                     <h3 className="not-find">記事が見当たりませんでした。</h3>

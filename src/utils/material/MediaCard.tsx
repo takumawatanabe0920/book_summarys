@@ -29,6 +29,7 @@ const MediaCard: FC<Props> = props => {
     title,
     favorite_count,
     category,
+    book_name,
     // sub_category,
     user_name,
     discription,
@@ -93,6 +94,13 @@ const MediaCard: FC<Props> = props => {
               setting && setting.topSlider ? "top-article-body" : ""
             )}
           >
+            <div
+              className={clsx(
+                setting && setting.topSlider ? "_book-name-top" : "_book-name"
+              )}
+            >
+              {book_name ? book_name : "題材なし"}
+            </div>
             <CardContent>
               <div className="categories">
                 <span
