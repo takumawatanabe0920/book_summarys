@@ -9,7 +9,7 @@ import {
 } from "../../types"
 import { getSummaryBook, getIdComment } from "../functions"
 import { firebase } from "../config"
-import dayjs from "dayjs"
+// import dayjs from "dayjs"
 const db = firebase.firestore()
 
 export const createNotification = (values: Notification) => {
@@ -19,8 +19,8 @@ export const createNotification = (values: Notification) => {
     return
   }
   values.is_read = false
-  values.create_date = dayjs().unix()
-  values.update_date = dayjs().unix()
+  values.create_date = firebase.firestore.Timestamp.now()
+  values.update_date = firebase.firestore.Timestamp.now()
   const response = db
     .collection("notification")
     .add({

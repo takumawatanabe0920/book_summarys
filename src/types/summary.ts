@@ -15,8 +15,8 @@ export type SummaryBook = Partial<{
   favorite_id: []
   favorite_count: number
   publishing_status: string
-  create_date: number
-  update_date: number
+  create_date: firebase.firestore.Timestamp
+  update_date: firebase.firestore.Timestamp
 }>
 
 export type Category = Partial<{

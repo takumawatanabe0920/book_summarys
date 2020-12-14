@@ -25,42 +25,42 @@ const MypageSummaries = () => {
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const [page, setPage] = useState(Number(readQuery("pages") || 1))
   const [summariesNum, setSummariesNum] = useState(0)
-  const [dataNumPerPage, setDataNumPerPager] = useState(8)
+  const [dataNumPerPage, setDataNumPerPager] = useState(100)
 
-  const fetchPager = (num: number) => {
-    setPage(num)
-  }
+  // const fetchPager = (num: number) => {
+  //   setPage(num)
+  // }
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
         let resMySummariesDataList: ResultResponseList<ResSummaryBook>
-        let resSummariesNum = 0
+        //let resSummariesNum = 0
         if (currentUser.id === url.id) {
           resMySummariesDataList = await getOneConditionsSummaries(
             dataNumPerPage,
             page,
             ["user_id", url.id]
           )
-          resSummariesNum = await getOneConditionsSummaryCount([
-            "user_id",
-            url.id
-          ])
+          // resSummariesNum = await getOneConditionsSummaryCount([
+          //   "user_id",
+          //   url.id
+          // ])
         } else {
           resMySummariesDataList = await getTwoConditionsSummaries(
             dataNumPerPage,
             page,
             ["user_id", url.id, "publishing_status", "public"]
           )
-          resSummariesNum = await getTwoConditionsSummaryCount([
-            "user_id",
-            url.id,
-            "publishing_status",
-            "public"
-          ])
+          // resSummariesNum = await getTwoConditionsSummaryCount([
+          //   "user_id",
+          //   url.id,
+          //   "publishing_status",
+          //   "public"
+          // ])
         }
-        setSummariesNum(resSummariesNum)
+        //setSummariesNum(resSummariesNum)
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)
         }
@@ -90,11 +90,11 @@ const MypageSummaries = () => {
                         {summaries.map((summaryBook: ResSummaryBook) => {
                           return <MypageSummaryStackItem data={summaryBook} />
                         })}
-                        <Pager
+                        {/* <Pager
                           fetchPager={fetchPager}
                           dataNum={summariesNum}
                           dataNumPerPage={dataNumPerPage}
-                        />
+                        /> */}
                       </>
                     )}
                   </div>

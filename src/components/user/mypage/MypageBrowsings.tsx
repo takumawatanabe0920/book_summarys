@@ -21,13 +21,10 @@ const MypageBrowsings = () => {
   const url: { id: string } = useParams()
 
   const fetchPager = (num: number) => {
-    console.log(num)
     setPage(num)
   }
 
   useEffect(() => {
-    console.log("called")
-    console.log(page)
     const loadData = async () => {
       setLoading(true)
       if (url.id !== currentUser.id) {

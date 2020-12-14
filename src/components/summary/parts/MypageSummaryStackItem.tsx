@@ -8,7 +8,7 @@ import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 type Props = {
   data: ResSummaryBook
-  time?: number
+  time?: firebase.firestore.Timestamp
 }
 
 const MypageSummaryStackItem: FC<Props> = props => {

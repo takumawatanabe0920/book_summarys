@@ -8,7 +8,7 @@ import {
   ResUser
 } from "../../types"
 import { firebase } from "../config"
-import dayjs from "dayjs"
+// import dayjs from "dayjs"
 import { getCategory, getSubCategory, getIdUser } from "./"
 const db = firebase.firestore()
 
@@ -19,8 +19,8 @@ export const createSummary = (
   if (!title || !content || !category || !user_id) {
     return
   }
-  values.create_date = dayjs().unix()
-  values.update_date = dayjs().unix()
+  values.create_date = firebase.firestore.Timestamp.now()
+  values.update_date = firebase.firestore.Timestamp.now()
   const response = db
     .collection("summary")
     .add({
@@ -89,16 +89,30 @@ export const updateFavoriteSummaries = async (
 
 export const getRankingSummaries = async (
   limit?: number,
+  //data_range?: string,
   publishing_status?: string
 ): Promise<ResultResponseList<ResSummaryBook>> => {
+  const sinceAtDate = firebase.firestore.Timestamp.fromDate(
+    new Date("2020/12/13 13:12:35")
+  )
+  const recentAtDate = firebase.firestore.Timestamp.fromDate(
+    new Date("2021/01/01 00:00:00")
+  )
+  console.log(sinceAtDate)
+  console.log(recentAtDate)
+  // const WEEKSECONDS = 604800
+  // const MONTHSECONDS = 2592000
   const response = await db
     .collection("summary")
     .where("publishing_status", "==", publishing_status)
+    .orderBy("update_date", "asc")
     .orderBy("favorite_count", "desc")
+    .startAt(sinceAtDate)
+    .endAt(recentAtDate)
     .limit(limit)
     .get()
     .then(async res => {
-      let resData: ResSummaryBook[] = await Promise.all(
+      let resData: any = await Promise.all(
         res.docs.map(async doc => {
           const resCategory: ResultResponse<ResCategory> = await getCategory(
             doc.data().category
@@ -277,7 +291,7 @@ export const getTwoConditionsSummaries = async (
       .collection("summary")
       .where(fieldPath1, "==", query1)
       .where(fieldPath2, "==", query2)
-      .orderBy("update_date")
+      .orderBy("update_date", "desc")
       .limit(limit * skip)
       .get()
       .then(
@@ -290,7 +304,7 @@ export const getTwoConditionsSummaries = async (
     .collection("summary")
     .where(fieldPath1, "==", query1)
     .where(fieldPath2, "==", query2)
-    .orderBy("update_date")
+    .orderBy("update_date", "desc")
     .startAfter(data)
     .limit(limit)
     .get()

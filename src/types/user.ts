@@ -7,6 +7,8 @@ export type RegisterUser = Partial<{
   photoURL: string
   email: string
   password: string
+  create_date: firebase.firestore.Timestamp
+  update_date: firebase.firestore.Timestamp
 }>
 
 export type User = Partial<{
@@ -14,6 +16,8 @@ export type User = Partial<{
   photoURL: string
   login_id: string
   email: string
+  create_date: firebase.firestore.Timestamp
+  update_date: firebase.firestore.Timestamp
 }>
 
 export type Login = Partial<{

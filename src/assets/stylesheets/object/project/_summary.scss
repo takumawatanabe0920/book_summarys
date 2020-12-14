@@ -15,6 +15,21 @@
     margin-top: 1rem;
   }
 
+  ._show-book-name {
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    display: flex;
+    flex-wrap: wrap;
+
+    dt {
+      margin-right: 0.25rem;
+    }
+
+    @include sp {
+      font-size: 0.7rem;
+    }
+  }
+
   ._footer {
     padding: 0 0 1.5rem;
 
@@ -28,6 +43,7 @@
       }
     }
   }
+
   ._favorite-area {
     margin-top: 2rem;
   }

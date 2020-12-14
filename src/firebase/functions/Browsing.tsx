@@ -1,5 +1,5 @@
 import React from "react"
-import dayjs from "dayjs"
+// import dayjs from "dayjs"
 import {
   Browsing,
   ResultResponse,
@@ -16,8 +16,8 @@ export const createBrowsing = (values: Browsing) => {
   if (!summary_id || !user_id) {
     return { status: 400, error: "summary_idかuser_idがありません。" }
   }
-  values.create_date = dayjs().unix()
-  values.update_date = dayjs().unix()
+  values.create_date = firebase.firestore.Timestamp.now()
+  values.update_date = firebase.firestore.Timestamp.now()
   const response = db
     .collection("browsing")
     .add({

@@ -9,7 +9,7 @@ interface PropsData {
   id?: string
   user_id?: any
   comment?: string
-  update_date?: number
+  update_date?: firebase.firestore.Timestamp
 }
 
 function CommentItem<T extends PropsData>(props: Props<T>): JSX.Element {

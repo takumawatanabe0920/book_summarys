@@ -42,7 +42,7 @@ const MediaCard: FC<Props> = props => {
   const formatTag = () => {
     let now = new Date()
     let nowTime = Math.floor(now.getTime() / 1000)
-    const diffTime = nowTime - update_date
+    const diffTime = nowTime - update_date.seconds
     if (favorite_count > 0) {
       return <span className="main-tag recommned-tag">人気！</span>
     } else if (diffTime > 3600) {

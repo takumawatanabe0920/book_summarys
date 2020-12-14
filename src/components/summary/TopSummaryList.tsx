@@ -48,12 +48,15 @@ const TopSummaryList = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true)
       try {
+        console.log("called")
         let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
           6,
+          //"all",
           "public"
         )
+        console.log("called")
+        console.log(resSummariesRankingDataList)
         if (
           resSummariesRankingDataList &&
           resSummariesRankingDataList.status === 200
@@ -63,6 +66,7 @@ const TopSummaryList = () => {
       } catch (e) {}
     }
     loadData()
+    setLoading(true)
   }, [])
 
   return (

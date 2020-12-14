@@ -28,10 +28,20 @@ const Sidebar = () => {
           3,
           "public"
         )
+        console.log(resSummariesRankingDataList)
+        let resWeekSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
+          3,
+          "public"
+        )
+        let resMonthSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
+          3,
+          "public"
+        )
         if (
           resSummariesRankingDataList &&
           resSummariesRankingDataList.status === 200
         ) {
+          console.log(resSummariesRankingDataList.data)
           setAllRankingSummaries(resSummariesRankingDataList.data)
         }
       } catch (e) {}

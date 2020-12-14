@@ -1,4 +1,5 @@
 import React, { useState, useEffect, FC, useContext } from "react"
+import useReactRouter from "use-react-router"
 import { Link } from "react-router-dom"
 import { Input, Trimming } from "../../../components"
 import {
@@ -44,6 +45,7 @@ const RegisterForm: FC<Props> = props => {
     closeAlert
   ] = useAlertState(false)
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
+  const { history } = useReactRouter()
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist()
@@ -159,6 +161,7 @@ const RegisterForm: FC<Props> = props => {
           const user: CurrentUser = getCurrentUser()
           setCurrentUser(user)
           await throwAlert("success", "会員情報を更新しました。")
+          history.replace(`/`)
         } else if (resCreateOrUpdate.status === 400) {
           await throwAlert("danger", "会員情報の更新に失敗しました。")
         }
@@ -167,6 +170,7 @@ const RegisterForm: FC<Props> = props => {
           const user: CurrentUser = getCurrentUser()
           setCurrentUser(user)
           await throwAlert("success", "会員情報に成功しました。")
+          history.replace(`/`)
         } else if (
           resCreateOrUpdate.status === 400 &&
           resCreateOrUpdate.error === "user is exist"

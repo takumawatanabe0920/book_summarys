@@ -1,5 +1,5 @@
 import React from "react"
-import dayjs from "dayjs"
+// import dayjs from "dayjs"
 import {
   SummaryComment,
   ResSummaryComment,
@@ -16,8 +16,8 @@ const db = firebase.firestore()
 export const createSummaryComment = (
   values: SummaryComment
 ): Promise<ResultResponse<ResSummaryComment>> => {
-  values.create_date = dayjs().unix()
-  values.update_date = dayjs().unix()
+  values.create_date = firebase.firestore.Timestamp.now()
+  values.update_date = firebase.firestore.Timestamp.now()
 
   const response = db
     .collection("summaryComment")

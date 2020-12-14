@@ -15,7 +15,7 @@ interface PropsData {
   user_name?: string
   is_read?: boolean
   target_id?: any
-  update_date?: number
+  update_date?: firebase.firestore.Timestamp
 }
 
 function NotificationItem<T extends PropsData>(props: Props<T>): JSX.Element {

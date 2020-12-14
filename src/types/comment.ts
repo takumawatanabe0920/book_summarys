@@ -5,8 +5,8 @@ export type SummaryComment = Partial<{
   user_id: any
   user_name: string
   summary_id: any
-  create_date: number
-  update_date: number
+  create_date: firebase.firestore.Timestamp
+  update_date: firebase.firestore.Timestamp
 }>
 
 export type ResSummaryComment = SummaryComment & {
