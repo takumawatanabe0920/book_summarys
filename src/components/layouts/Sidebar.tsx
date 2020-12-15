@@ -12,7 +12,7 @@ const Sidebar = () => {
   const [rankingThisWeekSummaries, setRankingThisWeekSummaries] = useState<
     ResSummaryBook[]
   >([])
-  const [thisMonthSummaries, setThisMonthSummaries] = useState<
+  const [rankingThisMonthSummaries, setRankingThisMonthSummaries] = useState<
     ResSummaryBook[]
   >([])
   const { history } = useReactRouter()
@@ -26,23 +26,36 @@ const Sidebar = () => {
       try {
         let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
           3,
-          "public"
+          "public",
+          "all"
         )
-        console.log(resSummariesRankingDataList)
         let resWeekSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
           3,
-          "public"
+          "public",
+          "week"
         )
         let resMonthSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
           3,
-          "public"
+          "public",
+          "month"
         )
         if (
           resSummariesRankingDataList &&
           resSummariesRankingDataList.status === 200
         ) {
-          console.log(resSummariesRankingDataList.data)
           setAllRankingSummaries(resSummariesRankingDataList.data)
+        }
+        if (
+          resWeekSummariesRankingDataList &&
+          resWeekSummariesRankingDataList.status === 200
+        ) {
+          setRankingThisWeekSummaries(resWeekSummariesRankingDataList.data)
+        }
+        if (
+          resMonthSummariesRankingDataList &&
+          resMonthSummariesRankingDataList.status === 200
+        ) {
+          setRankingThisMonthSummaries(resMonthSummariesRankingDataList.data)
         }
       } catch (e) {}
     }
@@ -54,51 +67,55 @@ const Sidebar = () => {
     <div className="side-bar">
       <h3 className="border-orange">週間ランキング</h3>
       <div className="article-box">
-        {allRankingSummaries &&
-          allRankingSummaries.map((summary: ResSummaryBook, _index: number) => {
-            return (
-              <dl>
-                <dt>
-                  <span className={clsx("ranking", `ranking-week`)}>
-                    {_index + 1}
-                  </span>
-                </dt>
-                <dd>
-                  <Link
-                    to={`/summary/${summary.id}`}
-                    className="article-item"
-                    key={summary.id}
-                  >
-                    {summary.title}
-                  </Link>
-                </dd>
-              </dl>
-            )
-          })}
+        {rankingThisWeekSummaries &&
+          rankingThisWeekSummaries.map(
+            (summary: ResSummaryBook, _index: number) => {
+              return (
+                <dl>
+                  <dt>
+                    <span className={clsx("ranking", `ranking-week`)}>
+                      {_index + 1}
+                    </span>
+                  </dt>
+                  <dd>
+                    <Link
+                      to={`/summary/${summary.id}`}
+                      className="article-item"
+                      key={summary.id}
+                    >
+                      {summary.title}
+                    </Link>
+                  </dd>
+                </dl>
+              )
+            }
+          )}
       </div>
       <h3 className="border-green">月刊ランキング</h3>
       <div className="article-box">
-        {allRankingSummaries &&
-          allRankingSummaries.map((summary: ResSummaryBook, _index: number) => {
-            return (
-              <dl>
-                <dt>
-                  <span className={clsx("ranking", `ranking-month`)}>
-                    {_index + 1}
-                  </span>
-                </dt>
-                <dd>
-                  <div
-                    onClick={() => changeUrl(summary)}
-                    className="article-item"
-                    key={summary.id}
-                  >
-                    {summary.title}
-                  </div>
-                </dd>
-              </dl>
-            )
-          })}
+        {rankingThisMonthSummaries &&
+          rankingThisMonthSummaries.map(
+            (summary: ResSummaryBook, _index: number) => {
+              return (
+                <dl>
+                  <dt>
+                    <span className={clsx("ranking", `ranking-month`)}>
+                      {_index + 1}
+                    </span>
+                  </dt>
+                  <dd>
+                    <div
+                      onClick={() => changeUrl(summary)}
+                      className="article-item"
+                      key={summary.id}
+                    >
+                      {summary.title}
+                    </div>
+                  </dd>
+                </dl>
+              )
+            }
+          )}
       </div>
       <h3 className="border-blue">総合ランキング</h3>
       <div className="article-box mbt0">

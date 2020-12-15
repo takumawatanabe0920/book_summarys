@@ -8,7 +8,6 @@ import {
   ResUser
 } from "../../types"
 import { firebase } from "../config"
-// import dayjs from "dayjs"
 import { getCategory, getSubCategory, getIdUser } from "./"
 const db = firebase.firestore()
 
@@ -89,19 +88,33 @@ export const updateFavoriteSummaries = async (
 
 export const getRankingSummaries = async (
   limit?: number,
-  //data_range?: string,
-  publishing_status?: string
+  publishing_status?: string,
+  data_range?: string
 ): Promise<ResultResponseList<ResSummaryBook>> => {
-  const sinceAtDate = firebase.firestore.Timestamp.fromDate(
-    new Date("2020/12/13 13:12:35")
-  )
-  const recentAtDate = firebase.firestore.Timestamp.fromDate(
-    new Date("2021/01/01 00:00:00")
-  )
-  console.log(sinceAtDate)
-  console.log(recentAtDate)
-  // const WEEKSECONDS = 604800
-  // const MONTHSECONDS = 2592000
+  let BeginningOfDate: Date
+  let EndOfDate: Date
+  if (data_range === "month") {
+    const date = new Date()
+    BeginningOfDate = new Date(date.getFullYear(), date.getMonth(), 1)
+    EndOfDate = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+  } else if (data_range === "week") {
+    const today = new Date()
+    const this_year = today.getFullYear()
+    const this_month = today.getMonth()
+    const date = today.getDate()
+    const day_num = today.getDay()
+    const this_monday = date - day_num + 1
+    const this_sunday = this_monday + 6
+    BeginningOfDate = new Date(this_year, this_month, this_monday)
+    EndOfDate = new Date(this_year, this_month, this_sunday)
+  } else if (data_range === "all") {
+    BeginningOfDate = new Date(2020, 11)
+    EndOfDate = new Date()
+  }
+
+  const sinceAtDate = firebase.firestore.Timestamp.fromDate(BeginningOfDate)
+  const recentAtDate = firebase.firestore.Timestamp.fromDate(EndOfDate)
+
   const response = await db
     .collection("summary")
     .where("publishing_status", "==", publishing_status)

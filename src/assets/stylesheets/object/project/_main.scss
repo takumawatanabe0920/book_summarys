@@ -240,11 +240,7 @@
   }
 
   .MuiCardContent-root {
-    padding: 1.25rem 1rem 0rem;
-
-    @include sp {
-      padding: 1rem 1rem 0rem;
-    }
+    padding: 1rem 1rem 0rem;
   }
 
   .summary-bottom {

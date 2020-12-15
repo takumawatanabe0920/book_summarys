@@ -5,7 +5,7 @@ import { SummaryItem } from "../../components"
 import { ResultResponseList, ResSummaryBook } from "../../types"
 
 const TopSummaryList = () => {
-  const [allRankingSummaries, setAllRankingSummaries] = useState<
+  const [rankingThisMonthSummaries, setRankingThisMonthSummaries] = useState<
     ResSummaryBook[]
   >([])
   const [loading, setLoading] = useState<boolean>(false)
@@ -52,16 +52,14 @@ const TopSummaryList = () => {
         console.log("called")
         let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
           6,
-          //"all",
-          "public"
+          "public",
+          "month"
         )
-        console.log("called")
-        console.log(resSummariesRankingDataList)
         if (
           resSummariesRankingDataList &&
           resSummariesRankingDataList.status === 200
         ) {
-          setAllRankingSummaries(resSummariesRankingDataList.data)
+          setRankingThisMonthSummaries(resSummariesRankingDataList.data)
         }
       } catch (e) {}
     }
@@ -73,7 +71,7 @@ const TopSummaryList = () => {
     <>
       {loading && (
         <Slider {...settings}>
-          {allRankingSummaries.map((data: ResSummaryBook) => {
+          {rankingThisMonthSummaries.map((data: ResSummaryBook) => {
             return (
               <SummaryItem
                 key={data.id}
