@@ -5,7 +5,6 @@ import { ResSummaryBook, ResultResponseList } from "../../types"
 import {
   getOneConditionsSummaries,
   readQuery,
-  getTwoConditionsSummaries,
   getTwoConditionsSummaryCount,
   getTwoConditionsDescPaginationSummaries
 } from "../../firebase/functions"
@@ -46,6 +45,7 @@ const SummaryIndexPage = () => {
         let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getOneConditionsSummaries(
           6,
           1,
+          ["update_date", "desc"],
           ["publishing_status", "public"]
         )
         if (resSummariesDataList && resSummariesDataList.status === 200) {
@@ -56,8 +56,6 @@ const SummaryIndexPage = () => {
           page,
           ["category", updateData.query, "publishing_status", "public"]
         )
-        console.log("called")
-        console.log(resSelectSummariesDataList)
         let count: number = 0
         if (updateData && updateData.query) {
           count = await getTwoConditionsSummaryCount([

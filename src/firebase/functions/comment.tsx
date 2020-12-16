@@ -6,8 +6,7 @@ import {
   ResultResponse,
   ResultResponseList,
   ResSummaryBook,
-  ResUser,
-  SummaryBook
+  ResUser
 } from "../../types"
 import { firebase } from "../config"
 import { getSummaryBook, getIdUser } from "./"
@@ -64,6 +63,23 @@ export const getSummaryComments = (
     })
 
   return response
+}
+
+export const getMyCommentCount = (userId?: string): Promise<number> => {
+  const snapShot = db
+    .collection("summaryComment")
+    .where("user_id", "==", userId)
+    .orderBy("update_date", "desc")
+    .get()
+    .then(snap => {
+      return snap.size
+    })
+    .catch(error => {
+      console.log(error)
+      return 0
+    })
+
+  return snapShot
 }
 
 export const getMyComments = async (
@@ -149,30 +165,12 @@ export const getMyComments = async (
   return next
 }
 
-export const getMyCommentCount = (userId?: string): Promise<number> => {
-  const snapShot = db
-    .collection("summaryComment")
-    .where("user_id", "==", userId)
-    .orderBy("update_date", "desc")
-    .get()
-    .then(snap => {
-      return snap.size
-    })
-    .catch(error => {
-      console.log(error)
-      return 0
-    })
-
-  return snapShot
-}
-
 export const getIdComment = (
   id?: string
 ): Promise<ResultResponse<ResSummaryComment>> => {
   const response = db
     .collection("summaryComment")
     .doc(id)
-    //.orderBy("update_date")
     .get()
     .then(async doc => {
       if (doc.exists) {

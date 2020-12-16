@@ -213,33 +213,16 @@ export const getNewSummaries = async (
 export const getOneConditionsSummaries = async (
   limit?: number,
   page?: number,
+  sort?: [string, firebase.firestore.OrderByDirection],
   queryList?: string[]
 ): Promise<ResultResponseList<ResSummaryBook>> => {
   const [fieldPath, query] = queryList
-  const startTime = performance.now() // 開始時間
-  if (!limit) return
-  let data
-  const skip = page - 1
-  if (skip === 0) {
-    data = skip
-  } else {
-    data = await db
-      .collection("summary")
-      .where(fieldPath, "==", query)
-      .orderBy("update_date")
-      .limit(limit * skip)
-      .get()
-      .then(
-        documentresponses =>
-          documentresponses.docs[documentresponses.docs.length - 1]
-      )
-  }
+  const [orderFieldPath, directionStr] = sort
 
-  const next = await db
+  const response = await db
     .collection("summary")
     .where(fieldPath, "==", query)
-    .orderBy("update_date")
-    .startAfter(data)
+    .orderBy(orderFieldPath, directionStr)
     .limit(limit)
     .get()
     .then(async res => {
@@ -282,43 +265,23 @@ export const getOneConditionsSummaries = async (
       console.log(error)
       return { status: 400, error }
     })
-  const endTime = performance.now() // 終了時間
-  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
-  return next
+  return response
 }
 
 export const getTwoConditionsSummaries = async (
   limit?: number,
   page?: number,
+  sort?: [string, firebase.firestore.OrderByDirection],
   queryList?: string[]
 ): Promise<ResultResponseList<ResSummaryBook>> => {
   const [fieldPath1, query1, fieldPath2, query2] = queryList
-  const startTime = performance.now() // 開始時間
-  if (!limit) return
-  let data
-  const skip = page - 1
-  if (skip === 0) {
-    data = skip
-  } else {
-    data = await db
-      .collection("summary")
-      .where(fieldPath1, "==", query1)
-      .where(fieldPath2, "==", query2)
-      .orderBy("update_date", "desc")
-      .limit(limit * skip)
-      .get()
-      .then(
-        documentresponses =>
-          documentresponses.docs[documentresponses.docs.length - 1]
-      )
-  }
+  const [orderFieldPath, directionStr] = sort
 
-  const next = await db
+  const response = await db
     .collection("summary")
     .where(fieldPath1, "==", query1)
     .where(fieldPath2, "==", query2)
-    .orderBy("update_date", "desc")
-    .startAfter(data)
+    .orderBy(orderFieldPath, directionStr)
     .limit(limit)
     .get()
     .then(async res => {
@@ -348,9 +311,7 @@ export const getTwoConditionsSummaries = async (
       console.log(error)
       return { status: 400, error }
     })
-  const endTime = performance.now() // 終了時間
-  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
-  return next
+  return response
 }
 
 export const getOneConditionsDescPaginationSummaries = async (
@@ -464,14 +425,12 @@ export const getTwoConditionsDescPaginationSummaries = async (
   queryList?: string[]
 ): Promise<ResultResponseList<ResSummaryBook>> => {
   const [fieldPath1, query1, fieldPath2, query2] = queryList
-  const startTime = performance.now() // 開始時間
   if (!limit) return
   let data
   const skip = page - 1
   if (skip === 0) {
     data = 0
   } else {
-    console.log("called")
     data = await db
       .collection("summary")
       .where(fieldPath1, "==", query1)
@@ -562,8 +521,6 @@ export const getTwoConditionsDescPaginationSummaries = async (
         return { status: 400, error }
       })
   }
-  const endTime = performance.now() // 終了時間
-  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
   return next
 }
 

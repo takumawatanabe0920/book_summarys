@@ -169,13 +169,12 @@ export const getfavoriteNum = async (queryList?: string[]): Promise<number> => {
   return count ? count : 0
 }
 
-export const createFavorite = (
+export const createFavorite = async (
   values: Favorite
 ): Promise<ResultResponse<ResFavorite>> => {
   const { user_id, summary_id } = values
   if (!user_id || !summary_id) {
-    console.log("idがありません")
-    return
+    return { status: 400, error: "user_id or summary_id is exist" }
   }
   values.create_date = firebase.firestore.Timestamp.now()
   values.update_date = firebase.firestore.Timestamp.now()
@@ -195,12 +194,11 @@ export const createFavorite = (
   return response
 }
 
-export const deleteFavorite = (
+export const deleteFavorite = async (
   favoriteId: string
 ): Promise<ResultResponse<ResFavorite>> => {
   if (!favoriteId) {
-    console.log("idが存在しません。")
-    return
+    return { status: 400, error: "favoriteId is exist" }
   }
   const response = db
     .collection("favorite")

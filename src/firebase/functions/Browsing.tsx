@@ -120,7 +120,6 @@ export const getMyBrowsingsCount = (userId?: string): Promise<number> => {
   const snapShot = db
     .collection("browsing")
     .where("user_id", "==", userId)
-    .orderBy("update_date", "desc")
     .get()
     .then(snap => {
       return snap.size
