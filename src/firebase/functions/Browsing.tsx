@@ -56,32 +56,62 @@ export const getMyBrowsings = async (
           documentresponses.docs[documentresponses.docs.length - 1]
       )
   }
-  const next = await db
-    .collection("browsing")
-    .where("user_id", "==", userId)
-    .orderBy("update_date", "desc")
-    .endBefore(data)
-    .limit(limit)
-    .get()
-    .then(async res => {
-      let resData: ResBrowsing[] = await Promise.all(
-        res.docs.map(async doc => {
-          const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
-            doc.data().summary_id
-          )
-          let summary: ResSummaryBook
-          if (resSummary && resSummary.status === 200) {
-            summary = resSummary.data
-          }
-          return { id: doc.id, ...doc.data(), summary_id: summary }
-        })
-      )
-      return { status: 200, data: resData }
-    })
-    .catch(function(error) {
-      console.log(error)
-      return { status: 400, error }
-    })
+  let next
+  if (!data) {
+    next = await db
+      .collection("browsing")
+      .where("user_id", "==", userId)
+      .orderBy("update_date", "desc")
+      .endAt(data)
+      .limit(limit)
+      .get()
+      .then(async res => {
+        let resData: ResBrowsing[] = await Promise.all(
+          res.docs.map(async doc => {
+            const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
+              doc.data().summary_id
+            )
+            let summary: ResSummaryBook
+            if (resSummary && resSummary.status === 200) {
+              summary = resSummary.data
+            }
+            return { id: doc.id, ...doc.data(), summary_id: summary }
+          })
+        )
+        return { status: 200, data: resData }
+      })
+      .catch(function(error) {
+        console.log(error)
+        return { status: 400, error }
+      })
+  } else {
+    next = await db
+      .collection("browsing")
+      .where("user_id", "==", userId)
+      .orderBy("update_date", "desc")
+      .startAfter(data)
+      .limit(limit)
+      .get()
+      .then(async res => {
+        let resData: ResBrowsing[] = await Promise.all(
+          res.docs.map(async doc => {
+            const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
+              doc.data().summary_id
+            )
+            let summary: ResSummaryBook
+            if (resSummary && resSummary.status === 200) {
+              summary = resSummary.data
+            }
+            return { id: doc.id, ...doc.data(), summary_id: summary }
+          })
+        )
+        return { status: 200, data: resData }
+      })
+      .catch(function(error) {
+        console.log(error)
+        return { status: 400, error }
+      })
+  }
 
   return next
 }

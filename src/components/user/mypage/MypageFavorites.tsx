@@ -6,14 +6,26 @@ import {
   ResultResponse,
   ResUser
 } from "../../../types"
-import { MypageSidebar, MypageSummaryStackItem } from "../.."
-import { getMyFavorites, getIdUser } from "../../../firebase/functions"
+import { MypageSidebar, MypageSummaryStackItem, Pager } from "../.."
+import {
+  getMyFavorites,
+  getfavoriteNum,
+  getIdUser,
+  readQuery
+} from "../../../firebase/functions"
 
 const MypageFavorites = () => {
   const [user, setUser] = useState<ResUser>({})
   const [favorites, setFavorites] = useState<ResFavorite[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const url: { id: string } = useParams()
+  const [page, setPage] = useState(Number(readQuery("pages") || 1))
+  const [myFavoritesNum, setMyFavoritesNum] = useState(0)
+  const [dataNumPerPage, setDataNumPerPager] = useState(8)
+
+  const fetchPager = (num: number) => {
+    setPage(num)
+  }
 
   useEffect(() => {
     const loadData = async () => {
@@ -21,8 +33,15 @@ const MypageFavorites = () => {
       try {
         const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
         const resMyFavoritesDataList: ResultResponseList<ResFavorite> = await getMyFavorites(
+          dataNumPerPage,
+          page,
           url.id
         )
+        const resMyFavoritesCount: number = await getfavoriteNum([
+          "user_id",
+          url.id
+        ])
+        setMyFavoritesNum(resMyFavoritesCount)
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)
         }
@@ -33,7 +52,7 @@ const MypageFavorites = () => {
     }
 
     loadData()
-  }, [])
+  }, [page])
 
   return (
     <>
@@ -54,6 +73,11 @@ const MypageFavorites = () => {
                           <MypageSummaryStackItem data={favorite.summary_id} />
                         )
                       })}
+                    <Pager
+                      fetchPager={fetchPager}
+                      dataNum={myFavoritesNum}
+                      dataNumPerPage={dataNumPerPage}
+                    />
                   </div>
                 </div>
               </div>

@@ -6,7 +6,8 @@ import {
   getOneConditionsSummaries,
   readQuery,
   getTwoConditionsSummaries,
-  getTwoConditionsSummaryCount
+  getTwoConditionsSummaryCount,
+  getTwoConditionsDescPaginationSummaries
 } from "../../firebase/functions"
 
 // sections
@@ -41,19 +42,22 @@ const SummaryIndexPage = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
-      console.log(updateData)
-      console.log(page)
       try {
         let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getOneConditionsSummaries(
           6,
           1,
           ["publishing_status", "public"]
         )
-        let resSelectSummariesDataList: ResultResponseList<ResSummaryBook> = await getTwoConditionsSummaries(
+        if (resSummariesDataList && resSummariesDataList.status === 200) {
+          setSummaries(resSummariesDataList.data)
+        }
+        let resSelectSummariesDataList: ResultResponseList<ResSummaryBook> = await getTwoConditionsDescPaginationSummaries(
           dataNumPerPage,
           page,
           ["category", updateData.query, "publishing_status", "public"]
         )
+        console.log("called")
+        console.log(resSelectSummariesDataList)
         let count: number = 0
         if (updateData && updateData.query) {
           count = await getTwoConditionsSummaryCount([
@@ -62,9 +66,6 @@ const SummaryIndexPage = () => {
             "publishing_status",
             "public"
           ])
-        }
-        if (resSummariesDataList && resSummariesDataList.status === 200) {
-          setSummaries(resSummariesDataList.data)
         }
         if (
           resSelectSummariesDataList &&

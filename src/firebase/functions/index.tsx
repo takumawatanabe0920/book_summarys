@@ -18,7 +18,9 @@ import {
   getTwoConditionsSummaryCount,
   updateFavoriteSummaries,
   getRankingSummaries,
-  getNewSummaries
+  getNewSummaries,
+  getOneConditionsDescPaginationSummaries,
+  getTwoConditionsDescPaginationSummaries
 } from "./summary"
 import {
   emailAuthMixin_sendVerifyMail,
@@ -50,6 +52,7 @@ import {
   createSummaryComment,
   getMyComments,
   getSummaryComments,
+  getMyCommentCount,
   getIdComment
 } from "./comment"
 import {
@@ -75,6 +78,8 @@ export {
   getOneConditionsSummaryCount,
   getTwoConditionsSummaryCount,
   getTwoConditionsSummaries,
+  getOneConditionsDescPaginationSummaries,
+  getTwoConditionsDescPaginationSummaries,
   getIdUser,
   updateUser,
   getCurrentUser,
@@ -94,6 +99,7 @@ export {
   getMyBrowsingsCount,
   formatDateHour,
   getMyComments,
+  getMyCommentCount,
   createSummaryComment,
   getSummaryComments,
   getSummaryBookPopulate,

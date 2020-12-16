@@ -51,35 +51,87 @@ export const getFavorites = (): Promise<ResultResponseList<ResFavorite>> => {
   return response
 }
 
-export const getMyFavorites = (
-  user_id: string
+export const getMyFavorites = async (
+  limit?: number,
+  page?: number,
+  userId?: string
 ): Promise<ResultResponseList<ResFavorite>> => {
-  const response = db
-    .collection("favorite")
-    .where("user_id", "==", user_id)
-    .orderBy("update_date", "desc")
-    .get()
-    .then(async res => {
-      let resdata = await Promise.all(
-        res.docs.map(async doc => {
-          const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
-            doc.data().summary_id
-          )
-          let summary: ResSummaryBook
-          if (resSummary && resSummary.status === 200) {
-            summary = resSummary.data
-          }
-          return { id: doc.id, ...doc.data(), summary_id: summary }
-        })
+  if (!limit) return
+  let data
+  const skip = page - 1
+  if (skip === 0) {
+    data = skip
+  } else {
+    data = await db
+      .collection("favorite")
+      .where("user_id", "==", userId)
+      .orderBy("update_date", "desc")
+      .limit(limit * skip)
+      .get()
+      .then(
+        documentresponses =>
+          documentresponses.docs[documentresponses.docs.length - 1]
       )
-      return { status: 200, data: resdata }
-    })
-    .catch(function(error) {
-      console.log(error)
-      return { status: 400, error }
-    })
+  }
 
-  return response
+  let next
+  if (!data) {
+    next = await db
+      .collection("favorite")
+      .where("user_id", "==", userId)
+      .orderBy("update_date", "desc")
+      .endAt(data)
+      .limit(limit)
+      .get()
+      .then(async res => {
+        let resdata = await Promise.all(
+          res.docs.map(async doc => {
+            const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
+              doc.data().summary_id
+            )
+            let summary: ResSummaryBook
+            if (resSummary && resSummary.status === 200) {
+              summary = resSummary.data
+            }
+            return { id: doc.id, ...doc.data(), summary_id: summary }
+          })
+        )
+        return { status: 200, data: resdata }
+      })
+      .catch(function(error) {
+        console.log(error)
+        return { status: 400, error }
+      })
+  } else {
+    next = await db
+      .collection("favorite")
+      .where("user_id", "==", userId)
+      .orderBy("update_date", "desc")
+      .startAfter(data)
+      .limit(limit)
+      .get()
+      .then(async res => {
+        let resdata = await Promise.all(
+          res.docs.map(async doc => {
+            const resSummary: ResultResponse<ResSummaryBook> = await getSummaryBook(
+              doc.data().summary_id
+            )
+            let summary: ResSummaryBook
+            if (resSummary && resSummary.status === 200) {
+              summary = resSummary.data
+            }
+            return { id: doc.id, ...doc.data(), summary_id: summary }
+          })
+        )
+        return { status: 200, data: resdata }
+      })
+      .catch(function(error) {
+        console.log(error)
+        return { status: 400, error }
+      })
+  }
+
+  return next
 }
 
 export const getDonefavorite = (
@@ -102,11 +154,12 @@ export const getDonefavorite = (
   return response
 }
 
-export const getfavoriteNum = async (summaryId?: string): Promise<number> => {
+export const getfavoriteNum = async (queryList?: string[]): Promise<number> => {
   let count: number = 0
+  const [fieldPath, query] = queryList
   await db
     .collection("favorite")
-    .where("summary_id", "==", summaryId)
+    .where(fieldPath, "==", query)
     .get()
     .then(res =>
       res.docs.map(doc => {

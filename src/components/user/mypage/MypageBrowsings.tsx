@@ -15,7 +15,7 @@ const MypageBrowsings = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [page, setPage] = useState(Number(readQuery("pages") || 1))
   const [myBrowingsNum, setMyBrowingsNum] = useState(0)
-  const [dataNumPerPage, setDataNumPerPager] = useState(12)
+  const [dataNumPerPage, setDataNumPerPager] = useState(8)
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const { history } = useReactRouter()
   const url: { id: string } = useParams()
@@ -35,7 +35,7 @@ const MypageBrowsings = () => {
           history.push(`/mypage/${url.id}/home`)
         }
         let resBrowing: ResultResponseList<ResBrowsing>
-        if (currentUser) {
+        if (currentUser && currentUser.id) {
           resBrowing = await getMyBrowsings(
             dataNumPerPage,
             page,
@@ -74,6 +74,11 @@ const MypageBrowsings = () => {
                           />
                         )
                       })}
+                    <Pager
+                      fetchPager={fetchPager}
+                      dataNum={myBrowingsNum}
+                      dataNumPerPage={dataNumPerPage}
+                    />
                   </div>
                 </div>
               </div>

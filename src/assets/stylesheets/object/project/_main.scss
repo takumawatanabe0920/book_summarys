@@ -193,6 +193,8 @@
   }
 
   &.top-summary-list {
+    //pointer-events: none;
+
     @include more-sp {
       width: 100%;
       display: block;

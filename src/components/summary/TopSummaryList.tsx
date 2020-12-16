@@ -27,7 +27,7 @@ const TopSummaryList = () => {
       speed: 500,
       autoplay: true,
       slidesToShow: 2,
-      slidesToScroll: 1
+      slidesToScroll: 2
     }
   } else {
     settings = {
@@ -36,7 +36,7 @@ const TopSummaryList = () => {
       speed: 500,
       autoplay: true,
       slidesToShow: 3,
-      slidesToScroll: 1
+      slidesToScroll: 3
     }
   }
 

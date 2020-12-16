@@ -6,16 +6,28 @@ import {
   ResultResponseList,
   ResultResponse
 } from "../../../types"
-import { MypageSidebar, MypageSummaryStackItem } from "../.."
-import { getIdUser, getMyComments } from "../../../firebase/functions"
+import { MypageSidebar, MypageSummaryStackItem, Pager } from "../.."
+import {
+  getIdUser,
+  getMyComments,
+  readQuery,
+  getMyCommentCount
+} from "../../../firebase/functions"
 
 const MypageComments = () => {
   const [user, setUser] = useState<ResUser>({})
   const [summaryComments, setSummaryComments] = useState<ResSummaryComment[]>(
     []
   )
+  const [myCommentsNum, setMyCommentsNum] = useState(0)
+  const [dataNumPerPage, setDataNumPerPager] = useState(8)
+  const [page, setPage] = useState(Number(readQuery("pages") || 1))
   const [loading, setLoading] = useState<boolean>(false)
   const url: { id: string } = useParams()
+
+  const fetchPager = (num: number) => {
+    setPage(num)
+  }
 
   useEffect(() => {
     const loadData = async () => {
@@ -23,8 +35,12 @@ const MypageComments = () => {
       try {
         const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
         const resMySummaryCommentsDataList: ResultResponseList<ResSummaryComment> = await getMyComments(
+          dataNumPerPage,
+          page,
           url.id
         )
+        const count: number = await getMyCommentCount(url.id)
+        setMyCommentsNum(count)
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)
         }
@@ -38,7 +54,7 @@ const MypageComments = () => {
     }
 
     loadData()
-  }, [])
+  }, [page])
 
   return (
     <>
@@ -62,6 +78,11 @@ const MypageComments = () => {
                           )
                         }
                       )}
+                    <Pager
+                      fetchPager={fetchPager}
+                      dataNum={myCommentsNum}
+                      dataNumPerPage={dataNumPerPage}
+                    />
                   </div>
                 </div>
               </div>

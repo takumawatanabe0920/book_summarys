@@ -353,6 +353,220 @@ export const getTwoConditionsSummaries = async (
   return next
 }
 
+export const getOneConditionsDescPaginationSummaries = async (
+  limit?: number,
+  page?: number,
+  queryList?: string[]
+): Promise<ResultResponseList<ResSummaryBook>> => {
+  const [fieldPath, query] = queryList
+  const startTime = performance.now() // 開始時間
+  if (!limit) return
+  let data
+  const skip = page - 1
+  if (skip === 0) {
+    data = 0
+  } else {
+    data = await db
+      .collection("summary")
+      .where(fieldPath, "==", query)
+      .orderBy("update_date", "desc")
+      .limit(limit * skip)
+      .get()
+      .then(
+        documentresponses =>
+          documentresponses.docs[documentresponses.docs.length - 1]
+      )
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  let next
+  if (!data) {
+    next = await db
+      .collection("summary")
+      .where(fieldPath, "==", query)
+      .orderBy("update_date", "desc")
+      .endAt(data)
+      .limit(limit)
+      .get()
+      .then(async res => {
+        let resData: ResSummaryBook[] = await Promise.all(
+          res.docs.map(async doc => {
+            const resCategory: ResultResponse<ResCategory> = await getCategory(
+              doc.data().category
+            )
+            let category: ResCategory
+            const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+              doc.data().sub_category
+            )
+            let sub_category: ResCategory
+            if (resCategory && resCategory.status === 200) {
+              category = resCategory.data
+            }
+            if (resSubCategory && resSubCategory.status === 200) {
+              sub_category = resSubCategory.data
+            }
+
+            return { id: doc.id, ...doc.data(), category, sub_category }
+          })
+        )
+        return { status: 200, data: resData }
+      })
+      .catch(function(error) {
+        console.log(error)
+        return { status: 400, error }
+      })
+  } else {
+    next = await db
+      .collection("summary")
+      .where(fieldPath, "==", query)
+      .orderBy("update_date", "desc")
+      .startAfter(data)
+      .limit(limit)
+      .get()
+      .then(async res => {
+        let resData: ResSummaryBook[] = await Promise.all(
+          res.docs.map(async doc => {
+            const resCategory: ResultResponse<ResCategory> = await getCategory(
+              doc.data().category
+            )
+            let category: ResCategory
+            const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+              doc.data().sub_category
+            )
+            let sub_category: ResCategory
+            if (resCategory && resCategory.status === 200) {
+              category = resCategory.data
+            }
+            if (resSubCategory && resSubCategory.status === 200) {
+              sub_category = resSubCategory.data
+            }
+
+            return { id: doc.id, ...doc.data(), category, sub_category }
+          })
+        )
+        return { status: 200, data: resData }
+      })
+      .catch(function(error) {
+        console.log(error)
+        return { status: 400, error }
+      })
+  }
+  const endTime = performance.now() // 終了時間
+  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
+  return next
+}
+
+export const getTwoConditionsDescPaginationSummaries = async (
+  limit?: number,
+  page?: number,
+  queryList?: string[]
+): Promise<ResultResponseList<ResSummaryBook>> => {
+  const [fieldPath1, query1, fieldPath2, query2] = queryList
+  const startTime = performance.now() // 開始時間
+  if (!limit) return
+  let data
+  const skip = page - 1
+  if (skip === 0) {
+    data = 0
+  } else {
+    console.log("called")
+    data = await db
+      .collection("summary")
+      .where(fieldPath1, "==", query1)
+      .where(fieldPath2, "==", query2)
+      .orderBy("update_date", "desc")
+      .limit(limit * skip)
+      .get()
+      .then(
+        documentresponses =>
+          documentresponses.docs[documentresponses.docs.length - 1]
+      )
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
+  let next
+  if (!data) {
+    next = await db
+      .collection("summary")
+      .where(fieldPath1, "==", query1)
+      .where(fieldPath2, "==", query2)
+      .orderBy("update_date", "desc")
+      .endAt(data)
+      .limit(limit)
+      .get()
+      .then(async res => {
+        let resData: ResSummaryBook[] = await Promise.all(
+          res.docs.map(async doc => {
+            const resCategory: ResultResponse<ResCategory> = await getCategory(
+              doc.data().category
+            )
+            let category: ResCategory
+            const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+              doc.data().sub_category
+            )
+            let sub_category: ResCategory
+            if (resCategory && resCategory.status === 200) {
+              category = resCategory.data
+            }
+            if (resSubCategory && resSubCategory.status === 200) {
+              sub_category = resSubCategory.data
+            }
+
+            return { id: doc.id, ...doc.data(), category, sub_category }
+          })
+        )
+        return { status: 200, data: resData }
+      })
+      .catch(function(error) {
+        console.log(error)
+        return { status: 400, error }
+      })
+  } else {
+    next = await db
+      .collection("summary")
+      .where(fieldPath1, "==", query1)
+      .where(fieldPath2, "==", query2)
+      .orderBy("update_date", "desc")
+      .startAfter(data)
+      .limit(limit)
+      .get()
+      .then(async res => {
+        let resData: ResSummaryBook[] = await Promise.all(
+          res.docs.map(async doc => {
+            const resCategory: ResultResponse<ResCategory> = await getCategory(
+              doc.data().category
+            )
+            let category: ResCategory
+            const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
+              doc.data().sub_category
+            )
+            let sub_category: ResCategory
+            if (resCategory && resCategory.status === 200) {
+              category = resCategory.data
+            }
+            if (resSubCategory && resSubCategory.status === 200) {
+              sub_category = resSubCategory.data
+            }
+
+            return { id: doc.id, ...doc.data(), category, sub_category }
+          })
+        )
+        return { status: 200, data: resData }
+      })
+      .catch(function(error) {
+        console.log(error)
+        return { status: 400, error }
+      })
+  }
+  const endTime = performance.now() // 終了時間
+  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
+  return next
+}
+
 export const getOneConditionsSummaryCount = async (
   queryList?: string[]
 ): Promise<number> => {
