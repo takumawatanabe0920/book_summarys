@@ -83,12 +83,20 @@ const SummaryShowPage = () => {
             user_id: currentUser.id,
             user_name: currentUser.displayName ? currentUser.displayName : ""
           }
-          let [res]: ResBrowsing[] = await getMyBrowsings(browsing.user_id)
-          if (
-            !res ||
-            (res && res.summary_id && res.summary_id.id !== browsing.summary_id)
-          ) {
-            createBrowsing(browsing)
+          let resBrowsing: ResultResponseList<ResBrowsing> = await getMyBrowsings(
+            1,
+            1,
+            browsing.user_id
+          )
+          if (resBrowsing.status === 200) {
+            let [beforeBrowsing]: ResBrowsing[] = resBrowsing.data
+            if (
+              !beforeBrowsing ||
+              (beforeBrowsing.summary_id &&
+                beforeBrowsing.summary_id.id !== browsing.summary_id)
+            ) {
+              createBrowsing(browsing)
+            }
           }
         }
 

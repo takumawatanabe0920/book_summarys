@@ -8,19 +8,19 @@ import {
   categoryLinkingSubCategory
 } from "./category"
 import {
-  getSummaries,
-  getMyPublicSummaries,
+  getOneConditionsSummaries,
+  getTwoConditionsSummaries,
   getSummaryBook,
   getSummaryBookPopulate,
-  getSelectCategorySummaries,
   createSummary,
   updateSummary,
-  getSummariesCount,
-  getCategorySummariesCount,
+  getOneConditionsSummaryCount,
+  getTwoConditionsSummaryCount,
   updateFavoriteSummaries,
   getRankingSummaries,
-  getMySummaries,
-  getNewSummaries
+  getNewSummaries,
+  getOneConditionsDescPaginationSummaries,
+  getTwoConditionsDescPaginationSummaries
 } from "./summary"
 import {
   emailAuthMixin_sendVerifyMail,
@@ -47,11 +47,12 @@ import {
   getImage,
   responseUploadImage
 } from "./defalt"
-import { createBrowsing, getMyBrowsings } from "./browsing"
+import { createBrowsing, getMyBrowsings, getMyBrowsingsCount } from "./browsing"
 import {
   createSummaryComment,
   getMyComments,
   getSummaryComments,
+  getMyCommentCount,
   getIdComment
 } from "./comment"
 import {
@@ -67,18 +68,18 @@ export {
   getSubCategories,
   getSubCategory,
   categoryLinkingSubCategory,
-  getSummaries,
   getSummaryBook,
-  getMySummaries,
-  getMyPublicSummaries,
+  getOneConditionsSummaries,
   createSummary,
   updateSummary,
   updateFavoriteSummaries,
   getMyFavorites,
   getRankingSummaries,
-  getSummariesCount,
-  getCategorySummariesCount,
-  getSelectCategorySummaries,
+  getOneConditionsSummaryCount,
+  getTwoConditionsSummaryCount,
+  getTwoConditionsSummaries,
+  getOneConditionsDescPaginationSummaries,
+  getTwoConditionsDescPaginationSummaries,
   getIdUser,
   updateUser,
   getCurrentUser,
@@ -95,15 +96,17 @@ export {
   readQuery,
   createBrowsing,
   getMyBrowsings,
+  getMyBrowsingsCount,
   formatDateHour,
   getMyComments,
+  getMyCommentCount,
   createSummaryComment,
   getSummaryComments,
-  getNewSummaries,
   getSummaryBookPopulate,
   getIdComment,
   createNotification,
   getMyNotifications,
+  getNewSummaries,
   getMyNotReadNotificationsCount,
   updateReadNotifications,
   uploadImage,

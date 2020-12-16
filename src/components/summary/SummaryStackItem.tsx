@@ -22,6 +22,10 @@ const SummaryStackItem: FC<Props> = props => {
         </div>
         <div className="_txt-box">
           <h3 className="_title">{data.title}</h3>
+          <dl className="_book-name">
+            <dt>参考本:</dt>
+            <dd>{data.book_name}</dd>
+          </dl>
           <div className="categories">
             <span
               className={clsx(

@@ -5,7 +5,7 @@ import { SummaryItem } from "../../components"
 import { ResultResponseList, ResSummaryBook } from "../../types"
 
 const TopSummaryList = () => {
-  const [allRankingSummaries, setAllRankingSummaries] = useState<
+  const [rankingThisMonthSummaries, setRankingThisMonthSummaries] = useState<
     ResSummaryBook[]
   >([])
   const [loading, setLoading] = useState<boolean>(false)
@@ -27,7 +27,7 @@ const TopSummaryList = () => {
       speed: 500,
       autoplay: true,
       slidesToShow: 2,
-      slidesToScroll: 1
+      slidesToScroll: 2
     }
   } else {
     settings = {
@@ -36,7 +36,7 @@ const TopSummaryList = () => {
       speed: 500,
       autoplay: true,
       slidesToShow: 3,
-      slidesToScroll: 1
+      slidesToScroll: 3
     }
   }
 
@@ -48,28 +48,30 @@ const TopSummaryList = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true)
       try {
+        console.log("called")
         let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
           6,
-          "public"
+          "public",
+          "month"
         )
         if (
           resSummariesRankingDataList &&
           resSummariesRankingDataList.status === 200
         ) {
-          setAllRankingSummaries(resSummariesRankingDataList.data)
+          setRankingThisMonthSummaries(resSummariesRankingDataList.data)
         }
       } catch (e) {}
     }
     loadData()
+    setLoading(true)
   }, [])
 
   return (
     <>
       {loading && (
         <Slider {...settings}>
-          {allRankingSummaries.map((data: ResSummaryBook) => {
+          {rankingThisMonthSummaries.map((data: ResSummaryBook) => {
             return (
               <SummaryItem
                 key={data.id}

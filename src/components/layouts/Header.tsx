@@ -19,7 +19,7 @@ import { GlobalContext } from "./../../assets/hooks/context/Global"
 
 const Header = () => {
   const [userIcon, setUserIcon] = useState<string>("")
-  const [pullDown, setPullDown] = useState<boolean>(false)
+  const [mouseOver, setMouseOver] = useState<boolean>(false)
   const { history } = useReactRouter()
   const [
     isShowAlert,
@@ -35,8 +35,22 @@ const Header = () => {
     setNotificationCount
   } = useContext(GlobalContext)
 
-  const togglePulldown = () => {
-    setPullDown(!pullDown)
+  const enterPulldown = () => {
+    console.log("called1")
+    setMouseOver(true)
+  }
+
+  const closePulldown = () => {
+    setMouseOver(false)
+  }
+
+  const leavePulldown = () => {
+    // Set a timeout so that the menu doesn't close before the user has time to
+    // move their mouse over it
+    console.log("called2")
+    setTimeout(() => {
+      setMouseOver(false)
+    }, 300)
   }
 
   const handleLogout = async () => {
@@ -92,7 +106,7 @@ const Header = () => {
           {currentUser && (
             <div
               className="l-header__sub-logo _userIcon"
-              onClick={() => togglePulldown()}
+              onMouseEnter={() => enterPulldown()}
             >
               <img
                 src={userIcon ? userIcon : userCircleIcon}
@@ -100,17 +114,17 @@ const Header = () => {
                 className="_icon"
               />
               <img src={caretDownIcon} alt="logo" className="_logo" />
-              {pullDown && (
-                <div className="_pull-down">
-                  <Link
-                    onClick={() => togglePulldown()}
-                    to={`/mypage/${currentUser.id}/home`}
-                    className="_item"
-                  >
+              {mouseOver && (
+                <div
+                  className="_pull-down"
+                  onMouseEnter={() => enterPulldown()}
+                  onMouseLeave={() => leavePulldown()}
+                >
+                  <Link to={`/mypage/${currentUser.id}/home`} className="_item">
                     ユーザー情報
                   </Link>
                   <Link
-                    onClick={() => togglePulldown()}
+                    onClick={() => closePulldown()}
                     to={`/mypage/${currentUser.id}/edit`}
                     className="_item"
                   >
@@ -118,28 +132,28 @@ const Header = () => {
                   </Link>
                   <div className="hr"></div>
                   <Link
-                    onClick={() => togglePulldown()}
+                    onClick={() => closePulldown()}
                     to={`/mypage/${currentUser.id}/summaries`}
                     className="_item"
                   >
                     投稿記事一覧
                   </Link>
                   <Link
-                    onClick={() => togglePulldown()}
+                    onClick={() => closePulldown()}
                     to={`/mypage/${currentUser.id}/browsings`}
                     className="_item"
                   >
                     閲覧履歴一覧
                   </Link>
                   <Link
-                    onClick={() => togglePulldown()}
+                    onClick={() => closePulldown()}
                     to={`/mypage/${currentUser.id}/favorites`}
                     className="_item"
                   >
                     いいね一覧
                   </Link>
                   <Link
-                    onClick={() => togglePulldown()}
+                    onClick={() => closePulldown()}
                     to={`/mypage/${currentUser.id}/comments`}
                     className="_item"
                   >
@@ -149,7 +163,7 @@ const Header = () => {
                   <div
                     className="_item"
                     onClick={() => {
-                      handleLogout(), togglePulldown()
+                      handleLogout(), closePulldown()
                     }}
                   >
                     ログアウト

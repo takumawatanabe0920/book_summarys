@@ -8,7 +8,7 @@ import { GlobalContext } from "../../../assets/hooks/context/Global"
 
 type Props = {
   data: ResSummaryBook
-  time?: number
+  time?: firebase.firestore.Timestamp
 }
 
 const MypageSummaryStackItem: FC<Props> = props => {
@@ -40,7 +40,7 @@ const MypageSummaryStackItem: FC<Props> = props => {
   }
 
   const isShowElementOnlyCurrentUser = (): boolean => {
-    return data.user_id === currentUser.id
+    return data.user_id || data.user_id.id === currentUser.id
   }
 
   useEffect(() => {

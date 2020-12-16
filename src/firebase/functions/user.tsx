@@ -38,17 +38,21 @@ export const register = async (
           displayName,
           photoURL,
           login_id: result.user.uid,
-          email: result.user.email
+          email: result.user.email,
+          create_date: firebase.firestore.Timestamp.now(),
+          update_date: firebase.firestore.Timestamp.now()
         })
         .then(async res => {
           await setUser(res.id, "register")
         })
         .catch(error => {
+          console.log(error)
           return { status: 400, error }
         })
       return { status: 200 }
     })
     .catch(error => {
+      console.log(error)
       return { status: 400, error }
     })
   return response
@@ -65,7 +69,8 @@ export const updateUser = async (
     .doc(id)
     .update({
       displayName,
-      photoURL
+      photoURL,
+      update_date: firebase.firestore.Timestamp.now()
     })
     .then(async res => {
       await setUser(uid, "login")
@@ -195,15 +200,18 @@ const setUser = async (
   firebase.auth().onAuthStateChanged(login => {
     if (login) {
       const { uid, email } = login
-      const { id, displayName, photoURL } = user
+      const { id, displayName, photoURL, update_date, create_date } = user
 
       const currentUser: CurrentUser = {
         id,
         displayName,
         photoURL,
         login_id: uid,
+        update_date,
+        create_date,
         email
       }
+      console.log(currentUser)
 
       setLocalStrage(currentUser)
     } else {

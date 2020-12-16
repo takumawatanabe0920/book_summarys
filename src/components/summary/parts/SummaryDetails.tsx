@@ -20,6 +20,7 @@ const SummaryDetails: FC<Props> = props => {
     user_id,
     category,
     sub_category,
+    book_name,
     update_date
   } = summaryBook
   const url: { id: string } = useParams()
@@ -35,6 +36,10 @@ const SummaryDetails: FC<Props> = props => {
       <div className="summary-show">
         <div className="_header">
           <h1 className="main-title blue-main-title">{title}</h1>
+          <dl className="_show-book-name">
+            <dt>参考本:</dt>
+            <dd>{book_name}</dd>
+          </dl>
           <div className="tags">
             {/* TODO リンク：カテゴリー記事に飛ばす */}
             <span className="tag">{category.name}</span>

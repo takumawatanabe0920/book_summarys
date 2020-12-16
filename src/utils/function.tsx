@@ -1,11 +1,12 @@
 import React from "react"
 import dayjs from "dayjs"
 
-export const formatUpdateDate = (_datetime: number) => {
-  let messageTime = _datetime ? dayjs.unix(_datetime).format("MM/DD") : ""
+export const formatUpdateDate = (_datetime: firebase.firestore.Timestamp) => {
+  const dateTime = _datetime.seconds
+  let messageTime = dateTime ? dayjs.unix(dateTime).format("MM/DD") : ""
   let now = new Date()
   let nowTime = Math.floor(now.getTime() / 1000)
-  let diffTime = nowTime - _datetime
+  let diffTime = nowTime - dateTime
   let diffDays = Math.floor(diffTime / 86400)
 
   diffTime -= diffDays * 86400
