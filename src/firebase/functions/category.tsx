@@ -91,6 +91,7 @@ export const categoryLinkingSubCategory = async (
   const response = await db
     .collection("sub_category")
     .where("category_id", "==", categoryId)
+    .orderBy("display_order", "desc")
     .get()
     .then(res => {
       let resData: ResCategory[] = res.docs.map(doc => {
@@ -99,6 +100,7 @@ export const categoryLinkingSubCategory = async (
       return { status: 200, data: resData }
     })
     .catch(error => {
+      console.log(error)
       return { status: 400, error }
     })
   return response

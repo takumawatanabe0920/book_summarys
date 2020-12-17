@@ -6,7 +6,7 @@
   margin: auto;
   border: 1px solid #e3e3e3;
 
-  >._txt {
+  > ._txt {
     padding: 1rem;
   }
 
@@ -442,13 +442,10 @@
 
   ._category-body {
     display: flex;
-    max-width: 880px;
+    flex-wrap: wrap;
+    max-width: 800px;
     width: 100%;
     margin: auto;
-
-    @include more-sp {
-      justify-content: space-between;
-    }
 
     @include sp {
       flex-wrap: wrap;
@@ -482,12 +479,14 @@
       }
 
       &.sportImage {
-        background: url("../../static/images/sports.jpg") no-repeat center center;
+        background: url("../../static/images/sports.jpg") no-repeat center
+          center;
         background-size: cover;
       }
 
       &.businessImage {
-        background: url("../../static/images/business.jpg") no-repeat center center;
+        background: url("../../static/images/business.jpg") no-repeat center
+          center;
         background-size: cover;
       }
 
@@ -497,12 +496,37 @@
       }
 
       &.magazinImage {
-        background: url("../../static/images/magazin.jpg") no-repeat center center;
+        background: url("../../static/images/magazin.jpg") no-repeat center
+          center;
         background-size: cover;
       }
 
       &.natureImage {
-        background: url("../../static/images/nature.jpg") no-repeat center center;
+        background: url("../../static/images/nature.jpg") no-repeat center
+          center;
+        background-size: cover;
+      }
+
+      &.artImage {
+        background: url("../../static/images/art.jpg") no-repeat center center;
+        background-size: cover;
+      }
+
+      &.societyImage {
+        background: url("../../static/images/society.jpg") no-repeat center
+          center;
+        background-size: cover;
+      }
+
+      &.languageImage {
+        background: url("../../static/images/langage.jpg") no-repeat center
+          center;
+        background-size: cover;
+      }
+
+      &.othersImage {
+        background: url("../../static/images/others.jpg") no-repeat center
+          center;
         background-size: cover;
       }
 

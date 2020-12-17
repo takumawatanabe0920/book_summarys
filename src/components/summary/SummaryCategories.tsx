@@ -29,6 +29,14 @@ const SummaryCategories: FC<Props> = props => {
         return "magazinImage"
       case "nature":
         return "natureImage"
+      case "society":
+        return "societyImage"
+      case "language":
+        return "languageImage"
+      case "art":
+        return "artImage"
+      case "others":
+        return "othersImage"
     }
   }
 

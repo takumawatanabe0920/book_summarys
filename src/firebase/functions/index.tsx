@@ -18,7 +18,6 @@ import {
   getTwoConditionsSummaryCount,
   updateFavoriteSummaries,
   getRankingSummaries,
-  getNewSummaries,
   getOneConditionsDescPaginationSummaries,
   getTwoConditionsDescPaginationSummaries
 } from "./summary"
@@ -106,7 +105,6 @@ export {
   getIdComment,
   createNotification,
   getMyNotifications,
-  getNewSummaries,
   getMyNotReadNotificationsCount,
   updateReadNotifications,
   uploadImage,

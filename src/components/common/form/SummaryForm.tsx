@@ -297,7 +297,7 @@ const SummaryForm: FC<Props> = props => {
           )}
         </div>
         <Textarea
-          title="リード分"
+          title="リード文"
           name="discription"
           value={values && values.discription ? values.discription : ""}
           placeholder="一覧表示時に表示される文章になります。"

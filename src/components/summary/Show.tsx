@@ -12,18 +12,23 @@ import {
   SummaryDetails,
   SummaryComment,
   SummaryCommentForm,
+  SummaryList,
   Sidebar
 } from "./../../components"
 import {
   getSummaryBookPopulate,
   createBrowsing,
   getMyBrowsings,
-  getSummaryComments
+  getSummaryComments,
+  getTwoConditionsSummaries
 } from "../../firebase/functions"
 import { GlobalContext } from "./../../assets/hooks/context/Global"
 
 const SummaryShowPage = () => {
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
+  const [involvedSummaries, setInvolvedSummaries] = useState<ResSummaryBook[]>(
+    []
+  )
   const [summaryCommentList, setSummaryCommentList] = useState<
     ResSummaryComment[]
   >([])
@@ -47,6 +52,10 @@ const SummaryShowPage = () => {
           ) : (
             <p>ログインをしてからコメントをしよう</p>
           )}
+          <div className="article-block mt4">
+            <h2 className="main-title blue-main-title blue-back">関連記事</h2>
+            <SummaryList dataList={involvedSummaries} articleType="stack" />
+          </div>
         </div>
       )
     } else if (_type === "private") {
@@ -113,6 +122,28 @@ const SummaryShowPage = () => {
         if (resSummaryBook && resSummaryBook.status === 200) {
           setSummaryBook(resSummaryBook.data)
         }
+        console.log(resSummaryBook.data.category.id)
+
+        const resInvolvedSummaryBookList: ResultResponseList<ResSummaryBook> = await getTwoConditionsSummaries(
+          3,
+          1,
+          ["update_date", "desc"],
+          [
+            "publishing_status",
+            "public",
+            "category",
+            resSummaryBook &&
+              resSummaryBook.data &&
+              resSummaryBook.data.category.id
+          ]
+        )
+        if (
+          resInvolvedSummaryBookList &&
+          resInvolvedSummaryBookList.status === 200
+        ) {
+          setInvolvedSummaries(resInvolvedSummaryBookList.data)
+        }
+
         setLoading(true)
       } catch (e) {}
     }
