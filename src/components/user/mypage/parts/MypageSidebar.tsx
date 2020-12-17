@@ -19,7 +19,7 @@ const MypageSidebar: FC<Props> = props => {
   const [loading, setLoading] = useState<boolean>(false)
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const [isMyAccount, setIsMyAccount] = useState<boolean>(() => {
-    return url.id === currentUser.id
+    return url.id === (currentUser && currentUser.id)
   })
   const [
     isShowAlert,
@@ -55,7 +55,7 @@ const MypageSidebar: FC<Props> = props => {
 
   return (
     <>
-      {loading && (
+      {loading && user && (
         <>
           <div className="_side-block">
             <Link

@@ -11,6 +11,7 @@ const db = firebase.firestore()
 export const getCategories = (): Promise<ResultResponseList<ResCategory>> => {
   const response = db
     .collection("category")
+    .orderBy("display_order")
     .get()
     .then(res => {
       let resData: ResCategory[] = res.docs.map(doc => {

@@ -78,7 +78,7 @@ const SummaryCommentForm: FC<Props> = props => {
       return await throwAlert("danger", "エラーが発生しました。")
     }
     if (await validationCheck()) return
-    if (window.confirm("記事を作成しますか？")) {
+    if (window.confirm("コメントをしますか？")) {
       const resCommnet: ResultResponse<ResSummaryComment> = await createSummaryComment(
         comments
       )

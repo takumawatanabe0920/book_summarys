@@ -33,12 +33,12 @@ const SummaryShowPage = () => {
   const slug: { id: string } = useParams()
 
   const publicSummary = (_type: string, user_id: string) => {
-    if (_type === "public" || currentUser.id === user_id) {
+    if (_type === "public" || (currentUser && currentUser.id === user_id)) {
       return (
         <div className="main-block article-block">
           <SummaryDetails summaryBook={summarybook} currentUser={currentUser} />
           <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
-          {currentUser.id ? (
+          {currentUser && currentUser.id ? (
             <SummaryCommentForm
               slug={slug}
               user_id={currentUser.id}
@@ -59,14 +59,14 @@ const SummaryShowPage = () => {
               currentUser={currentUser}
             />
             <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
-            {currentUser.id ? (
+            {currentUser && currentUser.id ? (
               <SummaryCommentForm
                 slug={slug}
                 user_id={currentUser.id}
                 summary_id={slug.id}
               />
             ) : (
-              <p>ログインをしてからコメントをしよう</p>
+              <p>ログインをしてからコメントができるよ</p>
             )}
           </div>
         </div>

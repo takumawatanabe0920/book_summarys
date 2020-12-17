@@ -55,7 +55,6 @@ const Trimming: FC<Props> = props => {
   const onCropComplete = async (crop: Crop) => {
     if (imageRef && crop.width && crop.height) {
       const UNIQUEID = createUniqueStr()
-      console.log(UNIQUEID)
       const [croppedImageUrl, blobFile] = await getCroppedImg(
         imageRef,
         crop,

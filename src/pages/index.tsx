@@ -50,32 +50,28 @@ ReactDOM.render(
                   path="/summary/:id/edit"
                   component={SummaryEditPage}
                 />
-                <PrivateRoute
-                  exact
-                  path="/mypage/:id/home"
-                  component={MypageHome}
-                />
+                <Route exact path="/mypage/:id/home" component={MypageHome} />
                 <PrivateRoute
                   exact
                   path="/mypage/:id/edit"
                   component={MypageEdit}
                 />
-                <PrivateRoute
+                <Route
                   exact
                   path="/mypage/:id/favorites"
                   component={MypageFavorites}
                 />
-                <PrivateRoute
+                <Route
                   exact
                   path="/mypage/:id/browsings"
                   component={MypageBrowsings}
                 />
-                <PrivateRoute
+                <Route
                   exact
                   path="/mypage/:id/comments"
                   component={MypageComments}
                 />
-                <PrivateRoute
+                <Route
                   exact
                   path="/mypage/:id/summaries"
                   component={MypageSummaries}
@@ -83,7 +79,7 @@ ReactDOM.render(
                 <Route exact path="/user/:id" component={UserDetailPage} />
                 <Route exact path="/summary/:id" component={SummaryShowPage} />
                 <Route exact path="/summary" component={SummaryPage} />
-                <Route
+                <PrivateRoute
                   exact
                   path="/notification"
                   component={NotificationPage}

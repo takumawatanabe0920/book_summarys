@@ -37,7 +37,7 @@ const MypageSummaries = () => {
         const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
         let resMySummariesDataList: ResultResponseList<ResSummaryBook>
         let resSummariesNum = 0
-        if (currentUser.id === url.id) {
+        if ((currentUser && currentUser.id) === url.id) {
           resMySummariesDataList = await getOneConditionsDescPaginationSummaries(
             dataNumPerPage,
             page,
@@ -82,7 +82,7 @@ const MypageSummaries = () => {
               <div className="user-mypage">
                 <h1 className="main-title blue-main-title">MY PAGE</h1>
                 <div className="mypage-content">
-                  <MypageSidebar user={currentUser} />
+                  <MypageSidebar user={user} />
                   <div className="_mypage">
                     <h2 className="sub-ttl">投稿記事一覧</h2>
                     {summaries && summaries.length > 0 && (

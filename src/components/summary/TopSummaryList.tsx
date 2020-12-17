@@ -49,7 +49,6 @@ const TopSummaryList = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        console.log("called")
         let resSummariesRankingDataList: ResultResponseList<ResSummaryBook> = await getRankingSummaries(
           6,
           "public",

@@ -48,7 +48,6 @@ export const getMyNotifications = (
     .orderBy("update_date", "desc")
     .get()
     .then(async res => {
-      const startTime = performance.now() // 開始時間
       if (res.docs.length <= 0) return []
       let resData = await Promise.all(
         res.docs.map(async doc => {
@@ -90,8 +89,6 @@ export const getMyNotifications = (
           return _data.target_id.summary_id.user_id === user_id
         })
       }
-      const endTime = performance.now() // 終了時間
-      console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
       return newArray
     })
 
@@ -175,7 +172,6 @@ export const updateReadNotifications = async (
         })
       )
       await batch.commit()
-      console.log(count)
       return count
     })
     .catch(error => {

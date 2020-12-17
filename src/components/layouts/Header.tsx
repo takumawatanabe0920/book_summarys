@@ -36,7 +36,6 @@ const Header = () => {
   } = useContext(GlobalContext)
 
   const enterPulldown = () => {
-    console.log("called1")
     setMouseOver(true)
   }
 
@@ -45,9 +44,6 @@ const Header = () => {
   }
 
   const leavePulldown = () => {
-    // Set a timeout so that the menu doesn't close before the user has time to
-    // move their mouse over it
-    console.log("called2")
     setTimeout(() => {
       setMouseOver(false)
     }, 300)
@@ -81,7 +77,7 @@ const Header = () => {
     }
 
     loadData()
-  }, [currentUser])
+  }, [currentUser, notificationCount])
 
   return (
     <header className="l-header__container">

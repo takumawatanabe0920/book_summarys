@@ -211,7 +211,6 @@ const setUser = async (
         create_date,
         email
       }
-      console.log(currentUser)
 
       setLocalStrage(currentUser)
     } else {

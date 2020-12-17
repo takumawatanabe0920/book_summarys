@@ -63,7 +63,6 @@ const SummaryForm: FC<Props> = props => {
     const target = event.target
     const value = target.type === "checkbox" ? target.checked : target.value
     const name = target.name
-    console.log({ ...values, [name]: value })
     setValues({ ...values, [name]: value })
   }
 
@@ -123,7 +122,6 @@ const SummaryForm: FC<Props> = props => {
     if (_file.size > 1000000) {
       setImageUrl(null)
       setImage(undefined)
-      console.log(image)
       throwAlert("danger", "ファイルサイズが1MBを超えています")
       return "err"
     }
@@ -186,9 +184,6 @@ const SummaryForm: FC<Props> = props => {
         errorText.content = "50文字以上で入力してください。"
       }
     }
-    console.log(!thumbnail)
-    console.log(!imageUrl)
-    console.log(!image)
     if (!thumbnail && (!image || !imageUrl)) {
       isError = true
       errorText.thumbnail = "サムネイル画像を設定してください。"
@@ -378,7 +373,7 @@ const SummaryForm: FC<Props> = props => {
           setThumnail(resThumnail)
           setValues({
             ...editData,
-            ["user_id"]: currentUser.id,
+            ["user_id"]: currentUser && currentUser.id,
             ["user_name"]: currentUser.displayName
               ? currentUser.displayName
               : ""
@@ -386,7 +381,7 @@ const SummaryForm: FC<Props> = props => {
         } else {
           setValues({
             ...values,
-            ["user_id"]: currentUser.id,
+            ["user_id"]: currentUser && currentUser.id,
             ["user_name"]: currentUser.displayName
               ? currentUser.displayName
               : ""

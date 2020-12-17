@@ -17,7 +17,6 @@ const NotificationPage = () => {
   const { currentUser, notificationCount, setNotificationCount } = useContext(
     GlobalContext
   )
-
   const handleChange = (event: any, newValue: any) => {
     setValue(newValue)
   }
@@ -32,8 +31,6 @@ const NotificationPage = () => {
       currentUser.id,
       _tabType
     )
-    console.log(resCount)
-    console.log(notificationCount)
     setNotificationCount(notificationCount - resCount)
   }
 

@@ -13,7 +13,7 @@ const MypageEdit = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
-      if (url.id !== currentUser.id) {
+      if (url.id !== (currentUser && currentUser.id)) {
         history.push(`/mypage/${url.id}/home`)
       }
     }

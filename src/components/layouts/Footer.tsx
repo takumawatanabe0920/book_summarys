@@ -6,7 +6,12 @@ const Footer = () => {
       <div className="l-footer__logo">SHERENOTE</div>
       <div className="l-footer__links">
         <span className="l-footer__link">
-          <a href="#" className="contact_link_hp">
+          <a
+            href="https://twitter.com/ku____maaa"
+            target="_blank"
+            rel="noopener"
+            className="contact_link_hp"
+          >
             お問い合わせ
           </a>
         </span>

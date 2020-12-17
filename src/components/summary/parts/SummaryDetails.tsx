@@ -60,7 +60,10 @@ const SummaryDetails: FC<Props> = props => {
         <div className="_body">
           <ReadOnlyEditor editorState={content} />
           <div className="_favorite-area">
-            <FavoriteButton user_id={currentUser.id} summary_id={url.id} />
+            <FavoriteButton
+              user_id={currentUser && currentUser.id}
+              summary_id={url.id}
+            />
           </div>
         </div>
       </div>
