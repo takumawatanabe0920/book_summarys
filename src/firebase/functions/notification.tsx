@@ -41,8 +41,6 @@ export const getMyNotifications = (
   target_user_id: string,
   type: string
 ): Promise<ResNotification[]> => {
-  console.log(target_user_id)
-  console.log(type)
   const response = db
     .collection("notification")
     .where("target_user_id", "==", target_user_id)
