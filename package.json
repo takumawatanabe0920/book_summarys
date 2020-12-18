@@ -44,7 +44,6 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-hammerjs": "^1.0.1",
-    "react-hook-form": "^6.9.5",
     "react-image-crop": "^8.6.6",
     "react-router-dom": "^5.2.0",
     "react-slick": "^0.27.13",

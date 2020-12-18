@@ -58,7 +58,7 @@ module.exports = {
     alias: {}
   },
   //plugins: [],
-  //plugins: [new BundleAnalyzerPlugin()],
+  plugins: [new BundleAnalyzerPlugin()],
   // new BundleAnalyzerPlugin()
 
   // 開発モード設定

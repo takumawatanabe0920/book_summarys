@@ -1,9 +1,10 @@
 import React, { useState, useEffect, FC } from "react"
 // components
 import { ResultResponseList, ResCategory } from "../../types"
-import { getCategories, readQuery } from "../../firebase/functions"
+import { getCategoriesPopulateImage, readQuery } from "../../firebase/functions"
 import { Link } from "react-router-dom"
 import clsx from "clsx"
+import { url } from "inspector"
 
 type Props = {
   fetchData: any
@@ -17,34 +18,14 @@ const SummaryCategories: FC<Props> = props => {
     fetchData(slug, name)
   }
 
-  const formatCategoryImage = (_type: string): string => {
-    switch (_type) {
-      case "sports":
-        return "sportImage"
-      case "business":
-        return "businessImage"
-      case "novel":
-        return "novelImage"
-      case "magazin":
-        return "magazinImage"
-      case "nature":
-        return "natureImage"
-      case "society":
-        return "societyImage"
-      case "language":
-        return "languageImage"
-      case "art":
-        return "artImage"
-      case "others":
-        return "othersImage"
-    }
-  }
-
   useEffect(() => {
     const loadData = async () => {
       try {
-        const resCategoryList: ResultResponseList<ResCategory> = await getCategories()
-        setCategories(resCategoryList.data)
+        const resCategoryList: ResultResponseList<ResCategory> = await getCategoriesPopulateImage()
+        console.log(resCategoryList)
+        if (resCategoryList && resCategoryList.status === 200) {
+          setCategories(resCategoryList.data)
+        }
       } catch (e) {}
     }
 
@@ -59,9 +40,13 @@ const SummaryCategories: FC<Props> = props => {
           {categories.map((data: ResCategory) => {
             return (
               <Link
+                style={{
+                  background: `url(${data.image}) no-repeat center center`,
+                  backgroundSize: "cover"
+                }}
                 onClick={() => updateData(data.id, data.name)}
                 to={`/summary?category=${data.id}`}
-                className={clsx("_data", formatCategoryImage(data.slug))}
+                className="_data"
               >
                 <p className="_data-tag">{data.name}</p>
               </Link>

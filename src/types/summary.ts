@@ -23,6 +23,7 @@ export type Category = Partial<{
   name: string
   slug: string
   display_order: number
+  image: string
 }>
 
 export type SubCategory = Partial<{

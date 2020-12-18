@@ -1,5 +1,4 @@
 import React, { useState, useEffect, FC, useContext } from "react"
-import { useForm } from "react-hook-form"
 import useReactRouter from "use-react-router"
 import { Input, Textarea, Select } from "../../../components"
 import {
@@ -44,9 +43,6 @@ const SummaryForm: FC<Props> = props => {
   const [errorTexts, setErrorTexts] = useState<SummaryBook>({})
   const [thumnail, setThumnail] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
-  const { register, handleSubmit, errors, formState } = useForm<SummaryBook>({
-    mode: "onChange"
-  })
   const [
     isShowAlert,
     alertStatus,
@@ -305,7 +301,6 @@ const SummaryForm: FC<Props> = props => {
           onChange={handleTextareaChange}
           errorMessage={errorTexts.discription ? errorTexts.discription : ""}
         />
-        {errors.title && "作者名は1文字以上、20文字以下でなければなりません。"}
         <RichEditor
           title="本の内容"
           required={true}

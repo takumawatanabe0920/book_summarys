@@ -38,7 +38,6 @@ const SummaryIndexPage = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true)
       try {
         let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getOneConditionsSummaries(
           6,
@@ -70,6 +69,7 @@ const SummaryIndexPage = () => {
           setSelectSummaries(resSelectSummariesDataList.data)
         }
         setSummariesNum(count)
+        setLoading(true)
       } catch (e) {}
     }
 
@@ -78,7 +78,7 @@ const SummaryIndexPage = () => {
 
   return (
     <>
-      {loading && (
+      {loading ? (
         <div className="summary-contents">
           <SummaryCategories fetchData={fetchData} />
           <div className="l-container">
@@ -108,6 +108,10 @@ const SummaryIndexPage = () => {
               </div>
             </div>
           </div>
+        </div>
+      ) : (
+        <div className="loading">
+          <div className="loader"></div>
         </div>
       )}
     </>

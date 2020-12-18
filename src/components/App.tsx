@@ -40,16 +40,16 @@ const HomePage = () => {
         if (resNewSummariesDataList && resNewSummariesDataList.status === 200) {
           setNewSummaries(resNewSummariesDataList.data)
         }
+        setLoading(true)
       } catch (e) {}
     }
 
     loadData()
-    setLoading(true)
   }, [])
 
   return (
     <>
-      {loading && (
+      {loading ? (
         <>
           <TopSummaryList />
           <div className="l-main">
@@ -75,6 +75,10 @@ const HomePage = () => {
             <Sidebar />
           </div>
         </>
+      ) : (
+        <div className="loading">
+          <div className="loader"></div>
+        </div>
       )}
     </>
   )

@@ -2,6 +2,7 @@ import React from "react"
 
 import {
   getCategories,
+  getCategoriesPopulateImage,
   getCategory,
   getSubCategories,
   getSubCategory,
@@ -69,6 +70,7 @@ export {
   categoryLinkingSubCategory,
   getSummaryBook,
   getOneConditionsSummaries,
+  getCategoriesPopulateImage,
   createSummary,
   updateSummary,
   updateFavoriteSummaries,

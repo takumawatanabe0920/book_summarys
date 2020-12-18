@@ -7,11 +7,6 @@ import editIcon from "../../static/images/icon/edit-regular.svg"
 import caretDownIcon from "../../static/images/icon/caret-down-solid.svg"
 import userCircleIcon from "../../static/images/icon/user-circle-solid.svg"
 import logoIcon from "../../static/images/icon/logo.png"
-import businessImg from "../../static/images/business.jpg"
-import magazinImg from "../../static/images/magazin.jpg"
-import natureImg from "../../static/images/nature.jpg"
-import novelImg from "../../static/images/novel.jpg"
-import sportsImg from "../../static/images/sports.jpg"
 
 export {
   iconUl,
@@ -21,10 +16,5 @@ export {
   editIcon,
   userCircleIcon,
   caretDownIcon,
-  logoIcon,
-  businessImg,
-  magazinImg,
-  natureImg,
-  novelImg,
-  sportsImg
+  logoIcon
 }

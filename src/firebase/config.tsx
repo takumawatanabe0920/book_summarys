@@ -1,5 +1,5 @@
 import React from "react"
-import * as firebase from "firebase/app"
+import firebase from "firebase/app"
 import "firebase/storage"
 import "firebase/firestore"
 import "firebase/auth"
@@ -12,7 +12,7 @@ var firebaseConfig = {
   storageBucket: "sherenote-0920.appspot.com",
   messagingSenderId: "366733885061",
   appId: "1:366733885061:web:abd1767f95da2514a0f3ec"
-};
+}
 // Initialize Firebase
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)

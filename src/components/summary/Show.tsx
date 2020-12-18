@@ -153,10 +153,14 @@ const SummaryShowPage = () => {
 
   return (
     <>
-      {loading && (
+      {loading ? (
         <div className="summary_main">
           {publicSummary(summarybook.publishing_status, summarybook.user_id.id)}
           <Sidebar />
+        </div>
+      ) : (
+        <div className="loading">
+          <div className="loader"></div>
         </div>
       )}
     </>
