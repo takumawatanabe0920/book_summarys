@@ -13,13 +13,13 @@ type Props = {
 }
 
 const MypageSidebar: FC<Props> = props => {
-  const url: { id: string } = useParams()
+  const slug: { id: string } = useParams()
   const { user } = props
   const { history } = useReactRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const [isMyAccount, setIsMyAccount] = useState<boolean>(() => {
-    return url.id === (currentUser && currentUser.id)
+    return slug.id === (currentUser && currentUser.id)
   })
   const [
     isShowAlert,
@@ -50,8 +50,9 @@ const MypageSidebar: FC<Props> = props => {
   }
 
   useEffect(() => {
+    setIsMyAccount(slug.id === (currentUser && currentUser.id))
     setLoading(true)
-  }, [])
+  }, [slug, isMyAccount])
 
   return (
     <>
@@ -59,14 +60,14 @@ const MypageSidebar: FC<Props> = props => {
         <>
           <div className="_side-block">
             <Link
-              to={`/mypage/${user.id ? user.id : url.id}/home`}
+              to={`/mypage/${user.id ? user.id : slug.id}/home`}
               className={clsx("_side-item", isActive("home"))}
             >
               ユーザー情報
             </Link>
             {isMyAccount ? (
               <Link
-                to={`/mypage/${user.id ? user.id : url.id}/edit`}
+                to={`/mypage/${user.id ? user.id : slug.id}/edit`}
                 className={clsx("_side-item", isActive("edit"))}
               >
                 会員情報を編集
@@ -75,14 +76,14 @@ const MypageSidebar: FC<Props> = props => {
               ""
             )}
             <Link
-              to={`/mypage/${user.id ? user.id : url.id}/summaries`}
+              to={`/mypage/${user.id ? user.id : slug.id}/summaries`}
               className={clsx("_side-item", isActive("summaries"))}
             >
               投稿記事
             </Link>
             {isMyAccount ? (
               <Link
-                to={`/mypage/${user.id ? user.id : url.id}/browsings`}
+                to={`/mypage/${user.id ? user.id : slug.id}/browsings`}
                 className={clsx("_side-item", isActive("browsings"))}
               >
                 閲覧履歴
@@ -91,13 +92,13 @@ const MypageSidebar: FC<Props> = props => {
               ""
             )}
             <Link
-              to={`/mypage/${user.id ? user.id : url.id}/favorites`}
+              to={`/mypage/${user.id ? user.id : slug.id}/favorites`}
               className={clsx("_side-item", isActive("favorites"))}
             >
               いいね
             </Link>
             <Link
-              to={`/mypage/${user.id ? user.id : url.id}/comments`}
+              to={`/mypage/${user.id ? user.id : slug.id}/comments`}
               className={clsx("_side-item", isActive("comments"))}
             >
               コメント

@@ -9,6 +9,7 @@ import {
   ResUser as CurrentUser
 } from "../../types"
 import { firebase } from "../config"
+import { responseUploadImage } from "./"
 
 export const getCurrentUser = (): CurrentUser => {
   const currentUserData = localStorage.getItem("user")
@@ -121,9 +122,13 @@ export const getIdUser = (id: string): Promise<ResultResponse<ResUser>> => {
     .collection("user")
     .doc(id)
     .get()
-    .then(doc => {
+    .then(async doc => {
       if (doc.exists) {
-        const data = { id: doc.id, ...doc.data() }
+        let photoURL: string = ""
+        if (doc.data().photoURL) {
+          photoURL = await responseUploadImage(doc.data().photoURL)
+        }
+        const data = { id: doc.id, ...doc.data(), photoURL }
         return { status: 200, data }
       }
     })

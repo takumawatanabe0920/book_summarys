@@ -21,7 +21,7 @@ const MypageSummaries = () => {
   const [user, setUser] = useState<ResUser>({})
   const [summaries, setSummaries] = useState<ResSummaryBook[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const url: { id: string } = useParams()
+  const slug: { id: string } = useParams()
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const [page, setPage] = useState(Number(readQuery("pages") || 1))
   const [summariesNum, setSummariesNum] = useState(0)
@@ -34,28 +34,28 @@ const MypageSummaries = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
+        const resUser: ResultResponse<ResUser> = await getIdUser(slug.id)
         let resMySummariesDataList: ResultResponseList<ResSummaryBook>
         let resSummariesNum = 0
-        if ((currentUser && currentUser.id) === url.id) {
+        if ((currentUser && currentUser.id) === slug.id) {
           resMySummariesDataList = await getOneConditionsDescPaginationSummaries(
             dataNumPerPage,
             page,
-            ["user_id", url.id]
+            ["user_id", slug.id]
           )
           resSummariesNum = await getOneConditionsSummaryCount([
             "user_id",
-            url.id
+            slug.id
           ])
         } else {
           resMySummariesDataList = await getTwoConditionsDescPaginationSummaries(
             dataNumPerPage,
             page,
-            ["user_id", url.id, "publishing_status", "public"]
+            ["user_id", slug.id, "publishing_status", "public"]
           )
           resSummariesNum = await getTwoConditionsSummaryCount([
             "user_id",
-            url.id,
+            slug.id,
             "publishing_status",
             "public"
           ])
@@ -71,7 +71,7 @@ const MypageSummaries = () => {
     }
     loadData()
     setLoading(true)
-  }, [page])
+  }, [page, slug])
 
   return (
     <>

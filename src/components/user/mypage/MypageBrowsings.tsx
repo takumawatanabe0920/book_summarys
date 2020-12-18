@@ -18,7 +18,7 @@ const MypageBrowsings = () => {
   const [dataNumPerPage, setDataNumPerPager] = useState(8)
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const { history } = useReactRouter()
-  const url: { id: string } = useParams()
+  const slug: { id: string } = useParams()
 
   const fetchPager = (num: number) => {
     setPage(num)
@@ -27,12 +27,12 @@ const MypageBrowsings = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true)
-      if (url.id !== (currentUser && currentUser.id)) {
-        history.push(`/mypage/${url.id}/home`)
+      if (slug.id !== (currentUser && currentUser.id)) {
+        history.push(`/mypage/${slug.id}/home`)
       }
       try {
-        if (url.id !== (currentUser && currentUser.id)) {
-          history.push(`/mypage/${url.id}/home`)
+        if (slug.id !== (currentUser && currentUser.id)) {
+          history.push(`/mypage/${slug.id}/home`)
         }
         let resBrowing: ResultResponseList<ResBrowsing>
         if (currentUser && currentUser.id) {
@@ -51,7 +51,7 @@ const MypageBrowsings = () => {
     }
 
     loadData()
-  }, [page])
+  }, [page, slug])
 
   return (
     <>

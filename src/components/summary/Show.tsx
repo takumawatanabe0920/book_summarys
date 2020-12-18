@@ -47,7 +47,7 @@ const SummaryShowPage = () => {
             <SummaryCommentForm
               slug={slug}
               user_id={currentUser.id}
-              summary_id={slug.id}
+              summary_book={summarybook}
             />
           ) : (
             <p>ログインをしてからコメントをしよう</p>
@@ -72,7 +72,7 @@ const SummaryShowPage = () => {
               <SummaryCommentForm
                 slug={slug}
                 user_id={currentUser.id}
-                summary_id={slug.id}
+                summary_book={summarybook}
               />
             ) : (
               <p>ログインをしてからコメントができるよ</p>
@@ -85,6 +85,7 @@ const SummaryShowPage = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      window.scrollTo(0, 0)
       try {
         if (slug && slug.id && currentUser) {
           const browsing = {

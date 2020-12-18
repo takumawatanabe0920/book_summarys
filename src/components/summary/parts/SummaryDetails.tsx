@@ -62,7 +62,7 @@ const SummaryDetails: FC<Props> = props => {
           <div className="_favorite-area">
             <FavoriteButton
               user_id={currentUser && currentUser.id}
-              summary_id={url.id}
+              summary_book={summaryBook}
             />
           </div>
         </div>

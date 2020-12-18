@@ -4,6 +4,7 @@ import { Textarea } from "./../../components"
 import {
   SummaryComment,
   ResSummaryComment,
+  ResSummaryBook,
   ResultResponse
 } from "./../../types"
 import {
@@ -16,16 +17,16 @@ import { GlobalContext } from "./../../assets/hooks/context/Global"
 type Props = {
   slug?: { id?: string }
   user_id: string
-  summary_id: string
+  summary_book: ResSummaryBook
 }
 
 const SummaryCommentForm: FC<Props> = props => {
-  const { slug, user_id, summary_id } = props
+  const { slug, user_id, summary_book } = props
   const { currentUser, setCurrentUser } = useContext(GlobalContext)
   const initialState = {
     user_id,
     user_name: currentUser.displayName ? currentUser.displayName : "",
-    summary_id,
+    summary_id: summary_book.id,
     comment: ""
   }
   const [comments, setComments] = useState<SummaryComment>({
@@ -85,6 +86,7 @@ const SummaryCommentForm: FC<Props> = props => {
       if (resCommnet && resCommnet.status === 200) {
         createNotification({
           user_id,
+          target_user_id: summary_book.user_id.id,
           user_name: currentUser.displayName ? currentUser.displayName : "",
           target_id: resCommnet.data.id,
           type: "summary_comment"
