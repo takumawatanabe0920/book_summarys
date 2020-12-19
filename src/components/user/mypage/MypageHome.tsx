@@ -7,21 +7,21 @@ import { getIdUser } from "../../../firebase/functions"
 const MypageEdit = () => {
   const [user, setUser] = useState<ResUser>({})
   const [loading, setLoading] = useState<boolean>(false)
-  const url: { id: string } = useParams()
+  const slug: { id: string } = useParams()
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
+        const resUser: ResultResponse<ResUser> = await getIdUser(slug.id)
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)
         }
+        setLoading(true)
       } catch (e) {}
     }
 
     loadData()
-    setLoading(true)
-  }, [])
+  }, [slug])
 
   return (
     <>

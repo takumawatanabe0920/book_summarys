@@ -22,12 +22,15 @@ export type SummaryBook = Partial<{
 export type Category = Partial<{
   name: string
   slug: string
+  display_order: number
+  image: string
 }>
 
 export type SubCategory = Partial<{
   category_id: string
   name: string
   slug: string
+  display_order: number
 }>
 
 export type ResSummaryBook = SummaryBook & {

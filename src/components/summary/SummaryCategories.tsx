@@ -1,9 +1,11 @@
 import React, { useState, useEffect, FC } from "react"
+import { LazyLoadComponent } from "react-lazy-load-image-component"
 // components
 import { ResultResponseList, ResCategory } from "../../types"
-import { getCategories, readQuery } from "../../firebase/functions"
+import { getCategoriesPopulateImage, readQuery } from "../../firebase/functions"
 import { Link } from "react-router-dom"
 import clsx from "clsx"
+import { url } from "inspector"
 
 type Props = {
   fetchData: any
@@ -17,26 +19,13 @@ const SummaryCategories: FC<Props> = props => {
     fetchData(slug, name)
   }
 
-  const formatCategoryImage = (_type: string): string => {
-    switch (_type) {
-      case "sports":
-        return "sportImage"
-      case "business":
-        return "businessImage"
-      case "novel":
-        return "novelImage"
-      case "magazin":
-        return "magazinImage"
-      case "nature":
-        return "natureImage"
-    }
-  }
-
   useEffect(() => {
     const loadData = async () => {
       try {
-        const resCategoryList: ResultResponseList<ResCategory> = await getCategories()
-        setCategories(resCategoryList.data)
+        const resCategoryList: ResultResponseList<ResCategory> = await getCategoriesPopulateImage()
+        if (resCategoryList && resCategoryList.status === 200) {
+          setCategories(resCategoryList.data)
+        }
       } catch (e) {}
     }
 
@@ -50,13 +39,19 @@ const SummaryCategories: FC<Props> = props => {
         <div className="_category-body">
           {categories.map((data: ResCategory) => {
             return (
-              <Link
-                onClick={() => updateData(data.id, data.name)}
-                to={`/summary?category=${data.id}`}
-                className={clsx("_data", formatCategoryImage(data.slug))}
-              >
-                <p className="_data-tag">{data.name}</p>
-              </Link>
+              <LazyLoadComponent>
+                <Link
+                  style={{
+                    background: `url(${data.image}) no-repeat center center`,
+                    backgroundSize: "cover"
+                  }}
+                  onClick={() => updateData(data.id, data.name)}
+                  to={`/summary?category=${data.id}`}
+                  className="_data"
+                >
+                  <p className="_data-tag">{data.name}</p>
+                </Link>
+              </LazyLoadComponent>
             )
           })}
         </div>

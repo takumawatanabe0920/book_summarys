@@ -32,6 +32,7 @@ export const uploadImage = (
 }
 
 export const getImage = (_imgPath: string): Promise<ResultResponse<string>> => {
+  if (_imgPath.match(/^\https:/)) return
   if (!_imgPath) return
   const ref = firebase
     .storage()

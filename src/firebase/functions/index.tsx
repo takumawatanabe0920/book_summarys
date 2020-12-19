@@ -2,6 +2,7 @@ import React from "react"
 
 import {
   getCategories,
+  getCategoriesPopulateImage,
   getCategory,
   getSubCategories,
   getSubCategory,
@@ -18,7 +19,6 @@ import {
   getTwoConditionsSummaryCount,
   updateFavoriteSummaries,
   getRankingSummaries,
-  getNewSummaries,
   getOneConditionsDescPaginationSummaries,
   getTwoConditionsDescPaginationSummaries
 } from "./summary"
@@ -70,6 +70,7 @@ export {
   categoryLinkingSubCategory,
   getSummaryBook,
   getOneConditionsSummaries,
+  getCategoriesPopulateImage,
   createSummary,
   updateSummary,
   updateFavoriteSummaries,
@@ -106,7 +107,6 @@ export {
   getIdComment,
   createNotification,
   getMyNotifications,
-  getNewSummaries,
   getMyNotReadNotificationsCount,
   updateReadNotifications,
   uploadImage,

@@ -12,18 +12,23 @@ import {
   SummaryDetails,
   SummaryComment,
   SummaryCommentForm,
+  SummaryList,
   Sidebar
 } from "./../../components"
 import {
   getSummaryBookPopulate,
   createBrowsing,
   getMyBrowsings,
-  getSummaryComments
+  getSummaryComments,
+  getTwoConditionsSummaries
 } from "../../firebase/functions"
 import { GlobalContext } from "./../../assets/hooks/context/Global"
 
 const SummaryShowPage = () => {
   const [summarybook, setSummaryBook] = useState<ResSummaryBook>({})
+  const [involvedSummaries, setInvolvedSummaries] = useState<ResSummaryBook[]>(
+    []
+  )
   const [summaryCommentList, setSummaryCommentList] = useState<
     ResSummaryComment[]
   >([])
@@ -33,20 +38,24 @@ const SummaryShowPage = () => {
   const slug: { id: string } = useParams()
 
   const publicSummary = (_type: string, user_id: string) => {
-    if (_type === "public" || currentUser.id === user_id) {
+    if (_type === "public" || (currentUser && currentUser.id === user_id)) {
       return (
         <div className="main-block article-block">
           <SummaryDetails summaryBook={summarybook} currentUser={currentUser} />
           <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
-          {currentUser.id ? (
+          {currentUser && currentUser.id ? (
             <SummaryCommentForm
               slug={slug}
               user_id={currentUser.id}
-              summary_id={slug.id}
+              summary_book={summarybook}
             />
           ) : (
             <p>ログインをしてからコメントをしよう</p>
           )}
+          <div className="article-block mt4">
+            <h2 className="main-title blue-main-title blue-back">関連記事</h2>
+            <SummaryList dataList={involvedSummaries} articleType="stack" />
+          </div>
         </div>
       )
     } else if (_type === "private") {
@@ -59,14 +68,14 @@ const SummaryShowPage = () => {
               currentUser={currentUser}
             />
             <SummaryComment<ResSummaryComment> dataList={summaryCommentList} />
-            {currentUser.id ? (
+            {currentUser && currentUser.id ? (
               <SummaryCommentForm
                 slug={slug}
                 user_id={currentUser.id}
-                summary_id={slug.id}
+                summary_book={summarybook}
               />
             ) : (
-              <p>ログインをしてからコメントをしよう</p>
+              <p>ログインをしてからコメントができるよ</p>
             )}
           </div>
         </div>
@@ -76,6 +85,7 @@ const SummaryShowPage = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      window.scrollTo(0, 0)
       try {
         if (slug && slug.id && currentUser) {
           const browsing = {
@@ -113,6 +123,27 @@ const SummaryShowPage = () => {
         if (resSummaryBook && resSummaryBook.status === 200) {
           setSummaryBook(resSummaryBook.data)
         }
+
+        const resInvolvedSummaryBookList: ResultResponseList<ResSummaryBook> = await getTwoConditionsSummaries(
+          3,
+          1,
+          ["update_date", "desc"],
+          [
+            "publishing_status",
+            "public",
+            "category",
+            resSummaryBook &&
+              resSummaryBook.data &&
+              resSummaryBook.data.category.id
+          ]
+        )
+        if (
+          resInvolvedSummaryBookList &&
+          resInvolvedSummaryBookList.status === 200
+        ) {
+          setInvolvedSummaries(resInvolvedSummaryBookList.data)
+        }
+
         setLoading(true)
       } catch (e) {}
     }
@@ -122,10 +153,14 @@ const SummaryShowPage = () => {
 
   return (
     <>
-      {loading && (
+      {loading ? (
         <div className="summary_main">
           {publicSummary(summarybook.publishing_status, summarybook.user_id.id)}
           <Sidebar />
+        </div>
+      ) : (
+        <div className="loading">
+          <div className="loader"></div>
         </div>
       )}
     </>

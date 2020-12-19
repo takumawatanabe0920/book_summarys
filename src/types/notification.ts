@@ -2,6 +2,7 @@ import React from "react"
 
 export type Notification = Partial<{
   user_id: string
+  target_user_id: string
   user_name: string
   type: "favorite" | "company" | "summary_comment"
   target_id: any

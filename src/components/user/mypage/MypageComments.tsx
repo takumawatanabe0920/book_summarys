@@ -23,7 +23,7 @@ const MypageComments = () => {
   const [dataNumPerPage, setDataNumPerPager] = useState(8)
   const [page, setPage] = useState(Number(readQuery("pages") || 1))
   const [loading, setLoading] = useState<boolean>(false)
-  const url: { id: string } = useParams()
+  const slug: { id: string } = useParams()
 
   const fetchPager = (num: number) => {
     setPage(num)
@@ -33,13 +33,13 @@ const MypageComments = () => {
     const loadData = async () => {
       setLoading(true)
       try {
-        const resUser: ResultResponse<ResUser> = await getIdUser(url.id)
+        const resUser: ResultResponse<ResUser> = await getIdUser(slug.id)
         const resMySummaryCommentsDataList: ResultResponseList<ResSummaryComment> = await getMyComments(
           dataNumPerPage,
           page,
-          url.id
+          slug.id
         )
-        const count: number = await getMyCommentCount(url.id)
+        const count: number = await getMyCommentCount(slug.id)
         setMyCommentsNum(count)
         if (resUser && resUser.status === 200) {
           setUser(resUser.data)
@@ -54,7 +54,7 @@ const MypageComments = () => {
     }
 
     loadData()
-  }, [page])
+  }, [page, slug])
 
   return (
     <>

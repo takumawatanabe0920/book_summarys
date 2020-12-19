@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect, useContext } from "react"
 import clsx from "clsx"
 import Hammer from "react-hammerjs"
 import useReactRouter from "use-react-router"
+import { LazyLoadComponent } from "react-lazy-load-image-component"
 import { ResSummaryBook, ResultResponse } from "../../types"
 import { getImage } from "../../firebase/functions"
 import { Link } from "react-router-dom"
@@ -88,14 +89,16 @@ const MediaCard: FC<Props> = props => {
               setting && setting.topSlider ? "top-ver" : ""
             )}
           >
-            <CardMedia
-              className={clsx(
-                setting && setting.topSlider ? "sliderImg" : "media",
-                elType === "top-summary-list" ? "top-summary-img" : ""
-              )}
-              image={summaryThumbnail}
-              title="Contemplative Reptile"
-            />
+            <LazyLoadComponent>
+              <CardMedia
+                className={clsx(
+                  setting && setting.topSlider ? "sliderImg" : "media",
+                  elType === "top-summary-list" ? "top-summary-img" : ""
+                )}
+                image={summaryThumbnail}
+                title="Contemplative Reptile"
+              />
+            </LazyLoadComponent>
             <div
               className={clsx(
                 "article-body",

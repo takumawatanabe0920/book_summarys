@@ -9,6 +9,8 @@ import {
   ResUser as CurrentUser
 } from "../../types"
 import { firebase } from "../config"
+import { responseUploadImage } from "./"
+import { getImage } from "../../firebase/functions/defalt"
 
 export const getCurrentUser = (): CurrentUser => {
   const currentUserData = localStorage.getItem("user")
@@ -44,12 +46,13 @@ export const register = async (
         })
         .then(async res => {
           await setUser(res.id, "register")
+          return { status: 200 }
         })
         .catch(error => {
           console.log(error)
           return { status: 400, error }
         })
-      return { status: 200 }
+      return user
     })
     .catch(error => {
       console.log(error)
@@ -121,9 +124,13 @@ export const getIdUser = (id: string): Promise<ResultResponse<ResUser>> => {
     .collection("user")
     .doc(id)
     .get()
-    .then(doc => {
+    .then(async doc => {
       if (doc.exists) {
-        const data = { id: doc.id, ...doc.data() }
+        let photoURL: string = ""
+        if (doc.data().photoURL) {
+          photoURL = await responseUploadImage(doc.data().photoURL)
+        }
+        const data = { id: doc.id, ...doc.data(), photoURL }
         return { status: 200, data }
       }
     })
@@ -139,10 +146,16 @@ const getUidUser = (uid: string): Promise<ResultResponse<ResUser[]>> => {
     .collection("user")
     .where("login_id", "==", uid)
     .get()
-    .then(res => {
-      let resData: ResUser[] = res.docs.map(doc => {
-        return { id: doc.id, ...doc.data() }
-      })
+    .then(async res => {
+      let resData: ResUser[] = await Promise.all(
+        res.docs.map(async doc => {
+          let photoURL: string = ""
+          if (doc.data().photoURL) {
+            photoURL = await responseUploadImage(doc.data().photoURL)
+          }
+          return { id: doc.id, ...doc.data(), photoURL }
+        })
+      )
       return { status: 200, data: resData }
     })
     .catch(error => {
@@ -200,7 +213,7 @@ const setUser = async (
   firebase.auth().onAuthStateChanged(login => {
     if (login) {
       const { uid, email } = login
-      const { id, displayName, photoURL, update_date, create_date } = user
+      let { id, displayName, photoURL, update_date, create_date } = user
 
       const currentUser: CurrentUser = {
         id,
@@ -211,8 +224,6 @@ const setUser = async (
         create_date,
         email
       }
-      console.log(currentUser)
-
       setLocalStrage(currentUser)
     } else {
       return { status: 400, error: "login is not yet" }

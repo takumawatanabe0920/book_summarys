@@ -40,7 +40,7 @@ const MypageSummaryStackItem: FC<Props> = props => {
   }
 
   const isShowElementOnlyCurrentUser = (): boolean => {
-    return data.user_id || data.user_id.id === currentUser.id
+    return (data.user_id || data.user_id.id) === (currentUser && currentUser.id)
   }
 
   useEffect(() => {

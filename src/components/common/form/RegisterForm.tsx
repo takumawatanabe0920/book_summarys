@@ -165,7 +165,7 @@ const RegisterForm: FC<Props> = props => {
         } else if (resCreateOrUpdate.status === 400) {
           await throwAlert("danger", "会員情報の更新に失敗しました。")
         }
-      } else if (!isEdit) {
+      } else {
         if (resCreateOrUpdate && resCreateOrUpdate.status === 200) {
           const user: CurrentUser = getCurrentUser()
           setCurrentUser(user)
@@ -188,8 +188,6 @@ const RegisterForm: FC<Props> = props => {
       try {
         if (isEdit) {
           const { displayName, photoURL } = userData
-          const resUserIcon: string = await responseUploadImage(photoURL)
-          setUserIcon(resUserIcon)
           setValues({ displayName, photoURL })
         }
       } catch (e) {}
@@ -214,7 +212,7 @@ const RegisterForm: FC<Props> = props => {
           setState={setState}
           title="ユーザーアイコン"
           required={true}
-          userIcon={userIcon}
+          userIcon={currentUser.photoURL}
           isEdit={isEdit}
         />
         {!isEdit && (

@@ -1,18 +1,13 @@
-// pathモジュールの読み込み
-var path = require("path")
+const path = require("path")
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin")
+
 module.exports = {
-  // モードを開発モードにする
-  mode: "development",
-  // 入力ファイル設定
+  mode: "production", // 本番モード
   entry: [path.resolve(__dirname, "./src/pages/index.tsx")],
-  // 出力ファイル設定
   output: {
-    // 出力されるファイル名
     filename: "bundle.js",
-    // 出力先ディレクトリ
     path: path.resolve(__dirname, "dist")
   },
-  // モジュール設定
   module: {
     rules: [
       {
@@ -45,20 +40,19 @@ module.exports = {
           }
         }
       },
-      { test: /\.(gif|png|jpe?g|)$/, use: "url-loader" }
+      { test: /\.(gif|png|jpg|svg|)$/, use: "url-loader" }
     ]
   },
-  // モジュール解決
+  //plugins: [new UglifyJSPlugin()],
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".ts", ".tsx", ".js", ".json"],
+    alias: {}
   },
-  // 開発モード設定
-  devtool: "source-map",
-  devServer: {
-    historyApiFallback: true,
-    contentBase: "./dist",
-    host: "0.0.0.0",
-    port: 3016
-  }
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM",
+    firebase: "firebase",
+    "@material-ui/core": "MaterialUI"
+  },
+  devtool: "source-map"
 }
-//# sourceMappingURL=webpack.config.js.map

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, FC, useContext } from "react"
-import { useForm } from "react-hook-form"
 import useReactRouter from "use-react-router"
 import { Input, Textarea, Select } from "../../../components"
 import {
@@ -44,9 +43,6 @@ const SummaryForm: FC<Props> = props => {
   const [errorTexts, setErrorTexts] = useState<SummaryBook>({})
   const [thumnail, setThumnail] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
-  const { register, handleSubmit, errors, formState } = useForm<SummaryBook>({
-    mode: "onChange"
-  })
   const [
     isShowAlert,
     alertStatus,
@@ -63,7 +59,6 @@ const SummaryForm: FC<Props> = props => {
     const target = event.target
     const value = target.type === "checkbox" ? target.checked : target.value
     const name = target.name
-    console.log({ ...values, [name]: value })
     setValues({ ...values, [name]: value })
   }
 
@@ -123,7 +118,6 @@ const SummaryForm: FC<Props> = props => {
     if (_file.size > 1000000) {
       setImageUrl(null)
       setImage(undefined)
-      console.log(image)
       throwAlert("danger", "ファイルサイズが1MBを超えています")
       return "err"
     }
@@ -186,9 +180,6 @@ const SummaryForm: FC<Props> = props => {
         errorText.content = "50文字以上で入力してください。"
       }
     }
-    console.log(!thumbnail)
-    console.log(!imageUrl)
-    console.log(!image)
     if (!thumbnail && (!image || !imageUrl)) {
       isError = true
       errorText.thumbnail = "サムネイル画像を設定してください。"
@@ -302,7 +293,7 @@ const SummaryForm: FC<Props> = props => {
           )}
         </div>
         <Textarea
-          title="リード分"
+          title="リード文"
           name="discription"
           value={values && values.discription ? values.discription : ""}
           placeholder="一覧表示時に表示される文章になります。"
@@ -310,7 +301,6 @@ const SummaryForm: FC<Props> = props => {
           onChange={handleTextareaChange}
           errorMessage={errorTexts.discription ? errorTexts.discription : ""}
         />
-        {errors.title && "作者名は1文字以上、20文字以下でなければなりません。"}
         <RichEditor
           title="本の内容"
           required={true}
@@ -378,7 +368,7 @@ const SummaryForm: FC<Props> = props => {
           setThumnail(resThumnail)
           setValues({
             ...editData,
-            ["user_id"]: currentUser.id,
+            ["user_id"]: currentUser && currentUser.id,
             ["user_name"]: currentUser.displayName
               ? currentUser.displayName
               : ""
@@ -386,7 +376,7 @@ const SummaryForm: FC<Props> = props => {
         } else {
           setValues({
             ...values,
-            ["user_id"]: currentUser.id,
+            ["user_id"]: currentUser && currentUser.id,
             ["user_name"]: currentUser.displayName
               ? currentUser.displayName
               : ""

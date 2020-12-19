@@ -154,62 +154,6 @@ export const getRankingSummaries = async (
   return response
 }
 
-export const getNewSummaries = async (
-  limit?: number,
-  publishing_status?: string
-): Promise<ResultResponseList<ResSummaryBook>> => {
-  const startTime = performance.now() // 開始時間
-  const response = await db
-    .collection("summary")
-    .where("publishing_status", "==", publishing_status)
-    .orderBy("update_date", "desc")
-    .limit(limit)
-    .get()
-    .then(async res => {
-      let resData: ResSummaryBook[] = await Promise.all(
-        res.docs.map(async doc => {
-          const resCategory: ResultResponse<ResCategory> = await getCategory(
-            doc.data().category
-          )
-          const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
-            doc.data().sub_category
-          )
-          const resUser: ResultResponse<ResUser> = await getIdUser(
-            doc.data().user_id
-          )
-          let category: ResCategory
-          if (resCategory && resCategory.status === 200) {
-            category = resCategory.data
-          }
-          let sub_category: ResCategory
-          if (resSubCategory && resSubCategory.status === 200) {
-            sub_category = resSubCategory.data
-          }
-          let user: ResUser = {}
-          if (resUser && resUser.status === 200) {
-            user = resUser.data
-          }
-
-          return {
-            id: doc.id,
-            ...doc.data(),
-            category,
-            sub_category,
-            user_id: user ? user : doc.data().user_id
-          }
-        })
-      )
-      return { status: 200, data: resData }
-    })
-    .catch(error => {
-      console.log(error)
-      return { status: 400, error }
-    })
-  const endTime = performance.now() // 終了時間
-  console.log(endTime - startTime) // 何ミリ秒かかったかを表示する
-  return response
-}
-
 export const getOneConditionsSummaries = async (
   limit?: number,
   page?: number,
@@ -294,6 +238,9 @@ export const getTwoConditionsSummaries = async (
           const resSubCategory: ResultResponse<ResCategory> = await getSubCategory(
             doc.data().sub_category
           )
+          const resUser: ResultResponse<ResUser> = await getIdUser(
+            doc.data().user_id
+          )
           let sub_category: ResCategory
           if (resCategory && resCategory.status === 200) {
             category = resCategory.data
@@ -301,8 +248,18 @@ export const getTwoConditionsSummaries = async (
           if (resSubCategory && resSubCategory.status === 200) {
             sub_category = resSubCategory.data
           }
+          let user: ResUser = {}
+          if (resUser && resUser.status === 200) {
+            user = resUser.data
+          }
 
-          return { id: doc.id, ...doc.data(), category, sub_category }
+          return {
+            id: doc.id,
+            ...doc.data(),
+            category,
+            sub_category,
+            user_id: user ? user : doc.data().user_id
+          }
         })
       )
       return { status: 200, data: resData }

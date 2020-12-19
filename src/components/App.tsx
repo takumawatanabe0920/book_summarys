@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react"
 // components
 import { SummaryList, Sidebar, TopSummaryList } from "./../components"
 import { ResSummaryBook, ResultResponseList } from "./../types"
-import { getNewSummaries } from "../firebase/functions"
+import { getOneConditionsSummaries } from "../firebase/functions"
 import { Link } from "react-router-dom"
 const HomePage = () => {
   const [summaries, setSummaries] = useState<ResSummaryBook[]>([])
+  const [newSummaries, setNewSummaries] = useState<ResSummaryBook[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
   let getSummaryNum = 0
@@ -18,23 +19,37 @@ const HomePage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        let resSummariesDataList: ResultResponseList<ResSummaryBook> = await getNewSummaries(
-          getSummaryNum,
-          "public"
+        let resRecommendSummariesDataList: ResultResponseList<ResSummaryBook> = await getOneConditionsSummaries(
+          6,
+          1,
+          ["favorite_count", "desc"],
+          ["publishing_status", "public"]
         )
-        if (resSummariesDataList && resSummariesDataList.status === 200) {
-          setSummaries(resSummariesDataList.data)
+        let resNewSummariesDataList: ResultResponseList<ResSummaryBook> = await getOneConditionsSummaries(
+          4,
+          1,
+          ["update_date", "desc"],
+          ["publishing_status", "public"]
+        )
+        if (
+          resRecommendSummariesDataList &&
+          resRecommendSummariesDataList.status === 200
+        ) {
+          setSummaries(resRecommendSummariesDataList.data)
         }
+        if (resNewSummariesDataList && resNewSummariesDataList.status === 200) {
+          setNewSummaries(resNewSummariesDataList.data)
+        }
+        setLoading(true)
       } catch (e) {}
     }
 
     loadData()
-    setLoading(true)
   }, [])
 
   return (
     <>
-      {loading && (
+      {loading ? (
         <>
           <TopSummaryList />
           <div className="l-main">
@@ -54,17 +69,16 @@ const HomePage = () => {
                 <h2 className="main-title blue-main-title blue-back">
                   新着記事
                 </h2>
-                <SummaryList dataList={summaries} articleType="stack" />
-                {/* <div className="btn-area">
-                  <Link to="/summary" className="_btn center-btn">
-                    もっと見る
-                  </Link>
-                </div> */}
+                <SummaryList dataList={newSummaries} articleType="stack" />
               </div>
             </div>
             <Sidebar />
           </div>
         </>
+      ) : (
+        <div className="loading">
+          <div className="loader"></div>
+        </div>
       )}
     </>
   )
