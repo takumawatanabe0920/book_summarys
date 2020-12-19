@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 // components
-import { SummaryList, SummaryCategories, Pager } from ".."
+import { SummaryList, SummaryCategories, Pager, Loading } from ".."
 import { ResSummaryBook, ResultResponseList } from "../../types"
 import {
   getOneConditionsSummaries,
@@ -110,9 +110,7 @@ const SummaryIndexPage = () => {
           </div>
         </div>
       ) : (
-        <div className="loading">
-          <div className="loader"></div>
-        </div>
+        <Loading />
       )}
     </>
   )

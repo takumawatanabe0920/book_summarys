@@ -9,37 +9,32 @@ import {
   Header,
   Footer,
   TopHeader,
-  Alert
+  Alert,
+  Loading
 } from "../components"
-const HomePage = React.lazy(() => import("../components/App"))
-const SummaryCreatePage = React.lazy(() =>
-  import("../components/summary/Create")
-)
-const SummaryEditPage = React.lazy(() => import("../components/summary/Edit"))
-const SummaryShowPage = React.lazy(() => import("../components/summary/Show"))
-const SignUpPage = React.lazy(() => import("../components/sign_up"))
-const SignInPage = React.lazy(() => import("../components/sign_in"))
-const MypageFavorites = React.lazy(() =>
+const HomePage = lazy(() => import("../components/App"))
+const SummaryCreatePage = lazy(() => import("../components/summary/Create"))
+const SummaryEditPage = lazy(() => import("../components/summary/Edit"))
+const SummaryShowPage = lazy(() => import("../components/summary/Show"))
+const SignUpPage = lazy(() => import("../components/sign_up"))
+const SignInPage = lazy(() => import("../components/sign_in"))
+const MypageFavorites = lazy(() =>
   import("../components/user/mypage/MypageFavorites")
 )
-const MypageSummaries = React.lazy(() =>
+const MypageSummaries = lazy(() =>
   import("../components/user/mypage/MypageSummaries")
 )
-const MypageBrowsings = React.lazy(() =>
+const MypageBrowsings = lazy(() =>
   import("../components/user/mypage/MypageBrowsings")
 )
-const MypageComments = React.lazy(() =>
+const MypageComments = lazy(() =>
   import("../components/user/mypage/MypageComments")
 )
-const MypageHome = React.lazy(() =>
-  import("../components/user/mypage/MypageHome")
-)
-const MypageEdit = React.lazy(() =>
-  import("../components/user/mypage/MypageEdit")
-)
-const UserDetailPage = React.lazy(() => import("../components/user/UserDetail"))
-const NotificationPage = React.lazy(() => import("../components/notifications"))
-const SummaryPage = React.lazy(() => import("../components/summary"))
+const MypageHome = lazy(() => import("../components/user/mypage/MypageHome"))
+const MypageEdit = lazy(() => import("../components/user/mypage/MypageEdit"))
+const UserDetailPage = lazy(() => import("../components/user/UserDetail"))
+const NotificationPage = lazy(() => import("../components/notifications"))
+const SummaryPage = lazy(() => import("../components/summary"))
 
 // コンポーネント読み込み
 
@@ -55,77 +50,77 @@ ReactDOM.render(
               <Alert />
               <Switch>
                 <Route exact path="/">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <HomePage />
                   </Suspense>
                 </Route>
                 <PrivateRoute exact path="/summary/create">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <SummaryCreatePage />
                   </Suspense>
                 </PrivateRoute>
                 <PrivateRoute exact path="/summary/:id/edit">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <SummaryEditPage />
                   </Suspense>
                 </PrivateRoute>
                 <Route exact path="/mypage/:id/home">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <MypageHome />
                   </Suspense>
                 </Route>
                 <PrivateRoute exact path="/mypage/:id/edit">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <MypageEdit />
                   </Suspense>
                 </PrivateRoute>
                 <Route exact path="/mypage/:id/favorites">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <MypageFavorites />
                   </Suspense>
                 </Route>
                 <Route exact path="/mypage/:id/browsings">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <MypageBrowsings />
                   </Suspense>
                 </Route>
                 <Route exact path="/mypage/:id/comments">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <MypageComments />
                   </Suspense>
                 </Route>
                 <Route exact path="/mypage/:id/summaries">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <MypageSummaries />
                   </Suspense>
                 </Route>
                 <Route exact path="/user/:id">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <UserDetailPage />
                   </Suspense>
                 </Route>
                 <Route exact path="/summary/:id">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <SummaryShowPage />
                   </Suspense>
                 </Route>
                 <Route exact path="/summary">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <SummaryPage />
                   </Suspense>
                 </Route>
                 <PrivateRoute exact path="/notification">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <NotificationPage />
                   </Suspense>
                 </PrivateRoute>
                 <GuestRoute exact path="/sign_up">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <SignUpPage />
                   </Suspense>
                 </GuestRoute>
                 <GuestRoute exact path="/sign_in">
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<div />}>
                     <SignInPage />
                   </Suspense>
                 </GuestRoute>

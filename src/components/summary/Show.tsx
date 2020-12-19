@@ -13,7 +13,8 @@ import {
   SummaryComment,
   SummaryCommentForm,
   SummaryList,
-  Sidebar
+  Sidebar,
+  Loading
 } from "./../../components"
 import {
   getSummaryBookPopulate,
@@ -159,9 +160,7 @@ const SummaryShowPage = () => {
           <Sidebar />
         </div>
       ) : (
-        <div className="loading">
-          <div className="loader"></div>
-        </div>
+        <Loading />
       )}
     </>
   )

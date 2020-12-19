@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 // components
-import { SummaryList, Sidebar, TopSummaryList } from "./../components"
+import { SummaryList, Sidebar, TopSummaryList, Loading } from "./../components"
 import { ResSummaryBook, ResultResponseList } from "./../types"
 import { getOneConditionsSummaries } from "../firebase/functions"
 import { Link } from "react-router-dom"
@@ -76,9 +76,7 @@ const HomePage = () => {
           </div>
         </>
       ) : (
-        <div className="loading">
-          <div className="loader"></div>
-        </div>
+        <Loading />
       )}
     </>
   )

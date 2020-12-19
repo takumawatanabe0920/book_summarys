@@ -1,5 +1,5 @@
-const path = require("path")
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin")
+import path from "path"
+import UglifyJSPlugin from "uglifyjs-webpack-plugin"
 
 module.exports = {
   mode: "production", // 本番モード

@@ -36,6 +36,7 @@ import Navbar from "./common/parts/Navbar"
 import NotificationList from "./notifications/NotificationList"
 import NotificationItem from "./notifications/NotificationItem"
 import Alert from "./common/parts/Alert"
+import Loading from "./common/parts/Loading"
 
 export {
   Input,
@@ -75,5 +76,6 @@ export {
   NotificationItem,
   Alert,
   Navbar,
-  Trimming
+  Trimming,
+  Loading
 }
