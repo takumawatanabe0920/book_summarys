@@ -17,7 +17,6 @@ export const createNotification = (values: Notification) => {
     console.log("not good")
     return
   }
-  console.log(values)
   values.is_read = false
   values.create_date = firebase.firestore.Timestamp.now()
   values.update_date = firebase.firestore.Timestamp.now()

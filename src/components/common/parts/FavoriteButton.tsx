@@ -67,7 +67,6 @@ const FavoliteButton: FC<Props> = props => {
       const resFavorite: ResultResponse<ResFavorite> = await createFavorite(
         newProps
       )
-      console.log(resFavorite)
       if (resFavorite && resFavorite.status === 200) {
         updateFavoriteSummaries(resFavorite.data.id, summary_book.id)
         setCurrentUserFavorites({ id: resFavorite.data.id, ...props })

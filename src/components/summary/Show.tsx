@@ -123,7 +123,6 @@ const SummaryShowPage = () => {
         if (resSummaryBook && resSummaryBook.status === 200) {
           setSummaryBook(resSummaryBook.data)
         }
-        console.log(resSummaryBook.data.category.id)
 
         const resInvolvedSummaryBookList: ResultResponseList<ResSummaryBook> = await getTwoConditionsSummaries(
           3,

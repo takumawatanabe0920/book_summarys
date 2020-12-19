@@ -4,7 +4,6 @@ import useReactRouter from "use-react-router"
 import { ResUser as CurrentUser, ResultResponse, Login } from "../../types"
 import {
   getMyNotReadNotificationsCount,
-  responseUploadImage,
   logout
 } from "../../firebase/functions"
 import {
@@ -18,8 +17,8 @@ import useAlertState from "./../../assets/hooks/useAlertState"
 import { GlobalContext } from "./../../assets/hooks/context/Global"
 
 const Header = () => {
-  const [userIcon, setUserIcon] = useState<string>("")
   const [mouseOver, setMouseOver] = useState<boolean>(false)
+  const [userIcon, setUserIcon] = useState<string>("")
   const { history } = useReactRouter()
   const [
     isShowAlert,
@@ -68,10 +67,6 @@ const Header = () => {
         const resNotificationCount: number = await getMyNotReadNotificationsCount(
           currentUser.id
         )
-        const resUserIcon: string = await responseUploadImage(
-          currentUser.photoURL
-        )
-        setUserIcon(resUserIcon)
         setNotificationCount(resNotificationCount)
       } catch (e) {}
     }
@@ -105,7 +100,9 @@ const Header = () => {
               onMouseEnter={() => enterPulldown()}
             >
               <img
-                src={userIcon ? userIcon : userCircleIcon}
+                src={
+                  currentUser.photoURL ? currentUser.photoURL : userCircleIcon
+                }
                 alt="ロゴ"
                 className="_icon"
               />

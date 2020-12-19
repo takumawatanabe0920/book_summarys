@@ -23,7 +23,6 @@ const SummaryCategories: FC<Props> = props => {
     const loadData = async () => {
       try {
         const resCategoryList: ResultResponseList<ResCategory> = await getCategoriesPopulateImage()
-        console.log(resCategoryList)
         if (resCategoryList && resCategoryList.status === 200) {
           setCategories(resCategoryList.data)
         }
