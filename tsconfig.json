@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "es6",
+    "module": "esNext",
     "lib": ["es2019", "dom"],
     "allowJs": true, // jsコンパイル用
     "checkJs": true, // js簡易型チェック

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, FC } from "react"
+import { LazyLoadComponent } from "react-lazy-load-image-component"
 // components
 import { ResultResponseList, ResCategory } from "../../types"
 import { getCategoriesPopulateImage, readQuery } from "../../firebase/functions"
@@ -39,17 +40,19 @@ const SummaryCategories: FC<Props> = props => {
         <div className="_category-body">
           {categories.map((data: ResCategory) => {
             return (
-              <Link
-                style={{
-                  background: `url(${data.image}) no-repeat center center`,
-                  backgroundSize: "cover"
-                }}
-                onClick={() => updateData(data.id, data.name)}
-                to={`/summary?category=${data.id}`}
-                className="_data"
-              >
-                <p className="_data-tag">{data.name}</p>
-              </Link>
+              <LazyLoadComponent>
+                <Link
+                  style={{
+                    background: `url(${data.image}) no-repeat center center`,
+                    backgroundSize: "cover"
+                  }}
+                  onClick={() => updateData(data.id, data.name)}
+                  to={`/summary?category=${data.id}`}
+                  className="_data"
+                >
+                  <p className="_data-tag">{data.name}</p>
+                </Link>
+              </LazyLoadComponent>
             )
           })}
         </div>
