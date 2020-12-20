@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "client": "webpack-dev-server --hot --inline --config webpack.dev.cjs",
+    "client": "webpack-dev-server --hot --inline --config webpack.dev.js",
     "dev": "NODE_ENV=development concurrently \"npm run client\"",
-    "build": "webpack --config webpack.prod.cjs",
+    "build": "webpack --config webpack.prod.js",
     "build-prod": "webpack --mode=production",
     "tree-shaking": "webpack --config webpack.prod.js --display-used-exports",
     "ts-node": "ts-node"
